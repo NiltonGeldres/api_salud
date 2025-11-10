@@ -13,7 +13,7 @@ import com.api_salud.api_salud.service.MedicoService;
 
 @RestController
 @RequestMapping("")
-public class AtencionMedica {
+public class AtencionMedicaController {
 	
 	@Autowired
 	MedicoService medicoService;
