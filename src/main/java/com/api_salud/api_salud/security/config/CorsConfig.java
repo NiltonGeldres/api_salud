@@ -13,8 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
         .addMapping("/**")
        .allowedOrigins( 
     		             "http://localhost:3000",
-    		             "http://192.168.0.200:3000",
-    		             "http://192.168.0.6:3000"
+    		             "http://frontdev:3000"
     		   )
         .allowedMethods( "GET","POST", "PUT","DELETE")
         .allowCredentials(true);
