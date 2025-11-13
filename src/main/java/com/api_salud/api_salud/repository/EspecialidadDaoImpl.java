@@ -79,7 +79,7 @@ public class EspecialidadDaoImpl  implements EspecialidadDao{
 	    List<EspecialidadEntity> res =new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
 	    simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-				    		.withProcedureName("igm_maestros.especialidad_xmedico_leer")
+				    		.withProcedureName("igm_maestros.especialidad_xmedico_leaer")
 				            .withoutProcedureColumnMetaDataAccess()
 				            .declareParameters(
 				            		new SqlParameter("p_idmedico", Types.INTEGER ),
