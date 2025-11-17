@@ -1,56 +1,101 @@
 package com.api_salud.atencionmedica.entity;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.time.OffsetDateTime;
 
-@Entity
-@Table(name = "atenciones_medicas_diagnosticos", schema = "igm_atenciones_medicas")
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AtencionMedicaDiagnostico extends BaseDetalleEntity {
+/**
+ * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_diagnosticos
+ */
+public class AtencionMedicaDiagnostico {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // PK: id_atencion_diagnostico bigint
     private Long idAtencionDiagnostico;
 
+    // FK: id_atencion bigint
+    private Long idAtencion;
+
+    // Campos
+    // id_diagnostico integer
     private Integer idDiagnostico;
+    // id_subclasificacion integer
     private Integer idSubclasificacion;
-    private Integer idlab1; // Asumiendo que es id_lab1
-    private Integer idDiagnosticoOrder; // Mapea id_diagnostico_orden
-	public Long getIdAtencionDiagnostico() {
-		return idAtencionDiagnostico;
-	}
-	public void setIdAtencionDiagnostico(Long idAtencionDiagnostico) {
-		this.idAtencionDiagnostico = idAtencionDiagnostico;
-	}
-	public Integer getIdDiagnostico() {
-		return idDiagnostico;
-	}
-	public void setIdDiagnostico(Integer idDiagnostico) {
-		this.idDiagnostico = idDiagnostico;
-	}
-	public Integer getIdSubclasificacion() {
-		return idSubclasificacion;
-	}
-	public void setIdSubclasificacion(Integer idSubclasificacion) {
-		this.idSubclasificacion = idSubclasificacion;
-	}
-	public Integer getIdlab1() {
-		return idlab1;
-	}
-	public void setIdlab1(Integer idlab1) {
-		this.idlab1 = idlab1;
-	}
-	public Integer getIdDiagnosticoOrder() {
-		return idDiagnosticoOrder;
-	}
-	public void setIdDiagnosticoOrder(Integer idDiagnosticoOrder) {
-		this.idDiagnosticoOrder = idDiagnosticoOrder;
-	}
-    
-    
+    // id_lab1 integer
+    private Integer idLab1;
+    // id_diagnostico_orden integer
+    private Integer idDiagnosticoOrden;
+
+    // Trazabilidad
+    // id_usuario integer
+    private Integer idUsuario;
+    // ts_registro timestamp with time zone
+    private OffsetDateTime tsRegistro;
+
+    // --- Constructor, Getters y Setters ---
+
+    public AtencionMedicaDiagnostico() {
+    }
+
+    // Getters y Setters
+    // ...
+    public Long getIdAtencionDiagnostico() {
+        return idAtencionDiagnostico;
+    }
+
+    public void setIdAtencionDiagnostico(Long idAtencionDiagnostico) {
+        this.idAtencionDiagnostico = idAtencionDiagnostico;
+    }
+
+    public Long getIdAtencion() {
+        return idAtencion;
+    }
+
+    public void setIdAtencion(Long idAtencion) {
+        this.idAtencion = idAtencion;
+    }
+
+    public Integer getIdDiagnostico() {
+        return idDiagnostico;
+    }
+
+    public void setIdDiagnostico(Integer idDiagnostico) {
+        this.idDiagnostico = idDiagnostico;
+    }
+
+    public Integer getIdSubclasificacion() {
+        return idSubclasificacion;
+    }
+
+    public void setIdSubclasificacion(Integer idSubclasificacion) {
+        this.idSubclasificacion = idSubclasificacion;
+    }
+
+    public Integer getIdLab1() {
+        return idLab1;
+    }
+
+    public void setIdLab1(Integer idLab1) {
+        this.idLab1 = idLab1;
+    }
+
+    public Integer getIdDiagnosticoOrden() {
+        return idDiagnosticoOrden;
+    }
+
+    public void setIdDiagnosticoOrden(Integer idDiagnosticoOrden) {
+        this.idDiagnosticoOrden = idDiagnosticoOrden;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public OffsetDateTime getTsRegistro() {
+        return tsRegistro;
+    }
+
+    public void setTsRegistro(OffsetDateTime tsRegistro) {
+        this.tsRegistro = tsRegistro;
+    }
 }

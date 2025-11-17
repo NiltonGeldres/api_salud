@@ -1,6 +1,5 @@
 package com.api_salud.atencionmedica.service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +56,7 @@ public class AtencionMedicaService {
     @Transactional
     public boolean actualizarAtencion(Long idAtencion, AtencionMedicaRequest request) {
         // Validar si la atención existe antes de actualizar (opcional, el SP maneja el FOUND)
-        if (repository.obtenerPorId(idAtencion).isEmpty()) {
+        if (repository.obtenerPorId(idAtencion).isPresent()) {
             // Manejo de error si la atención no existe
             return false;
         }

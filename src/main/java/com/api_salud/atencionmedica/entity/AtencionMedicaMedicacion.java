@@ -1,115 +1,182 @@
 package com.api_salud.atencionmedica.entity;
 
+import java.time.OffsetDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import java.math.BigDecimal;
+/**
+ * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_medicacion
+ */
+public class AtencionMedicaMedicacion {
 
-@Entity
-@Table(name = "atenciones_medicas_medicacion", schema = "igm_atenciones_medicas")
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AtencionMedicaMedicacion extends BaseDetalleEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // PK: id_atencion_medicacion bigint
     private Long idAtencionMedicacion;
 
+    // FK: id_atencion bigint
+    private Long idAtencion;
+
+    // Campos
+    // id_almacen integer
     private Integer idAlmacen;
+    // id_producto integer
     private Integer idProducto;
+    // cantidad_dosis integer
     private Integer cantidadDosis;
-    private Integer idUmDosis; // Unidad de Medida
+    // id_um_dosis integer (Unidad de Medida de Dosis)
+    private Integer idUmDosis;
+    // id_frecuencia_dosis integer
     private Integer idFrecuenciaDosis;
+    // cantidad_periodo integer
     private Integer cantidadPeriodo;
+    // id_via_administracion integer
     private Integer idViaAdministracion;
+    // cantidad_total integer
     private Integer cantidadTotal;
-    private BigDecimal precio; // Mapea DOUBLE PRECISION
-    private BigDecimal montoTotal; // Mapea DOUBLE PRECISION
+    // precio double precision -> Double
+    private Double precio;
+    // monto_total double precision -> Double
+    private Double montoTotal;
+    // indicaciones character varying(5000)
     private String indicaciones;
+    // id_diagnostico integer
     private Integer idDiagnostico;
-	public Long getIdAtencionMedicacion() {
-		return idAtencionMedicacion;
-	}
-	public void setIdAtencionMedicacion(Long idAtencionMedicacion) {
-		this.idAtencionMedicacion = idAtencionMedicacion;
-	}
-	public Integer getIdAlmacen() {
-		return idAlmacen;
-	}
-	public void setIdAlmacen(Integer idAlmacen) {
-		this.idAlmacen = idAlmacen;
-	}
-	public Integer getIdProducto() {
-		return idProducto;
-	}
-	public void setIdProducto(Integer idProducto) {
-		this.idProducto = idProducto;
-	}
-	public Integer getCantidadDosis() {
-		return cantidadDosis;
-	}
-	public void setCantidadDosis(Integer cantidadDosis) {
-		this.cantidadDosis = cantidadDosis;
-	}
-	public Integer getIdUmDosis() {
-		return idUmDosis;
-	}
-	public void setIdUmDosis(Integer idUmDosis) {
-		this.idUmDosis = idUmDosis;
-	}
-	public Integer getIdFrecuenciaDosis() {
-		return idFrecuenciaDosis;
-	}
-	public void setIdFrecuenciaDosis(Integer idFrecuenciaDosis) {
-		this.idFrecuenciaDosis = idFrecuenciaDosis;
-	}
-	public Integer getCantidadPeriodo() {
-		return cantidadPeriodo;
-	}
-	public void setCantidadPeriodo(Integer cantidadPeriodo) {
-		this.cantidadPeriodo = cantidadPeriodo;
-	}
-	public Integer getIdViaAdministracion() {
-		return idViaAdministracion;
-	}
-	public void setIdViaAdministracion(Integer idViaAdministracion) {
-		this.idViaAdministracion = idViaAdministracion;
-	}
-	public Integer getCantidadTotal() {
-		return cantidadTotal;
-	}
-	public void setCantidadTotal(Integer cantidadTotal) {
-		this.cantidadTotal = cantidadTotal;
-	}
-	public BigDecimal getPrecio() {
-		return precio;
-	}
-	public void setPrecio(BigDecimal precio) {
-		this.precio = precio;
-	}
-	public BigDecimal getMontoTotal() {
-		return montoTotal;
-	}
-	public void setMontoTotal(BigDecimal montoTotal) {
-		this.montoTotal = montoTotal;
-	}
-	public String getIndicaciones() {
-		return indicaciones;
-	}
-	public void setIndicaciones(String indicaciones) {
-		this.indicaciones = indicaciones;
-	}
-	public Integer getIdDiagnostico() {
-		return idDiagnostico;
-	}
-	public void setIdDiagnostico(Integer idDiagnostico) {
-		this.idDiagnostico = idDiagnostico;
-	}
-    
-    
+
+    // Trazabilidad
+    // id_usuario integer
+    private Integer idUsuario;
+    // ts_registro timestamp with time zone
+    private OffsetDateTime tsRegistro;
+
+    // --- Constructor, Getters y Setters ---
+
+    public AtencionMedicaMedicacion() {
+    }
+
+    // Getters y Setters
+    // ...
+    public Long getIdAtencionMedicacion() {
+        return idAtencionMedicacion;
+    }
+
+    public void setIdAtencionMedicacion(Long idAtencionMedicacion) {
+        this.idAtencionMedicacion = idAtencionMedicacion;
+    }
+
+    public Long getIdAtencion() {
+        return idAtencion;
+    }
+
+    public void setIdAtencion(Long idAtencion) {
+        this.idAtencion = idAtencion;
+    }
+
+    public Integer getIdAlmacen() {
+        return idAlmacen;
+    }
+
+    public void setIdAlmacen(Integer idAlmacen) {
+        this.idAlmacen = idAlmacen;
+    }
+
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Integer getCantidadDosis() {
+        return cantidadDosis;
+    }
+
+    public void setCantidadDosis(Integer cantidadDosis) {
+        this.cantidadDosis = cantidadDosis;
+    }
+
+    public Integer getIdUmDosis() {
+        return idUmDosis;
+    }
+
+    public void setIdUmDosis(Integer idUmDosis) {
+        this.idUmDosis = idUmDosis;
+    }
+
+    public Integer getIdFrecuenciaDosis() {
+        return idFrecuenciaDosis;
+    }
+
+    public void setIdFrecuenciaDosis(Integer idFrecuenciaDosis) {
+        this.idFrecuenciaDosis = idFrecuenciaDosis;
+    }
+
+    public Integer getCantidadPeriodo() {
+        return cantidadPeriodo;
+    }
+
+    public void setCantidadPeriodo(Integer cantidadPeriodo) {
+        this.cantidadPeriodo = cantidadPeriodo;
+    }
+
+    public Integer getIdViaAdministracion() {
+        return idViaAdministracion;
+    }
+
+    public void setIdViaAdministracion(Integer idViaAdministracion) {
+        this.idViaAdministracion = idViaAdministracion;
+    }
+
+    public Integer getCantidadTotal() {
+        return cantidadTotal;
+    }
+
+    public void setCantidadTotal(Integer cantidadTotal) {
+        this.cantidadTotal = cantidadTotal;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public Double getMontoTotal() {
+        return montoTotal;
+    }
+
+    public void setMontoTotal(Double montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
+    public String getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(String indicaciones) {
+        this.indicaciones = indicaciones;
+    }
+
+    public Integer getIdDiagnostico() {
+        return idDiagnostico;
+    }
+
+    public void setIdDiagnostico(Integer idDiagnostico) {
+        this.idDiagnostico = idDiagnostico;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public OffsetDateTime getTsRegistro() {
+        return tsRegistro;
+    }
+
+    public void setTsRegistro(OffsetDateTime tsRegistro) {
+        this.tsRegistro = tsRegistro;
+    }
 }

@@ -1,50 +1,92 @@
 package com.api_salud.atencionmedica.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.time.OffsetDateTime;
 
-@Entity
-@Table(name = "atenciones_medicas_examen_fisico", schema = "igm_atenciones_medicas")
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class AtencionMedicaExamenFisico extends BaseDetalleEntity {
+/**
+ * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_examen_fisico
+ */
+public class AtencionMedicaExamenFisico {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // PK: id_atencion_examen_fisico bigint
     private Long idAtencionExamenFisico;
 
+    // FK: id_atencion bigint
+    private Long idAtencion;
+
+    // Campos
+    // id_examen_fisico integer
     private Integer idExamenFisico;
+    // id_tipo_examen_fisico integer
     private Integer idTipoExamenFisico;
+    // descripcion character varying(5000)
     private String descripcion;
-	public Long getIdAtencionExamenFisico() {
-		return idAtencionExamenFisico;
-	}
-	public void setIdAtencionExamenFisico(Long idAtencionExamenFisico) {
-		this.idAtencionExamenFisico = idAtencionExamenFisico;
-	}
-	public Integer getIdExamenFisico() {
-		return idExamenFisico;
-	}
-	public void setIdExamenFisico(Integer idExamenFisico) {
-		this.idExamenFisico = idExamenFisico;
-	}
-	public Integer getIdTipoExamenFisico() {
-		return idTipoExamenFisico;
-	}
-	public void setIdTipoExamenFisico(Integer idTipoExamenFisico) {
-		this.idTipoExamenFisico = idTipoExamenFisico;
-	}
-	public String getDescripcion() {
-		return descripcion;
-	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-    
-    
+
+    // Trazabilidad
+    // id_usuario integer
+    private Integer idUsuario;
+    // ts_registro timestamp with time zone
+    private OffsetDateTime tsRegistro;
+
+    // --- Constructor, Getters y Setters ---
+
+    public AtencionMedicaExamenFisico() {
+    }
+
+    // Getters y Setters
+    // ...
+    public Long getIdAtencionExamenFisico() {
+        return idAtencionExamenFisico;
+    }
+
+    public void setIdAtencionExamenFisico(Long idAtencionExamenFisico) {
+        this.idAtencionExamenFisico = idAtencionExamenFisico;
+    }
+
+    public Long getIdAtencion() {
+        return idAtencion;
+    }
+
+    public void setIdAtencion(Long idAtencion) {
+        this.idAtencion = idAtencion;
+    }
+
+    public Integer getIdExamenFisico() {
+        return idExamenFisico;
+    }
+
+    public void setIdExamenFisico(Integer idExamenFisico) {
+        this.idExamenFisico = idExamenFisico;
+    }
+
+    public Integer getIdTipoExamenFisico() {
+        return idTipoExamenFisico;
+    }
+
+    public void setIdTipoExamenFisico(Integer idTipoExamenFisico) {
+        this.idTipoExamenFisico = idTipoExamenFisico;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public OffsetDateTime getTsRegistro() {
+        return tsRegistro;
+    }
+
+    public void setTsRegistro(OffsetDateTime tsRegistro) {
+        this.tsRegistro = tsRegistro;
+    }
 }
