@@ -1,73 +1,53 @@
 package com.api_salud.atencionmedica.service;
 
+import com.api_salud.atencionmedica.domain.AtencionMedicaModel.AtencionMedica;
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.api_salud.atencionmedica.entity.AtencionMedica;
-import com.api_salud.atencionmedica.repository.AtencionMedicaRepository;
-import com.api_salud.atencionmedica.request.AtencionMedicaRequest;
 
 /**
- * Servicio para la lógica de negocio de la cabecera de Atención Médica.
+ * Interfaz que define las operaciones de negocio para la gestión de Atención Médica.
+ * Incluye la orquestación del CRUD maestro y sus múltiples detalles.
  */
-@Service
-public class AtencionMedicaService {
-
-    private final AtencionMedicaRepository repository;
-
-    public AtencionMedicaService(AtencionMedicaRepository repository) {
-        this.repository = repository;
-    }
+public interface AtencionMedicaService {
 
     /**
-     * Crea una nueva atención médica.
-     * @param request Datos de la atención.
-     * @return El ID de la atención creada.
+     * Inserta una nueva Atención Médica junto con todos sus detalles asociados.
+     *
+     * @param atencion El objeto AtencionMedica completo (maestro + detalles).
+     * @return El ID de la Atención Médica insertada (idAtencion).
      */
-    @Transactional
-    public Long crearAtencion(AtencionMedicaRequest request) {
-        // Aquí podría ir lógica de negocio adicional antes de la inserción
-        return repository.insertar(request);
-    }
+    Long crearAtencionMedicaCompleta(AtencionMedica atencion);
 
     /**
-     * Obtiene una atención médica por su ID.
+     * Obtiene una Atención Médica por su ID, incluyendo todos sus detalles.
+     *
+     * @param idAtencion ID de la Atención Médica a buscar.
+     * @return El objeto AtencionMedica completo o null si no se encuentra.
      */
-    public Optional<AtencionMedica> obtenerAtencionPorId(Long idAtencion) {
-        return repository.obtenerPorId(idAtencion);
-    }
+    AtencionMedica obtenerAtencionMedicaCompletaPorId(Long idAtencion);
 
     /**
-     * Lista las atenciones médicas por ID de paciente.
+     * Lista todas las Atenciones Médicas de un paciente específico (sin cargar los detalles por defecto).
+     *
+     * @param idPaciente ID del paciente.
+     * @return Lista de objetos AtencionMedica (solo la información maestra).
      */
-    public List<AtencionMedica> listarAtencionesPorPaciente(Integer idPaciente) {
-        return repository.listarPorPaciente(idPaciente);
-    }
+    List<AtencionMedica> listarAtencionesPorPaciente(Integer idPaciente);
 
     /**
-     * Actualiza una atención médica existente.
-     * @param idAtencion ID de la atención a actualizar.
-     * @param request Datos a actualizar.
-     * @return true si se actualizó, false en caso contrario.
+     * Actualiza la información maestra de una Atención Médica y sus detalles.
+     * NOTA: La lógica de actualización de detalles puede variar (eliminar/insertar vs. update individual).
+     * Aquí se implementará una lógica básica de reemplazo.
+     *
+     * @param atencion El objeto AtencionMedica con los datos actualizados.
+     * @return true si la actualización fue exitosa, false en caso contrario.
      */
-    @Transactional
-    public boolean actualizarAtencion(Long idAtencion, AtencionMedicaRequest request) {
-        // Validar si la atención existe antes de actualizar (opcional, el SP maneja el FOUND)
-        if (repository.obtenerPorId(idAtencion).isPresent()) {
-            // Manejo de error si la atención no existe
-            return false;
-        }
-        return repository.actualizar(idAtencion, request);
-    }
+    Boolean actualizarAtencionMedicaCompleta(AtencionMedica atencion);
 
     /**
-     * Elimina una atención médica por su ID.
+     * Elimina lógicamente una Atención Médica.
+     *
+     * @param idAtencion ID de la Atención Médica a eliminar.
+     * @return true si la eliminación fue exitosa.
      */
-    @Transactional
-    public void eliminarAtencion(Long idAtencion) {
-        repository.eliminar(idAtencion);
-    }
+    Boolean eliminarAtencionMedica(Long idAtencion);
 }
