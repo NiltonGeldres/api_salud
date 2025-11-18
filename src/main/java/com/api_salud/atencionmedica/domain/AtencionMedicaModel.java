@@ -179,4 +179,42 @@ public class AtencionMedicaModel {
         private Integer idUsuario;
         private OffsetDateTime tsRegistro;
     }
+  
+    
+    /**
+     * 8. Detalle: igm_atenciones_medicas.atenciones_medicas_tratamientos
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Sintoma {
+        private Long idAtencionSintoma;
+        private Long idAtencion; // FK
+        private Integer idSintoma; // Suponiendo que la medicación está relacionada a un producto
+        private Integer idTipoSintoma;
+        private Integer descripcion;
+        private Integer idUsuario;
+        private OffsetDateTime tsRegistro;
+    }
+    
+
+    /**
+     * 8. Detalle: igm_atenciones_medicas.atenciones_medicas_tratamientos
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Tratamiento {
+        private Long idAtencionTratamiento;
+        private Long idAtencion; // FK
+        private Integer idTratamiento; // Suponiendo que la medicación está relacionada a un producto
+        private Integer idTipoTratamiento;
+        private Integer descripcion;
+        private Integer idUsuario;
+        private OffsetDateTime tsRegistro;
+    }
+    
+    
+    
+    
 }

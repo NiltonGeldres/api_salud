@@ -1,50 +1,46 @@
 package com.api_salud.atencionmedica.controller;
 
-import com.api_salud.atencionmedica.domain.AtencionMedicaModel.AtencionMedica;
 import com.api_salud.atencionmedica.request.AtencionMedicaRequestDTO;
+//import com.api_salud.atencionmedica.entity.AtencionMedica;
+import com.api_salud.atencionmedica.domain.AtencionMedicaModel.AtencionMedica;
+import com.api_salud.atencionmedica.mapper.AtencionMedicaMapper;
 import com.api_salud.atencionmedica.service.AtencionMedicaService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controlador REST para la gestión completa de Atenciones Médicas.
- * Expone endpoints para el CRUD de la entidad maestra y sus detalles.
+ * Controlador REST para la gestión de Atenciones Médicas.
+ * Maneja las peticiones HTTP relacionadas con la creación y manipulación de atenciones.
  */
 @RestController
-@RequestMapping("/api/atenciones-medicas")
+@RequestMapping("/api/atenciones") // Ruta base para el recurso AtencionMedica
+@RequiredArgsConstructor // Genera un constructor con argumentos requeridos (final fields) para inyección
 public class AtencionMedicaController {
 
-    private static final Logger LOGGER = Logger.getLogger(AtencionMedicaController.class.getName());
-
+    // Inyección de dependencias a través del constructor generado por Lombok
     private final AtencionMedicaService atencionMedicaService;
-
-    @Autowired
-    public AtencionMedicaController(AtencionMedicaService atencionMedicaService) {
-        this.atencionMedicaService = atencionMedicaService;
-    }
+    private final AtencionMedicaMapper mapper;
 
     /**
-     * POST: Crea una nueva Atención Médica con todos sus detalles.
-     * URL: /api/atenciones-medicas
-     *
-     * @param atencion Objeto AtencionMedica completo enviado en el cuerpo de la petición.
-     * @return ResponseEntity con el ID de la nueva atención y status 201 (Created).
+     * Crea una nueva Atencion Medica en el sistema.
+     * * @param requestDTO El DTO con los datos de la atención a crear.
+     * @return ResponseEntity con el ID de la atención creada y el status HTTP 201 (Created).
      */
     @PostMapping
     public ResponseEntity<Long> crearAtencionMedica(@RequestBody AtencionMedicaRequestDTO requestDTO) {
-        // 1. Mapear DTO a la Entidad de Dominio (AtencionMedica)
-        AtencionMedica atencion = mapper.toEntity(requestDTO);
-
-        // 2. Ejecutar lógica de negocio
-        Long idAtencion = atencionMedicaService.crearAtencionMedicaCompleta(atencion);
         
-        // ...
+        // OPTIMO: Mapear DTO al MODELO DE DOMINIO, que es el tipo que viaja al Service
+        AtencionMedica atencionModel = mapper.toModel(requestDTO); 
+
+        // El Service solo ve el Objeto de Negocio limpio (Modelo)
+        Long idAtencion = atencionMedicaService.crearAtencionMedicaCompleta(atencionModel);
+        
+        return new ResponseEntity<>(idAtencion, HttpStatus.CREATED);
     }
 
     /**
