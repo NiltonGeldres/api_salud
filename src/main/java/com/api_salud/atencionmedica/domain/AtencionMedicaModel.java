@@ -1,8 +1,4 @@
 package com.api_salud.atencionmedica.domain;
-
-
-
-
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -12,51 +8,51 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * Clase contenedora de todos los DTOs/Modelos de la Atención Médica y sus detalles.
- * Usamos Lombok (@Data) para simplificar getters, setters, toString, equals y hashCode.
+ * MODELO DE DOMINIO: Representa la Atención Médica en la capa de negocio (Service).
+ * El sufijo 'Model' se utiliza para evitar cualquier conflicto con la Entidad (Entity) 
+ * y la de transporte (DTO).
  */
 @Data
-public class AtencionMedicaModel {
+@NoArgsConstructor
+@AllArgsConstructor
+public class AtencionMedicaModel { 
+    
+    // 1. Campos de la Entidad Maestra
+    private Long idAtencion;
+    private Integer idPaciente;
+    private Integer idCuentaAtencion;
+    private Integer idServicio;
+    private Integer idMedicoIngreso;
+    private Integer idEstadoAtencion;
+    private OffsetDateTime tsIngreso; 
+    private OffsetDateTime tsActualizacion;
+    private Integer idUsuarioRegistro;
+    private String origenRegistroUsuario;
+    
+    // 2. Propiedades para los detalles 
+    private List<Antecedente> antecedentes;
+    private List<Diagnostico> diagnosticos;
+    private List<Discapacidad> discapacidades;
+    private List<DiscapacidadOtros> discapacidadOtros;
+    private List<ExamenFisico> examenesFisicos;
+    private List<OrdenMedica> ordenesMedicas;
+    private List<Medicacion> medicacion;
+    private List<Sintoma> sintomas;
+    private List<Tratamiento> tratamientos;
+
+    // ===================================================================================
+    // CLASES ANIDADAS DE DETALLE (Modelos de Detalle)
+    // ===================================================================================
 
     /**
-     * 1. Entidad Maestra: igm_atenciones_medicas.atenciones_medicas
-     */
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AtencionMedica {
-        private Long idAtencion;
-        private Integer idPaciente;
-        private Integer idCuentaAtencion;
-        private Integer idServicio;
-        private Integer idMedicoIngreso;
-        private Integer idEstadoAtencion;
-        private OffsetDateTime tsIngreso; // Usar OffsetDateTime para timestamp with time zone
-        private OffsetDateTime tsActualizacion;
-        private Integer idUsuarioRegistro;
-        private String origenRegistroUsuario;
-        
-        // Propiedades para los detalles (no mapeadas directamente a la tabla principal)
-        private List<Antecedente> antecedentes;
-        private List<Diagnostico> diagnosticos;
-        private List<Discapacidad> discapacidades;
-        private List<DiscapacidadOtros> discapacidadOtros;
-        private List<ExamenFisico> examenesFisicos;
-        private List<OrdenMedica> ordenesMedicas;
-        private List<Medicacion> medicacion;
-        
-        
-    }
-
-    /**
-     * 2. Detalle: igm_atenciones_medicas.atenciones_medicas_antecedentes
+     * Detalle: Modelo de Antecedente
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Antecedente {
         private Long idAtencionAntecedente;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idAntecedente;
         private Integer idTipoAntecedente;
         private String descripcion;
@@ -65,14 +61,14 @@ public class AtencionMedicaModel {
     }
 
     /**
-     * 3. Detalle: igm_atenciones_medicas.atenciones_medicas_diagnosticos
+     * Detalle: Modelo de Diagnostico
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Diagnostico {
         private Long idAtencionDiagnostico;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idDiagnostico;
         private Integer idSubclasificacion;
         private Integer idLab1;
@@ -82,14 +78,14 @@ public class AtencionMedicaModel {
     }
 
     /**
-     * 4. Detalle: igm_atenciones_medicas.atenciones_medicas_discapacidad
+     * Detalle: Modelo de Discapacidad
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Discapacidad {
         private Long idAtencionDiscapacidad;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idDiscapacidad;
         private Integer idGravedadDiscapacidad;
         private Integer idUsuario;
@@ -97,21 +93,21 @@ public class AtencionMedicaModel {
     }
 
     /**
-     * 5. Detalle: igm_atenciones_medicas.atenciones_medicas_discapacidad_otros
+     * Detalle: Modelo de DiscapacidadOtros
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DiscapacidadOtros {
         private Long idAtencionDiscapacidadOtros;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idTipoActividad;
-        private Integer idTiempoDiscapacidadAa; // aa = años
-        private Integer idTiempoDiscapacidadMm; // mm = meses
-        private Integer idTiempoDiscapacidadDd; // dd = días
-        private Integer idTiempoSintrabajarAa;
-        private Integer idTiempoSintrabajarMm;
-        private Integer idTiempoSintrabajarDd;
+        private Integer idTiempoDiscapacidadAnios; 
+        private Integer idTiempoDiscapacidadMeses; 
+        private Integer idTiempoDiscapacidadDias; 
+        private Integer idTiempoSintrabajarAnios;
+        private Integer idTiempoSintrabajarMeses;
+        private Integer idTiempoSintrabajarDias;
         private Integer idAlta;
         private Integer idProductividad;
         private Integer idUsuario;
@@ -119,14 +115,14 @@ public class AtencionMedicaModel {
     }
 
     /**
-     * 6. Detalle: igm_atenciones_medicas.atenciones_medicas_examen_fisico
+     * Detalle: Modelo de ExamenFisico
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ExamenFisico {
         private Long idAtencionExamenFisico;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idExamenFisico;
         private Integer idTipoExamenFisico;
         private String descripcion;
@@ -135,14 +131,14 @@ public class AtencionMedicaModel {
     }
     
     /**
-     * 7. Detalle: igm_atenciones_medicas.atenciones_medicas_ordenes_medicas
+     * Detalle: Modelo de OrdenMedica
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class OrdenMedica {
         private Long idAtencionOrdenMedica;
-        private Long idAtencion; // FK
+        private Long idAtencion; 
         private Integer idPuntoCarga;
         private Integer idEstado;
         private Integer idProducto;
@@ -156,18 +152,18 @@ public class AtencionMedicaModel {
     }
     
     /**
-     * 8. Detalle: igm_atenciones_medicas.atenciones_medicas_medicacion
+     * Detalle: Modelo de Medicacion
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Medicacion {
         private Long idAtencionMedicacion;
-        private Long idAtencion; // FK
-        private Integer idProducto; // Suponiendo que la medicación está relacionada a un producto
+        private Long idAtencion; 
+        private Integer idProducto; 
         private Integer idAlmacen;
         private Integer cantidadDosis;
-        private Integer idUmDosis; // Unidad de Medida de Dosis
+        private Integer idUmDosis; 
         private Integer idFrecuenciaDosis;
         private Integer cantidadPeriodo;
         private Integer idViaAdministracion;
@@ -179,42 +175,37 @@ public class AtencionMedicaModel {
         private Integer idUsuario;
         private OffsetDateTime tsRegistro;
     }
-  
     
     /**
-     * 8. Detalle: igm_atenciones_medicas.atenciones_medicas_tratamientos
+     * Detalle: Modelo de Sintoma
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Sintoma {
         private Long idAtencionSintoma;
-        private Long idAtencion; // FK
-        private Integer idSintoma; // Suponiendo que la medicación está relacionada a un producto
+        private Long idAtencion; 
+        private Integer idSintoma; 
         private Integer idTipoSintoma;
-        private Integer descripcion;
+        private String descripcion; 
         private Integer idUsuario;
         private OffsetDateTime tsRegistro;
     }
     
 
     /**
-     * 8. Detalle: igm_atenciones_medicas.atenciones_medicas_tratamientos
+     * Detalle: Modelo de Tratamiento
      */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Tratamiento {
         private Long idAtencionTratamiento;
-        private Long idAtencion; // FK
-        private Integer idTratamiento; // Suponiendo que la medicación está relacionada a un producto
+        private Long idAtencion; 
+        private Integer idTratamiento; 
         private Integer idTipoTratamiento;
-        private Integer descripcion;
+        private String descripcion; 
         private Integer idUsuario;
         private OffsetDateTime tsRegistro;
     }
-    
-    
-    
-    
 }

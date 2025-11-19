@@ -1,114 +1,129 @@
-
 package com.api_salud.atencionmedica.mapper;
+//===================================================================================
+//IMPORTACIONES
+//===================================================================================
 
-import com.api_salud.atencionmedica.entity.*;
+//Modelos de Dominio (Terminan en Model)
+import com.api_salud.atencionmedica.domain.AtencionMedicaModel; 
+import com.api_salud.atencionmedica.domain.AtencionMedicaModel.Antecedente; 
+
+//Entidades de Persistencia (Terminan en Entity)
+import com.api_salud.atencionmedica.entity.AtencionMedicaEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaAntecedenteEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaDiagnosticoEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaDiscapacidadEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaDiscapacidadOtrosEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaExamenFisicoEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaMedicacionEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaOrdenMedicaEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaSintomaEntity;
+import com.api_salud.atencionmedica.entity.AtencionMedicaTratamientoEntity;
+
+//DTOs de Request (Terminan en DTO)
 import com.api_salud.atencionmedica.request.*;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
 /**
- * Mapper de MapStruct para la conversión entre Request DTOs y Entidades de Atención Médica.
- * Se configura con componentModel = "spring" para la inyección de dependencias.
- *
- * NOTA: Este código es 100% compatible con Java 8.
- */
+* Mapper de MapStruct para la conversión entre DTOs, Modelos y Entidades de Atención Médica.
+* Asegura la separación de capas usando la nomenclatura:
+* - Modelos: AtencionMedicaModel
+* - Entidades: AtencionMedicaEntity
+* - DTOs: AtencionMedicaRequestDTO
+*/
 @Mapper(componentModel = "spring")
 public interface AtencionMedicaMapper {
 
 	
-    // ===================================================================================
-    // 1. Mapeo Principal: Request DTO a Entidad de Cabecera (AtencionMedica)
-    // ===================================================================================
+ // ===================================================================================
+ // 1. DTO a MODELO (Controller -> Service)
+ // ===================================================================================
+ 
+ // Mapea el DTO (recibido por HTTP) al MODELO de Dominio.
+ AtencionMedicaModel toModel(AtencionMedicaRequestDTO dto); 
 
-    /**
-     * Convierte el DTO principal de la solicitud (incluyendo sus listas de detalles)
-     * a la Entidad principal de Atención Médica.
-     * @param dto El DTO de solicitud completo.
-     * @return La entidad de Atención Médica.
-     */
-    @Mappings({
-        // Ignorar el ID de la entidad principal (se genera al guardar en la BD)
-        @Mapping(target = "id", ignore = true),
-        
-        // Mapeo de las listas de detalles (MapStruct maneja la recursividad automáticamente)
-        @Mapping(target = "antecedentes", source = "antecedentes"),
-        @Mapping(target = "diagnosticos", source = "diagnosticos"),
-        @Mapping(target = "discapacidades", source = "discapacidades"),
-        @Mapping(target = "discapacidadOtros", source = "discapacidadOtros"),
-        @Mapping(target = "examenesFisicos", source = "examenesFisicos"),
-        @Mapping(target = "medicacion", source = "medicacion"),
-        @Mapping(target = "ordenesMedicas", source = "ordenesMedicas"),
-        @Mapping(target = "sintomas", source = "sintomas"),
-        @Mapping(target = "tratamientos", source = "tratamientos"),
-        
-        // Mapeo de campos directos de la cabecera (se asume que tienen el mismo nombre)
-        @Mapping(target = "idPaciente", source = "idPaciente"),
-        @Mapping(target = "idCuentaAtencion", source = "idCuentaAtencion"),
-        @Mapping(target = "idServicio", source = "idServicio"),
-        @Mapping(target = "idMedicoIngreso", source = "idMedicoIngreso"),
-        @Mapping(target = "idEstadoAtencion", source = "idEstadoAtencion"),
-        @Mapping(target = "tsIngreso", source = "tsIngreso"),
-        @Mapping(target = "idUsuarioRegistro", source = "idUsuarioRegistro"),
-        @Mapping(target = "origenRegistroUsuario", source = "origenRegistroUsuario")
-    })
-//    AtencionMedica toEntity(AtencionMedicaRequestDTO dto);
+ // ===================================================================================
+ // 2. MODELO a Entidad (Service -> Repository)
+ // ===================================================================================
+ 
+ @Mappings({
+     // Ignorar el ID de la entidad principal (se genera al guardar en la BD)
+     @Mapping(target = "id", ignore = true),
+     
+     // Mapeo de las listas de detalles
+     @Mapping(target = "antecedentes", source = "antecedentes"),
+     @Mapping(target = "diagnosticos", source = "diagnosticos"),
+     @Mapping(target = "discapacidades", source = "discapacidades"),
+     @Mapping(target = "discapacidadOtros", source = "discapacidadOtros"),
+     @Mapping(target = "examenesFisicos", source = "examenesFisicos"),
+     @Mapping(target = "medicacion", source = "medicacion"),
+     @Mapping(target = "ordenesMedicas", source = "ordenesMedicas"),
+     @Mapping(target = "sintomas", source = "sintomas"),
+     @Mapping(target = "tratamientos", source = "tratamientos"),
+     
+     // Mapeo de campos directos de la cabecera 
+     @Mapping(target = "idPaciente", source = "idPaciente"),
+     @Mapping(target = "idCuentaAtencion", source = "idCuentaAtencion"),
+     @Mapping(target = "idServicio", source = "idServicio"),
+     @Mapping(target = "idMedicoIngreso", source = "idMedicoIngreso"),
+     @Mapping(target = "idEstadoAtencion", source = "idEstadoAtencion"),
+     @Mapping(target = "tsIngreso", source = "tsIngreso"),
+     @Mapping(target = "idUsuarioRegistro", source = "idUsuarioRegistro"),
+     @Mapping(target = "origenRegistroUsuario", source = "origenRegistroUsuario")
+ })
+ // Mapea el Modelo de Dominio (AtencionMedicaModel) al objeto de Persistencia (AtencionMedicaEntity).
+ AtencionMedicaEntity toEntity(AtencionMedicaModel model); 
+ 
+ 
+ // ===================================================================================
+ // 3. Mapeo de Detalles (DTO a Entity de Detalle)
+ // ===================================================================================
 
-    AtencionMedica toModel(AtencionMedicaRequestDTO dto); 
+ // --- Antecedente ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaAntecedenteEntity toEntity(AntecedenteRequestDTO dto);
+ List<AtencionMedicaAntecedenteEntity> toAntecedenteEntityList(List<AntecedenteRequestDTO> dtos);
 
-    // Y añades un nuevo método para la conversión final, que solo usará el Service
-    AtencionMedica toEntity(AtencionMedica model);
-    
-    
-    // ===================================================================================
-    // 2. Mapeo de Detalles (Métodos individuales y de lista)
-    // ===================================================================================
+ // --- Diagnostico ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaDiagnosticoEntity toEntity(DiagnosticoRequestDTO dto);
+ List<AtencionMedicaDiagnosticoEntity> toDiagnosticoEntityList(List<DiagnosticoRequestDTO> dtos);
 
-    // --- Antecedente ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaAntecedente toEntity(AntecedenteRequestDTO dto);
-    List<AtencionMedicaAntecedente> toAntecedenteEntityList(List<AntecedenteRequestDTO> dtos);
+ // --- Discapacidad ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaDiscapacidadEntity toEntity(DiscapacidadRequestDTO dto);
+ List<AtencionMedicaDiscapacidadEntity> toDiscapacidadEntityList(List<DiscapacidadRequestDTO> dtos);
 
-    // --- Diagnostico ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaDiagnostico toEntity(DiagnosticoRequestDTO dto);
-    List<AtencionMedicaDiagnostico> toDiagnosticoEntityList(List<DiagnosticoRequestDTO> dtos);
+ // --- Discapacidad Otros ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaDiscapacidadOtrosEntity toEntity(DiscapacidadOtrosRequestDTO dto);
+ List<AtencionMedicaDiscapacidadOtrosEntity> toDiscapacidadOtrosEntityList(List<DiscapacidadOtrosRequestDTO> dtos);
 
-    // --- Discapacidad ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaDiscapacidad toEntity(DiscapacidadRequestDTO dto);
-    List<AtencionMedicaDiscapacidad> toDiscapacidadEntityList(List<DiscapacidadRequestDTO> dtos);
+ // --- Examen Físico ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaExamenFisicoEntity toEntity(ExamenFisicoRequestDTO dto);
+ List<AtencionMedicaExamenFisicoEntity> toExamenFisicoEntityList(List<ExamenFisicoRequestDTO> dtos);
 
-    // --- Discapacidad Otros ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaDiscapacidadOtros toEntity(DiscapacidadOtrosRequestDTO dto);
-    List<AtencionMedicaDiscapacidadOtros> toDiscapacidadOtrosEntityList(List<DiscapacidadOtrosRequestDTO> dtos);
+ // --- Medicación ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaMedicacionEntity toEntity(MedicacionRequestDTO dto);
+ List<AtencionMedicaMedicacionEntity> toMedicacionEntityList(List<MedicacionRequestDTO> dtos);
 
-    // --- Examen Físico ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaExamenFisico toEntity(ExamenFisicoRequestDTO dto);
-    List<AtencionMedicaExamenFisico> toExamenFisicoEntityList(List<ExamenFisicoRequestDTO> dtos);
+ // --- Orden Médica ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaOrdenMedicaEntity toEntity(OrdenMedicaRequestDTO dto);
+ List<AtencionMedicaOrdenMedicaEntity> toOrdenMedicaEntityList(List<OrdenMedicaRequestDTO> dtos);
 
-    // --- Medicación ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaMedicacion toEntity(MedicacionRequestDTO dto);
-    List<AtencionMedicaMedicacion> toMedicacionEntityList(List<MedicacionRequestDTO> dtos);
+ // --- Síntoma ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaSintomaEntity toEntity(SintomaRequestDTO dto);
+ List<AtencionMedicaSintomaEntity> toSintomaEntityList(List<SintomaRequestDTO> dtos);
 
-    // --- Orden Médica ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaOrdenMedica toEntity(OrdenMedicaRequestDTO dto);
-    List<AtencionMedicaOrdenMedica> toOrdenMedicaEntityList(List<OrdenMedicaRequestDTO> dtos);
-
-    // --- Síntoma ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaSintoma toEntity(SintomaRequestDTO dto);
-    List<AtencionMedicaSintoma> toSintomaEntityList(List<SintomaRequestDTO> dtos);
-
-    // --- Tratamiento ---
-    @Mapping(target = "id", ignore = true)
-    AtencionMedicaTratamiento toEntity(TratamientoRequestDTO dto);
-    List<AtencionMedicaTratamiento> toTratamientoEntityList(List<TratamientoRequestDTO> dtos);
+ // --- Tratamiento ---
+ @Mapping(target = "id", ignore = true)
+ AtencionMedicaTratamientoEntity toEntity(TratamientoRequestDTO dto);
+ List<AtencionMedicaTratamientoEntity> toTratamientoEntityList(List<TratamientoRequestDTO> dtos);
 }

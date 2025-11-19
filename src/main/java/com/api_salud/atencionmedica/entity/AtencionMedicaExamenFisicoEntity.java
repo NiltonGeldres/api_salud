@@ -3,21 +3,21 @@ package com.api_salud.atencionmedica.entity;
 import java.time.OffsetDateTime;
 
 /**
- * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_tratamientos
+ * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_examen_fisico
  */
-public class AtencionMedicaTratamiento {
+public class AtencionMedicaExamenFisicoEntity {
 
-    // PK: id_atencion_tratamiento bigint
-    private Long idAtencionTratamiento;
+    // PK: id_atencion_examen_fisico bigint
+    private Long idAtencionExamenFisico;
 
     // FK: id_atencion bigint
     private Long idAtencion;
 
     // Campos
-    // id_tratamiento integer
-    private Integer idTratamiento;
-    // id_tipo_tratamiento integer
-    private Integer idTipoTratamiento;
+    // id_examen_fisico integer
+    private Integer idExamenFisico;
+    // id_tipo_examen_fisico integer
+    private Integer idTipoExamenFisico;
     // descripcion character varying(5000)
     private String descripcion;
 
@@ -29,17 +29,17 @@ public class AtencionMedicaTratamiento {
 
     // --- Constructor, Getters y Setters ---
 
-    public AtencionMedicaTratamiento() {
+    public AtencionMedicaExamenFisicoEntity() {
     }
 
     // Getters y Setters
     // ...
-    public Long getIdAtencionTratamiento() {
-        return idAtencionTratamiento;
+    public Long getIdAtencionExamenFisico() {
+        return idAtencionExamenFisico;
     }
 
-    public void setIdAtencionTratamiento(Long idAtencionTratamiento) {
-        this.idAtencionTratamiento = idAtencionTratamiento;
+    public void setIdAtencionExamenFisico(Long idAtencionExamenFisico) {
+        this.idAtencionExamenFisico = idAtencionExamenFisico;
     }
 
     public Long getIdAtencion() {
@@ -50,20 +50,20 @@ public class AtencionMedicaTratamiento {
         this.idAtencion = idAtencion;
     }
 
-    public Integer getIdTratamiento() {
-        return idTratamiento;
+    public Integer getIdExamenFisico() {
+        return idExamenFisico;
     }
 
-    public void setIdTratamiento(Integer idTratamiento) {
-        this.idTratamiento = idTratamiento;
+    public void setIdExamenFisico(Integer idExamenFisico) {
+        this.idExamenFisico = idExamenFisico;
     }
 
-    public Integer getIdTipoTratamiento() {
-        return idTipoTratamiento;
+    public Integer getIdTipoExamenFisico() {
+        return idTipoExamenFisico;
     }
 
-    public void setIdTipoTratamiento(Integer idTipoTratamiento) {
-        this.idTipoTratamiento = idTipoTratamiento;
+    public void setIdTipoExamenFisico(Integer idTipoExamenFisico) {
+        this.idTipoExamenFisico = idTipoExamenFisico;
     }
 
     public String getDescripcion() {

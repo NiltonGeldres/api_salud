@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 /**
  * Entidad que mapea la tabla igm_atenciones_medicas.atenciones_medicas_sintomas
  */
-public class AtencionMedicaSintoma {
+public class AtencionMedicaSintomaEntity {
 
     // PK: id_atencion_sintoma bigint
     private Long idAtencionSintoma;
@@ -29,7 +29,7 @@ public class AtencionMedicaSintoma {
 
     // --- Constructor, Getters y Setters ---
 
-    public AtencionMedicaSintoma() {
+    public AtencionMedicaSintomaEntity() {
     }
 
     // Getters y Setters

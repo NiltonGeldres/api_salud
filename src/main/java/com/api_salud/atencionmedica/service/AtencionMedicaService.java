@@ -1,53 +1,73 @@
 package com.api_salud.atencionmedica.service;
 
-import com.api_salud.atencionmedica.domain.AtencionMedicaModel.AtencionMedica;
-import java.util.List;
+import com.api_salud.atencionmedica.domain.AtencionMedicaModel;
+import com.api_salud.atencionmedica.entity.AtencionMedicaEntity;
+import com.api_salud.atencionmedica.mapper.AtencionMedicaMapper;
+import com.api_salud.atencionmedica.repository.AtencionMedicaRepository;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.OffsetDateTime;
+
 
 /**
- * Interfaz que define las operaciones de negocio para la gestión de Atención Médica.
- * Incluye la orquestación del CRUD maestro y sus múltiples detalles.
+ * SERVICIO DE NEGOCIO: Implementa la lógica de la aplicación.
+ * Recibe y retorna el AtencionMedicaModel (objeto de dominio limpio).
+ * Es responsable de validar la data y coordinar con el Mapper y el Repository.
  */
-public interface AtencionMedicaService {
+@Service
+@RequiredArgsConstructor
+public class AtencionMedicaService {
+    
+    // Inyección de dependencias
+    private final AtencionMedicaRepository atencionMedicaRepository;
+    private final AtencionMedicaMapper mapper;
 
     /**
-     * Inserta una nueva Atención Médica junto con todos sus detalles asociados.
-     *
-     * @param atencion El objeto AtencionMedica completo (maestro + detalles).
-     * @return El ID de la Atención Médica insertada (idAtencion).
+     * Procesa la creación de una atención médica completa (cabecera y detalles).
+     * @param atencionModel El modelo de dominio de Atención Médica.
+     * @return El ID de la atención médica creada.
      */
-    Long crearAtencionMedicaCompleta(AtencionMedica atencion);
+    @Transactional
+    public Long crearAtencionMedicaCompleta(AtencionMedicaModel atencionModel) {
+        
+        // ====================================================================
+        // 1. Lógica de Negocio y Validación (Se ejecuta sobre el Model)
+        // ====================================================================
+        
+        // Ejemplo de lógica: Establecer timestamps y estado antes de persistir
+        if (atencionModel.getTsIngreso() == null) {
+            atencionModel.setTsIngreso(OffsetDateTime.now());
+        }
+        atencionModel.setTsActualizacion(OffsetDateTime.now());
+        
+        // Ejemplo de validación: Asegurar que el ID del paciente es válido
+        if (atencionModel.getIdPaciente() == null || atencionModel.getIdPaciente() <= 0) {
+            throw new IllegalArgumentException("El ID del paciente es obligatorio para registrar una atención.");
+        }
+        
+        System.out.println("Lógica de Negocio ejecutada exitosamente para el paciente: " + atencionModel.getIdPaciente());
 
-    /**
-     * Obtiene una Atención Médica por su ID, incluyendo todos sus detalles.
-     *
-     * @param idAtencion ID de la Atención Médica a buscar.
-     * @return El objeto AtencionMedica completo o null si no se encuentra.
-     */
-    AtencionMedica obtenerAtencionMedicaCompletaPorId(Long idAtencion);
+        // ====================================================================
+        // 2. Mapeo a Entidad (Model -> Entity)
+        // ====================================================================
 
-    /**
-     * Lista todas las Atenciones Médicas de un paciente específico (sin cargar los detalles por defecto).
-     *
-     * @param idPaciente ID del paciente.
-     * @return Lista de objetos AtencionMedica (solo la información maestra).
-     */
-    List<AtencionMedica> listarAtencionesPorPaciente(Integer idPaciente);
+        // Conversión del Modelo de Dominio (Model) al objeto de Persistencia (Entity)
+        AtencionMedicaEntity atencionEntity = mapper.toEntity(atencionModel);
 
-    /**
-     * Actualiza la información maestra de una Atención Médica y sus detalles.
-     * NOTA: La lógica de actualización de detalles puede variar (eliminar/insertar vs. update individual).
-     * Aquí se implementará una lógica básica de reemplazo.
-     *
-     * @param atencion El objeto AtencionMedica con los datos actualizados.
-     * @return true si la actualización fue exitosa, false en caso contrario.
-     */
-    Boolean actualizarAtencionMedicaCompleta(AtencionMedica atencion);
+        // ====================================================================
+        // 3. Persistencia (Guardar en la BD)
+        // ====================================================================
+        
+        // El repositorio guarda la Entidad completa
+        AtencionMedicaEntity savedEntity = atencionMedicaRepository.save(atencionEntity);
+        
+        System.out.println("Atención médica y sus detalles guardados con éxito.");
 
-    /**
-     * Elimina lógicamente una Atención Médica.
-     *
-     * @param idAtencion ID de la Atención Médica a eliminar.
-     * @return true si la eliminación fue exitosa.
-     */
-    Boolean eliminarAtencionMedica(Long idAtencion);
+        // Retorna el ID generado por la base de datos
+        return savedEntity.getId();
+    }
+
+    // Aquí irían otros métodos de servicio: buscar, actualizar, eliminar, etc.
 }
