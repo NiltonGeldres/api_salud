@@ -1,135 +1,135 @@
 package com.api_salud.api_salud.entity;
 
 import java.util.Date;
-
+/*
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+*/
 public class PacienteEntity {
 	
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    @Column(name = "idpaciente")
+//	    @Id
+//	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	    @Column(name = "idpaciente")
 	    private Integer idPaciente;
 
-	    @Column(name = "nrohistoriaclinica")
+//	    @Column(name = "nrohistoriaclinica")
 	    private String nroHistoriaClinica;
 
-	    @Column(name = "nrodocumento")
+//	    @Column(name = "nrodocumento")
 	    private String nroDocumento;
 
-	    @Column(name = "apellidopaterno")
+//	    @Column(name = "apellidopaterno")
 	    private String apellidoPaterno;
 
-	    @Column(name = "apellidomaterno")
+//	    @Column(name = "apellidomaterno")
 	    private String apellidoMaterno;
 
-	    @Column(name = "primernombre")
+//	    @Column(name = "primernombre")
 	    private String primerNombre;
 
-	    @Column(name = "segundonombre")
+//	    @Column(name = "segundonombre")
 	    private String segundoNombre;
 
-	    @Column(name = "tercernombre")
+//	    @Column(name = "tercernombre")
 	    private String tercerNombre;
 
-	    @Column(name = "fechanacimiento")
+//	    @Column(name = "fechanacimiento")
 	    private String fechaNacimiento;
 
-	    @Column(name = "telefono")
+//	    @Column(name = "telefono")
 	    private String telefono;
 
-	    @Column(name = "email")
+//	    @Column(name = "email")
 	    private String email;
 
-	    @Column(name = "direcciondomicilio")
+//	    @Column(name = "direcciondomicilio")
 	    private String direccionDomicilio;
 
-	    @Column(name = "nombrepadre")
+//	    @Column(name = "nombrepadre")
 	    private String nombrePadre;
 
-	    @Column(name = "nombremadre")
+//	    @Column(name = "nombremadre")
 	    private String nombreMadre;
 
-	    @Column(name = "observacion")
+//	    @Column(name = "observacion")
 	    private String observacion;
 
-	    @Column(name = "gruposanguineo")
+//	    @Column(name = "gruposanguineo")
 	    private String grupoSanguineo;
 
-	    @Column(name = "factorrh")
+//	    @Column(name = "factorrh")
 	    private String factorRh;
 
-	    @Column(name = "idtiposexo")
+//	    @Column(name = "idtiposexo")
 	    private Integer idTipoSexo;
 
-	    @Column(name = "idgradoinstruccion")
+//	    @Column(name = "idgradoinstruccion")
 	    private Integer idGradoInstruccion;
 
-	    @Column(name = "idestadocivil")
+	    //	    @Column(name = "idestadocivil")
 	    private Integer idEstadoCivil;
 
-	    @Column(name = "iddocidentidad")
+	    //	    @Column(name = "iddocidentidad")
 	    private Integer idDocIdentidad;
 
-	    @Column(name = "idtipoocupacion")
+	    //	    @Column(name = "idtipoocupacion")
 	    private Integer idTipoOcupacion;
 
-	    @Column(name = "nroordenhijo")
+	    //	    @Column(name = "nroordenhijo")
 	    private Integer nroOrdenHijo;
 
-	    @Column(name = "ididioma")
+	    //	    @Column(name = "ididioma")
 	    private Integer idIdioma;
 
-	    @Column(name = "idetnia")
+	    //	    @Column(name = "idetnia")
 	    private Integer idEtnia;
 
-	    @Column(name = "idreligion")
+	    //	    @Column(name = "idreligion")
 	    private Integer idReligion;
 
-	    @Column(name = "idprocedencia")
+	    //	    @Column(name = "idprocedencia")
 	    private Integer idProcedencia;
 
-	    @Column(name = "idpaisdomicilio")
+	    //	    @Column(name = "idpaisdomicilio")
 	    private Integer idPaisDomicilio;
 
-	    @Column(name = "idpaisprocedencia")
+	    //	    @Column(name = "idpaisprocedencia")
 	    private Integer idPaisProcedencia;
 
-	    @Column(name = "idpaisnacimiento")
+	    //	    @Column(name = "idpaisnacimiento")
 	    private Integer idPaisNacimiento;
 
-	    @Column(name = "iddepartamentoprocedencia")
+	    //	    @Column(name = "iddepartamentoprocedencia")
 	    private Integer idDepartamentoProcedencia;
 
-	    @Column(name = "iddepartamentodomicilio")
+	    //	    @Column(name = "iddepartamentodomicilio")
 	    private Integer idDepartamentoDomicilio;
 
-	    @Column(name = "iddepartamentonacimiento")
+	    //	    @Column(name = "iddepartamentonacimiento")
 	    private Integer idDepartamentoNacimiento;
 
-	    @Column(name = "iddistritoprocedencia")
+	    //	    @Column(name = "iddistritoprocedencia")
 	    private Integer idDistritoProcedencia;
 
-	    @Column(name = "iddistritodomicilio")
+	    //	    @Column(name = "iddistritodomicilio")
 	    private Integer idDistritoDomicilio;
 
-	    @Column(name = "iddistritonacimiento")
+	    //	    @Column(name = "iddistritonacimiento")
 	    private Integer idDistritoNacimiento;
 
-	    @Column(name = "idcentropobladoprocedencia")
+	    //	    @Column(name = "idcentropobladoprocedencia")
 	    private Integer idCentroPobladoProcedencia;
 
-	    @Column(name = "idcentropobladodomicilio")
+	    //	    @Column(name = "idcentropobladodomicilio")
 	    private Integer idCentroPobladoDomicilio;
 
-	    @Column(name = "idcentropobladonacimiento")
+	    //	    @Column(name = "idcentropobladonacimiento")
 	    private Integer idCentroPobladoNacimiento;
 
-	    @Column(name = "idusuario")
+//    @Column(name = "idusuario")
 	    private Integer idUsuario;
 
 		public Integer getIdPaciente() {

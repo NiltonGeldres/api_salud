@@ -1,6 +1,6 @@
 package com.api_salud.api_salud.entity;
 
-
+/*
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,14 +10,14 @@ import javax.persistence.Table;
 
 
 @Entity 
-@Table(name = "citas_separadas")
+@Table(name = "citas_separadas")*/
 public class CitaSeparadaEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Id
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
 	int idCitaSeparada;
 	
-@Column(name = "fecha")
+//	@Column(name = "fecha")
 //@NotNull(message="fecha: no ha sido ingresada")
  //   @NotEmpty	
     String fecha ;

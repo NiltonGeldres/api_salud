@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor 
 public class AtencionMedicaController {
 
- private final AtencionMedicaService atencionMedicaService;
- private final AtencionMedicaMapper mapper;
+ private final AtencionMedicaService atencionMedicaService = null;
+ private final AtencionMedicaMapper mapper = null;
 
  /**
   * Endpoint para crear una nueva atención médica.

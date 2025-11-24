@@ -8,18 +8,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import com.api_salud.api_salud.repository.CitaDao;
+import com.api_salud.api_salud.repository.ProgramacionMedicaDao;
 import com.api_salud.api_salud.response.CitaDisponibleResponse;
 import com.api_salud.api_salud.response.CitaResponse;
 
 @SpringBootTest
 public class TestCitaAsignada {
 	@Autowired
-	CitaDao citaDao;
+	ProgramacionMedicaDao programacionMedicaDao;
 
 	@Test
 	void contextLoads() {
 		
-			CitaResponse data =	citaDao.asignadas(1762,"20240112" ,9 );
+			CitaResponse data =	programacionMedicaDao.asignadas(1762,"20240112" ,9 );
 		for (CitaDisponibleResponse  element : data.getCita()) {
 			//System.out.println("Elemento:  " +element.getHoraInicio());
 		}

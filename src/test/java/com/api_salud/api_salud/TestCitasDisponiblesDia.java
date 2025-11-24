@@ -11,11 +11,12 @@ import com.api_salud.api_salud.request.CitaRequest;
 import com.api_salud.api_salud.response.CitaDisponibleResponse;
 import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.service.CitaService;
+import com.api_salud.api_salud.service.ProgramacionMedicaService;
 
 @SpringBootTest
 public class TestCitasDisponiblesDia {
 	@Autowired
-	CitaService citaService;
+	ProgramacionMedicaService programacionMedicaService;
 
 	@Test
 	void contextLoads() {
@@ -24,7 +25,7 @@ public class TestCitasDisponiblesDia {
 		c.setIdEspecialidad(9);
 		c.setIdMedico(1762);
 		
-		CitaResponse data =	citaService.citaDisponible(c);
+		CitaResponse data =	programacionMedicaService.citaDisponible(c);
 		for (CitaDisponibleResponse element : data.getCita()) {
 		//	System.out.println("Elemento Entity :  " +element.getHoraInicio());
 //			System.out.println("Elemento Entity :  " +element.getIdProgramacion());

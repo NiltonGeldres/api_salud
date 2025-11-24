@@ -1,10 +1,6 @@
 package com.api_salud.api_salud.repository;
 
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,14 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.transaction.Transactional;
-
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -32,20 +25,11 @@ import org.springframework.stereotype.Repository;
 
 import com.api_salud.api_salud.entity.CitaBloqueadaEntity;
 import com.api_salud.api_salud.entity.CitaEntity;
-import com.api_salud.api_salud.entity.CitaSeparadaEntity;
-import com.api_salud.api_salud.entity.EspecialidadEntity;
-import com.api_salud.api_salud.entity.FacturacionOrdenServicioPagoEntity;
-import com.api_salud.api_salud.entity.FacturacionServicioDespachoEntity;
-import com.api_salud.api_salud.entity.MedicoEntity;
 import com.api_salud.api_salud.entity.ProgramacionMedicaEntity;
 
-import com.api_salud.api_salud.response.CitaBloqueadaResponse;
 import com.api_salud.api_salud.response.CitaDisponibleResponse;
 import com.api_salud.api_salud.response.CitaResponse;
-import com.api_salud.api_salud.response.CitaSeparadaResponse;
-import com.api_salud.api_salud.response.MedicoResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaResponse;
-import com.api_salud.api_salud.service.CitaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -65,8 +49,8 @@ public class CitaDaoImpl implements CitaDao{
 	private JdbcTemplate jdbcTemplate;  
 	private SimpleJdbcCall  simpleJdbcCallCita;  
 	
-	@Autowired
-	ProgramacionMedicaDao programacionMedicaDao;  
+//	@Autowired
+//	ProgramacionMedicaDao programacionMedicaDao;  
 	
 	@Autowired	
 	FacturacionDao facturacionDao;  
@@ -132,7 +116,7 @@ public class CitaDaoImpl implements CitaDao{
 	}
 
 	
-	
+/*	
 	@Override
 	public CitaResponse citasDisponiblesDia(int idMedico, String fecha, int idEspecialidad ) {
 		CitaResponse response = new CitaResponse();
@@ -140,7 +124,7 @@ public class CitaDaoImpl implements CitaDao{
 		ProgramacionMedicaResponse programacionMedica = null;  
 		programacionMedica = programacionMedicaDao.programacionMedicoFecha(idMedico,fecha,idEspecialidad);
 		
-		/* Recorrer programaciones del dia sin tomar la hora final de programacion*/
+		// Recorrer programaciones del dia sin tomar la hora final de programacion
 		List<CitaDisponibleResponse> citaProgramadaDia = new ArrayList<>();
 		List<String> citasProgramadasDiaTodas = new ArrayList<>();
 		for(ProgramacionMedicaEntity p : programacionMedica.getProgramacionMedica()) {
@@ -210,13 +194,13 @@ public class CitaDaoImpl implements CitaDao{
 		return response;
 	}
 	
-
+*/
 
 	
 	
 /* METODOS  UTILIS NO INTERFAZ*/
-	
-/*1*/	
+/*	
+//1	
 	@Override
 	public List<String> crearCitasProgramadasDiaTodas(String  fecha, String horaInicio,String horaFin) {
 		String DEFAULT_PATTERN = "yyyymmdd HH:mm:ss";		
@@ -244,7 +228,7 @@ public class CitaDaoImpl implements CitaDao{
 		return  cupos ;
 	}
 
-/*2*/
+//2
 	@Override
 	public List<String> citasNoDisponibleDia(int idMedico, String fecha, int idEspecialidad) {
 		List<String> citaAsignada = new ArrayList<>();
@@ -264,7 +248,7 @@ public class CitaDaoImpl implements CitaDao{
 		
 		return citaAsignada;
 	}
-/*3*/
+//3
 	
 	public CitaResponse asignadas(int idMedico, String fecha, int idEspecialidad) {
 		CitaResponse response = null;
@@ -336,9 +320,9 @@ public class CitaDaoImpl implements CitaDao{
 			return response;
 		}
 			
+	*/
 	
-	
-/* -----------------------------------------------------------------------------*/
+// -----------------------------------------------------------------------------
 	@Override
 	public int  leerXIdProgramacionMedica(int  idProgramacionMedica) {
    		System.out.println("idProgramacion "+idProgramacionMedica);
@@ -358,6 +342,8 @@ public class CitaDaoImpl implements CitaDao{
 		
 		return response;
 	}
+	
+	
 }
 
 

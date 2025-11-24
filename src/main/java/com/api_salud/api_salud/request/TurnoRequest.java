@@ -1,9 +1,9 @@
 package com.api_salud.api_salud.request;
 
-import javax.persistence.Id;
+//import javax.persistence.Id;
 
 public class TurnoRequest {
-	@Id
+//	@Id
 	int id_turno;
 
 	public int getId_turno() {

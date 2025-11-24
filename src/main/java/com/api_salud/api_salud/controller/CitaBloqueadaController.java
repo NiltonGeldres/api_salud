@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api_salud.api_salud.request.CitaBloqueadaRequest;
 import com.api_salud.api_salud.response.CitaBloqueadaResponse;
 import com.api_salud.api_salud.service.CitaBloqueadaService;
-import com.api_salud.api_salud.service.CitaSeparadaService;
-import com.api_salud.api_salud.service.CitaService;
-import com.api_salud.api_salud.service.UsuarioService;
+//import com.api_salud.api_salud.service.CitaSeparadaService;
+//import com.api_salud.api_salud.service.CitaService;
+//import com.api_salud.api_salud.service.UsuarioService;
 
 @RestController
 @RequestMapping("")
 public class CitaBloqueadaController {
 
-	@Autowired
-	CitaService citaService ;
+//	@Autowired
+//	CitaService citaService ;
 	
 	@Autowired
 	CitaBloqueadaService citaBloqueadaService;
 
-	@Autowired
-	CitaSeparadaService citaSeparadaService;
+//	@Autowired
+//	CitaSeparadaService citaSeparadaService;
 
-	@Autowired
-	UsuarioService usuarioService;
+//	@Autowired
+//	UsuarioService usuarioService;
     
     @PostMapping("/citaBloquear")
     public ResponseEntity<CitaBloqueadaResponse> citaBloquear(@RequestBody CitaBloqueadaRequest request){

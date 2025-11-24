@@ -19,8 +19,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
-import javax.transaction.Transactional;
-
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import com.api_salud.api_salud.entity.Role;
 import com.api_salud.api_salud.entity.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;

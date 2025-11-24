@@ -8,7 +8,7 @@ import com.api_salud.api_salud.response.CitaResponse;
 
 public interface CitaService {
 	
-	public CitaResponse citaDisponible(CitaRequest request);
+//	public CitaResponse citaDisponible(CitaRequest request);
 //	public CitaResponse crearCita(CitaFacturacionRequest request);
 	public int crearCita(CitaEntity c);	
 	public  CitaResponse leerCita(int idCita);	

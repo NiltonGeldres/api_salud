@@ -1,10 +1,10 @@
 package com.api_salud.api_salud.entity;
-
+/*
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+*/
 
 /*
 @NamedStoredProcedureQuery(name = "especialidad.web",  procedureName = "igm_maestros.especialidades_web_todos_leer", parameters = {
@@ -33,8 +33,8 @@ public class EspecialidadEntity {
 	
 //	  public static final String Web = "web";
 	  
-		@Id
-		@GeneratedValue(strategy=GenerationType.IDENTITY)
+//		@Id
+//		@GeneratedValue(strategy=GenerationType.IDENTITY)
 	   int idEspecialidad ;
        String descripcionEspecialidad;
 	public int getIdEspecialidad() {

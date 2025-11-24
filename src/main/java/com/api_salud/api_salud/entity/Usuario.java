@@ -1,16 +1,18 @@
 package com.api_salud.api_salud.entity;
-import javax.persistence.Entity;
+
+/*import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+*/
+//@Entity
+//@Table(name = "usuario", schema ="igm_security")
 
 
-@Entity
-@Table(name = "usuario", schema ="igm_security")
 public class Usuario {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	int id_usuario;
 	private String username;
 	private String password;

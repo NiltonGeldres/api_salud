@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.api_salud.api_salud.request.CitaRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaCrearRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaRequest;
+import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaMesResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaResponse;
 import com.api_salud.api_salud.service.MedicoService;
@@ -90,7 +93,18 @@ public class ProgramacionMedicaController {
 		return null;	
 	}
 	
-
+//---------------------------------------------------------
+    
+    
+    @PostMapping("/citaDisponible")
+    public ResponseEntity<CitaResponse> disponible(@RequestBody CitaRequest request){
+    	CitaResponse response = programacionMedicaService.citaDisponible(request);
+        return new ResponseEntity<CitaResponse>(response, HttpStatus.OK);
+    }	
+    
+    
+    
+//---------------------------------------------------------    
     
 	  static class medicoMesRequest  {
 		int mes;

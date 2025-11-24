@@ -1,12 +1,12 @@
 package com.api_salud.api_salud.entity;
-
+/*
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@Entity*/
 public class TurnoEntity {
 	
-	@Id
+//	@Id
 	int idTurno;
 	String descripcion;
 	String horaInicio;

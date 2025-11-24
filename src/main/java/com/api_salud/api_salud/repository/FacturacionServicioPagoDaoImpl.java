@@ -2,8 +2,8 @@ package com.api_salud.api_salud.repository;
 
 import java.sql.Types;
 
-import javax.transaction.Transactional;
-
+//import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;

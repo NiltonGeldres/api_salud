@@ -18,10 +18,11 @@ import com.api_salud.api_salud.entity.ProgramacionMedicaEntity;
 import com.api_salud.api_salud.entity.TurnoDetalleEntity;
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.repository.ProgramacionMedicaDao;
-
+import com.api_salud.api_salud.request.CitaRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaCrearDetalleRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaCrearRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaRequest;
+import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.MedicoResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaDiaResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaMesResponse;
@@ -75,6 +76,19 @@ public class ProgramacionMedicaServiceImpl implements ProgramacionMedicaService{
 				);
 
 	}
+	
+	
+	@Override
+	public CitaResponse citaDisponible(CitaRequest request) {
+		
+		return programacionMedicaDao.citasDisponiblesDia(
+			request.getIdMedico(),
+	        request.getFecha(),
+	        request.getIdEspecialidad()
+        );
+	}
+	
+	
 /*	
 	@Override
 	public ProgramacionMedicaMesResponse  programacionMedicoMesLeer1(int mes, int ano, int idMedico, int idEspecialidad) {

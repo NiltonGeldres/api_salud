@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.api_salud.api_salud.entity.TurnoDetalleEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class TurnoDetalleDaoImpl  implements TurnoDetalleDao {

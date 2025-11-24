@@ -1,13 +1,13 @@
 package com.api_salud.api_salud.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
 
 public class CitadoEntity {
 	
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//	@Id
+	//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 		int id;
 		String nroHistoriaClinica;
 		String nombres;

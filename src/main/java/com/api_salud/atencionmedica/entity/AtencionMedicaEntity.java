@@ -1,122 +1,122 @@
+// Archivo: com.api_salud.atencionmedica.entity.AtencionMedicaEntity.java
 package com.api_salud.atencionmedica.entity;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 /**
- * Entidad principal que mapea la tabla igm_atenciones_medicas.atenciones_medicas
+ * Entidad principal (Aggregate Root) para la capa de persistencia.
+ * Mapea la tabla igm_atenciones_medicas.atenciones_medicas (Cabecera) 
+ * y transporta las Entidades de Detalle para la inserción transaccional.
  */
 public class AtencionMedicaEntity {
 
-    // PK: id_atencion bigint
-    private Long idAtencion;
+    // --- 1. Campos de la Tabla igm_atenciones_medicas (Cabecera) ---
 
-    // FKs y campos obligatorios
-    // id_paciente integer
+    private Long idAtencion; // PK: id_atencion bigint
     private Integer idPaciente;
-    // id_cuenta_atencion integer
     private Integer idCuentaAtencion;
-    // id_servicio integer
     private Integer idServicio;
-    // id_medico_ingreso integer
     private Integer idMedicoIngreso;
-    // id_estado_atencion integer
     private Integer idEstadoAtencion;
-
-    // Fechas y Trazabilidad
-    // ts_ingreso timestamp with time zone
     private OffsetDateTime tsIngreso;
-    // ts_actualizacion timestamp with time zone (default now())
-    private OffsetDateTime tsActualizacion;
-    // id_usuario_registro integer
+    private OffsetDateTime tsActualizacion; // ts_actualizacion (default now())
     private Integer idUsuarioRegistro;
-    // origen_registro_usuario character varying(50)
     private String origenRegistroUsuario;
 
-    // --- Constructor, Getters y Setters ---
+    // --- 2. Colecciones de Entidades de Detalle (Para Mapeo y Persistencia) ---
+
+    // 1. Antecedentes (atenciones_medicas_antecedentes)
+    private List<AtencionMedicaAntecedenteEntity> antecedentes; 
+
+    // 2. Diagnósticos (atenciones_medicas_diagnosticos)
+    private List<AtencionMedicaDiagnosticoEntity> diagnosticos; 
+
+    // 3. Discapacidad (atenciones_medicas_discapacidad)
+    private List<AtencionMedicaDiscapacidadEntity> discapacidades; 
+
+    // 4. Discapacidad Otros (atenciones_medicas_discapacidad_otros)
+    private List<AtencionMedicaDiscapacidadOtrosEntity> discapacidadOtros;
+
+    // 5. Examen Físico (atenciones_medicas_examen_fisico)
+    private List<AtencionMedicaExamenFisicoEntity> examenesFisicos;
+
+    // 6. Órdenes Médicas (atenciones_medicas_ordenes_medicas)
+    private List<AtencionMedicaOrdenMedicaEntity> ordenesMedicas;
+
+    // 7. Medicación (atenciones_medicas_medicacion)
+    private List<AtencionMedicaMedicacionEntity> medicacion;
+
+    // 8. Síntomas (atenciones_medicas_sintomas)
+    private List<AtencionMedicaSintomaEntity> sintomas;
+
+    // 9. Tratamientos (atenciones_medicas_tratamientos)
+    private List<AtencionMedicaTratamientoEntity> tratamientos;
+
+    // --- 3. Constructor ---
 
     public AtencionMedicaEntity() {
     }
 
-    // Getters y Setters (se omiten por brevedad en este ejemplo,
-    // pero deben ser incluidos en una implementación real)
-    // ...
-    public Long getIdAtencion() {
-        return idAtencion;
-    }
+    // --- 4. Getters y Setters de Cabecera (Simplificados) ---
 
-    public void setIdAtencion(Long idAtencion) {
-        this.idAtencion = idAtencion;
-    }
+    public Long getIdAtencion() { return idAtencion; }
+    public void setIdAtencion(Long idAtencion) { this.idAtencion = idAtencion; }
+    public Integer getIdPaciente() { return idPaciente; }
+    public void setIdPaciente(Integer idPaciente) { this.idPaciente = idPaciente; }
+    public Integer getIdCuentaAtencion() { return idCuentaAtencion; }
+    public void setIdCuentaAtencion(Integer idCuentaAtencion) { this.idCuentaAtencion = idCuentaAtencion; }
+    public Integer getIdServicio() { return idServicio; }
+    public void setIdServicio(Integer idServicio) { this.idServicio = idServicio; }
+    public Integer getIdMedicoIngreso() { return idMedicoIngreso; }
+    public void setIdMedicoIngreso(Integer idMedicoIngreso) { this.idMedicoIngreso = idMedicoIngreso; }
+    public Integer getIdEstadoAtencion() { return idEstadoAtencion; }
+    public void setIdEstadoAtencion(Integer idEstadoAtencion) { this.idEstadoAtencion = idEstadoAtencion; }
+    public OffsetDateTime getTsIngreso() { return tsIngreso; }
+    public void setTsIngreso(OffsetDateTime tsIngreso) { this.tsIngreso = tsIngreso; }
+    public OffsetDateTime getTsActualizacion() { return tsActualizacion; }
+    public void setTsActualizacion(OffsetDateTime tsActualizacion) { this.tsActualizacion = tsActualizacion; }
+    public Integer getIdUsuarioRegistro() { return idUsuarioRegistro; }
+    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) { this.idUsuarioRegistro = idUsuarioRegistro; }
+    public String getOrigenRegistroUsuario() { return origenRegistroUsuario; }
+    public void setOrigenRegistroUsuario(String origenRegistroUsuario) { this.origenRegistroUsuario = origenRegistroUsuario; }
 
-    public Integer getIdPaciente() {
-        return idPaciente;
-    }
 
-    public void setIdPaciente(Integer idPaciente) {
-        this.idPaciente = idPaciente;
-    }
+    // --- 5. Getters y Setters de Detalles (Obligatorios para MapStruct y Repository) ---
+    
+    // Antecedentes
+    public List<AtencionMedicaAntecedenteEntity> getAntecedentes() { return antecedentes; }
+    public void setAntecedentes(List<AtencionMedicaAntecedenteEntity> antecedentes) { this.antecedentes = antecedentes; }
 
-    public Integer getIdCuentaAtencion() {
-        return idCuentaAtencion;
-    }
+    // Diagnósticos
+    public List<AtencionMedicaDiagnosticoEntity> getDiagnosticos() { return diagnosticos; }
+    public void setDiagnosticos(List<AtencionMedicaDiagnosticoEntity> diagnosticos) { this.diagnosticos = diagnosticos; }
 
-    public void setIdCuentaAtencion(Integer idCuentaAtencion) {
-        this.idCuentaAtencion = idCuentaAtencion;
-    }
+    // Discapacidad
+    public List<AtencionMedicaDiscapacidadEntity> getDiscapacidades() { return discapacidades; }
+    public void setDiscapacidades(List<AtencionMedicaDiscapacidadEntity> discapacidades) { this.discapacidades = discapacidades; }
 
-    public Integer getIdServicio() {
-        return idServicio;
-    }
+    // Discapacidad Otros
+    public List<AtencionMedicaDiscapacidadOtrosEntity> getDiscapacidadOtros() { return discapacidadOtros; }
+    public void setDiscapacidadOtros(List<AtencionMedicaDiscapacidadOtrosEntity> discapacidadOtros) { this.discapacidadOtros = discapacidadOtros; }
 
-    public void setIdServicio(Integer idServicio) {
-        this.idServicio = idServicio;
-    }
+    // Examen Físico
+    public List<AtencionMedicaExamenFisicoEntity> getExamenesFisicos() { return examenesFisicos; }
+    public void setExamenesFisicos(List<AtencionMedicaExamenFisicoEntity> examenesFisicos) { this.examenesFisicos = examenesFisicos; }
 
-    public Integer getIdMedicoIngreso() {
-        return idMedicoIngreso;
-    }
+    // Órdenes Médicas
+    public List<AtencionMedicaOrdenMedicaEntity> getOrdenesMedicas() { return ordenesMedicas; }
+    public void setOrdenesMedicas(List<AtencionMedicaOrdenMedicaEntity> ordenesMedicas) { this.ordenesMedicas = ordenesMedicas; }
 
-    public void setIdMedicoIngreso(Integer idMedicoIngreso) {
-        this.idMedicoIngreso = idMedicoIngreso;
-    }
+    // Medicación
+    public List<AtencionMedicaMedicacionEntity> getMedicacion() { return medicacion; }
+    public void setMedicacion(List<AtencionMedicaMedicacionEntity> medicacion) { this.medicacion = medicacion; }
 
-    public Integer getIdEstadoAtencion() {
-        return idEstadoAtencion;
-    }
+    // Síntomas
+    public List<AtencionMedicaSintomaEntity> getSintomas() { return sintomas; }
+    public void setSintomas(List<AtencionMedicaSintomaEntity> sintomas) { this.sintomas = sintomas; }
 
-    public void setIdEstadoAtencion(Integer idEstadoAtencion) {
-        this.idEstadoAtencion = idEstadoAtencion;
-    }
-
-    public OffsetDateTime getTsIngreso() {
-        return tsIngreso;
-    }
-
-    public void setTsIngreso(OffsetDateTime tsIngreso) {
-        this.tsIngreso = tsIngreso;
-    }
-
-    public OffsetDateTime getTsActualizacion() {
-        return tsActualizacion;
-    }
-
-    public void setTsActualizacion(OffsetDateTime tsActualizacion) {
-        this.tsActualizacion = tsActualizacion;
-    }
-
-    public Integer getIdUsuarioRegistro() {
-        return idUsuarioRegistro;
-    }
-
-    public void setIdUsuarioRegistro(Integer idUsuarioRegistro) {
-        this.idUsuarioRegistro = idUsuarioRegistro;
-    }
-
-    public String getOrigenRegistroUsuario() {
-        return origenRegistroUsuario;
-    }
-
-    public void setOrigenRegistroUsuario(String origenRegistroUsuario) {
-        this.origenRegistroUsuario = origenRegistroUsuario;
-    }
+    // Tratamientos
+    public List<AtencionMedicaTratamientoEntity> getTratamientos() { return tratamientos; }
+    public void setTratamientos(List<AtencionMedicaTratamientoEntity> tratamientos) { this.tratamientos = tratamientos; }
 }

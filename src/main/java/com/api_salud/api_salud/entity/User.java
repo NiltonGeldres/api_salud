@@ -1,5 +1,5 @@
 package com.api_salud.api_salud.entity;
-
+/*
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,9 +8,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="User")
+*/
 public class User {
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
+//		@Id
+//		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		int id;
 		String user	;
 		String password;

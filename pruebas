@@ -6,13 +6,15 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.18</version>
+		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
 	<groupId>com.api_salud</groupId>
 	<artifactId>api_salud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+<!--	<packaging>war</packaging> -->
 	
 	<name>api_salud</name>
 	<description>api_salud project for Spring Boot</description>
@@ -34,21 +36,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-        <!-- ** 3. LOMBOK (AGREGADO/CORREGIDO para @RequiredArgsConstructor) ** -->
-        <!-- Debe estar en provided y en los paths del compilador -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
-		<!--  3 Spring JPA (ELIMINAR SI ESTÁS USANDO SOLO JDBC) -->		
-		<!-- <dependency> 
+		<!--  3 Spring JPA -->		
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency> -->
-		
+		</dependency>
 		<!--  4 Spring TEST -->		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -70,7 +62,8 @@
  		<!--7-  Libreria crypto -->
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-crypto</artifactId> 
+		    <artifactId>spring-security-crypto</artifactId>
+		    <version>5.7.3</version> 
 		</dependency>
  		<!-- 8- POstgresql -->
 		<dependency>
@@ -96,33 +89,31 @@
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-mail</artifactId>
 	    </dependency>
-	    
-	    <!-- ********* DEPENDENCIAS AÑADIDAS PARA SOLUCIONAR EL BEAN JavaMailSender ********* -->
 	
-	    <!-- 11a. Java Activation Framework (Necesario para el manejo de MimeTypes en JavaMail) -->
-	    <dependency>
-	        <groupId>javax.activation</groupId>
-	        <artifactId>activation</artifactId>
-	        <version>1.1.1</version>
-	    </dependency>
-	    
-	    <!-- 11b. Java Mail API (Añade explícitamente las clases javax.mail.*) -->
-	    <dependency>
-	        <groupId>javax.mail</groupId>
-	        <artifactId>javax.mail-api</artifactId> 
-	    </dependency>
-    
-		<!--  12 DEPENDENCIA AÑADIDA: BINDING LOMBOK/MAPSTRUCT (Duplicada, solo se deja una) === -->
+		<!--  12 DEPENDENCIA AÑADIDA: BINDING LOMBOK/MAPSTRUCT === -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
             <version>0.2.0</version>
         </dependency>
 
-		<!--  13 JDBC === (Duplicada, solo se deja una) -->
+		<!--  12 DEPENDENCIA AÑADIDA: BINDING LOMBOK/MAPSTRUCT === -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+        
+		<!--  13 JDBC === -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		
+		<!--  13 JDBC === -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		
 		<!-- 14 MapStruct Library (La librería en sí) -->
@@ -147,13 +138,13 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
             
             <configuration>
                 <source>${java.version}</source> <!-- Versión de Java -->
                 <target>${java.version}</target> <!-- Versión de Java -->
                 <annotationProcessorPaths>
-                    
-                    <!-- 1. Procesador de Lombok (¡ESTE ERA EL QUE FALTABA O ESTABA MAL UBICADO!) -->
+                    <!-- 1. Procesador de Lombok (NECESARIO PARA EL BUILD DE MAVEN) -->
                     <path>
                         <groupId>org.projectlombok</groupId>
                         <artifactId>lombok</artifactId>

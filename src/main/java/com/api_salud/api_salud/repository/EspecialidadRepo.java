@@ -2,11 +2,12 @@ package com.api_salud.api_salud.repository;
 
 import java.util.List;
 import java.util.Map;
-
+/*
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+*/
 import org.springframework.transaction.annotation.Transactional;
 
 import com.api_salud.api_salud.entity.EspecialidadEntity;

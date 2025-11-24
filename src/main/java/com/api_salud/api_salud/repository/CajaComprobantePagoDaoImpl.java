@@ -3,7 +3,7 @@ package com.api_salud.api_salud.repository;
 import java.sql.Types;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -18,7 +18,7 @@ import com.api_salud.api_salud.entity.CajaComprobantePagoEntity;
 
 
 @Repository
-@Transactional
+@org.springframework.transaction.annotation.Transactional
 public class CajaComprobantePagoDaoImpl  implements CajaComprobantePagoDao{
 
 	@Autowired

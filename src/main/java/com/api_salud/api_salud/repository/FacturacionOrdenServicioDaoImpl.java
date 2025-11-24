@@ -4,7 +4,7 @@ package com.api_salud.api_salud.repository;
 import java.sql.Types;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import com.api_salud.api_salud.entity.FacturacionOrdenServicioEntity;
 import com.api_salud.api_salud.response.FacturacionOrdenServicioResponse;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository

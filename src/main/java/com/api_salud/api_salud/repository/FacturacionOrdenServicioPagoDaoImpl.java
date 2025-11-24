@@ -3,7 +3,7 @@ package com.api_salud.api_salud.repository;
 import java.sql.Types;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
