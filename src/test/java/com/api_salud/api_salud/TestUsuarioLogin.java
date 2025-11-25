@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.repository.UsuarioDao;
 import com.api_salud.api_salud.repository.UsuarioRepo;
@@ -56,9 +55,6 @@ public class TestUsuarioLogin {
 		    final String jwt = jwtUtilService.generateToken(userDetails);
 		    TokenInfo tokenInfo = new TokenInfo(jwt);
 		    System.out.println( "Token:  "+ResponseEntity.ok(tokenInfo));
-		    
-			
-		    
 
 		}	
 

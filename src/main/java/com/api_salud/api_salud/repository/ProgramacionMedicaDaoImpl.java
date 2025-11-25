@@ -46,8 +46,8 @@ public class ProgramacionMedicaDaoImpl  implements ProgramacionMedicaDao{
 	@Autowired
 	private CitaBloqueadaDao citaBloqueadaDao;
 
-	@Autowired
-	ProgramacionMedicaDao programacionMedicaDao;  
+//	@Autowired
+//	ProgramacionMedicaDao programacionMedicaDao;  
 	
 	
 	@Override
@@ -353,7 +353,8 @@ public class ProgramacionMedicaDaoImpl  implements ProgramacionMedicaDao{
 		CitaResponse response = new CitaResponse();
 		//Obtener la Programacion Medica solo hora de inicio y fin 
 		ProgramacionMedicaResponse programacionMedica = null;  
-		programacionMedica = programacionMedicaDao.programacionMedicoFecha(idMedico,fecha,idEspecialidad);
+//		programacionMedica = programacionMedicaDao.programacionMedicoFecha(idMedico,fecha,idEspecialidad);
+		programacionMedica = programacionMedicoFecha(idMedico,fecha,idEspecialidad);
 		
 		// Recorrer programaciones del dia sin tomar la hora final de programacion
 		List<CitaDisponibleResponse> citaProgramadaDia = new ArrayList<>();

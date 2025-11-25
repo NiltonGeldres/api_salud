@@ -2,9 +2,7 @@ package com.api_salud.api_salud.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.api_salud.api_salud.entity.Usuario;
-import com.api_salud.api_salud.entity.UsuarioResponse;
 import com.api_salud.api_salud.repository.UsuarioDao;
 
 @Service

@@ -51,7 +51,7 @@ public interface AtencionMedicaMapper {
  
  @Mappings({
      // Ignorar el ID de la entidad principal (se genera al guardar en la BD)
-     @Mapping(target = "id", ignore = true),
+     @Mapping(target = "idAtencion", ignore = true),
      
      // Mapeo de las listas de detalles
      @Mapping(target = "antecedentes", source = "antecedentes"),
@@ -83,47 +83,47 @@ public interface AtencionMedicaMapper {
  // ===================================================================================
 
  // --- Antecedente ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionAntecedente", ignore = true)
  AtencionMedicaAntecedenteEntity toEntity(AntecedenteRequestDTO dto);
  List<AtencionMedicaAntecedenteEntity> toAntecedenteEntityList(List<AntecedenteRequestDTO> dtos);
 
  // --- Diagnostico ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionDiagnostico", ignore = true)
  AtencionMedicaDiagnosticoEntity toEntity(DiagnosticoRequestDTO dto);
  List<AtencionMedicaDiagnosticoEntity> toDiagnosticoEntityList(List<DiagnosticoRequestDTO> dtos);
 
  // --- Discapacidad ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionDiscapacidad", ignore = true)
  AtencionMedicaDiscapacidadEntity toEntity(DiscapacidadRequestDTO dto);
  List<AtencionMedicaDiscapacidadEntity> toDiscapacidadEntityList(List<DiscapacidadRequestDTO> dtos);
 
  // --- Discapacidad Otros ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionDiscapacidadOtros", ignore = true)
  AtencionMedicaDiscapacidadOtrosEntity toEntity(DiscapacidadOtrosRequestDTO dto);
  List<AtencionMedicaDiscapacidadOtrosEntity> toDiscapacidadOtrosEntityList(List<DiscapacidadOtrosRequestDTO> dtos);
 
  // --- Examen Físico ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionExamenFisico", ignore = true)
  AtencionMedicaExamenFisicoEntity toEntity(ExamenFisicoRequestDTO dto);
  List<AtencionMedicaExamenFisicoEntity> toExamenFisicoEntityList(List<ExamenFisicoRequestDTO> dtos);
 
  // --- Medicación ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionMedicacion", ignore = true)
  AtencionMedicaMedicacionEntity toEntity(MedicacionRequestDTO dto);
  List<AtencionMedicaMedicacionEntity> toMedicacionEntityList(List<MedicacionRequestDTO> dtos);
 
  // --- Orden Médica ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionOrdenMedica", ignore = true)
  AtencionMedicaOrdenMedicaEntity toEntity(OrdenMedicaRequestDTO dto);
  List<AtencionMedicaOrdenMedicaEntity> toOrdenMedicaEntityList(List<OrdenMedicaRequestDTO> dtos);
 
  // --- Síntoma ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionSintoma", ignore = true)
  AtencionMedicaSintomaEntity toEntity(SintomaRequestDTO dto);
  List<AtencionMedicaSintomaEntity> toSintomaEntityList(List<SintomaRequestDTO> dtos);
 
  // --- Tratamiento ---
- @Mapping(target = "id", ignore = true)
+ @Mapping(target = "idAtencionTratamiento", ignore = true)
  AtencionMedicaTratamientoEntity toEntity(TratamientoRequestDTO dto);
  List<AtencionMedicaTratamientoEntity> toTratamientoEntityList(List<TratamientoRequestDTO> dtos);
 }

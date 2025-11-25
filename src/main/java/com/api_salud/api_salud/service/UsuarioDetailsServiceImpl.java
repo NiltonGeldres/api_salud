@@ -1,14 +1,7 @@
 package com.api_salud.api_salud.service;
 
-
-import java.util.List;
-
-
-
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.repository.RoleDao;
 import com.api_salud.api_salud.repository.UsuarioRepo; // Ahora es la interfaz sin JPA

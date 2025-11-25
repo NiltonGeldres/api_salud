@@ -10,25 +10,19 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import com.api_salud.api_salud.entity.ProgramacionMedicaCabeceraEntity;
 import com.api_salud.api_salud.entity.ProgramacionMedicaEntity;
 import com.api_salud.api_salud.entity.TurnoDetalleEntity;
-import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.repository.ProgramacionMedicaDao;
 import com.api_salud.api_salud.request.CitaRequest;
-import com.api_salud.api_salud.request.ProgramacionMedicaCrearDetalleRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaCrearRequest;
 import com.api_salud.api_salud.request.ProgramacionMedicaRequest;
 import com.api_salud.api_salud.response.CitaResponse;
-import com.api_salud.api_salud.response.MedicoResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaDiaResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaMesResponse;
 import com.api_salud.api_salud.response.ProgramacionMedicaResponse;
-
-import java.sql.Types;
 import java.text.DateFormat;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
