@@ -76,7 +76,9 @@ public Optional<Usuario> findByUsername(String username) {
 
     try {
         // Ejecuta la llamada a la función almacenada
+	    System.out.println("llamando SimpleJDBCCall");    	
         Map<String, Object> out = simpleJdbcCall.execute(params);
+	    System.out.println("Termino llamado a  SimpleJDBCCall");    	
 
         // El resultado mapeado (la lista de Usuarios) se recupera del cursor
         @SuppressWarnings("unchecked")

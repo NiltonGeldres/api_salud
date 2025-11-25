@@ -49,7 +49,7 @@ public class UsuarioCrear {
 			/*Usuario 2*/
 			
 			Usuario us1 = new Usuario();
-			us1.setUsername("jose");
+			us1.setUsername("jose25112025");
 			us1.setPassword("123");
 			us1.setEmail("jose@hotmail.com");
 			us1.setApellido_paterno("jose");

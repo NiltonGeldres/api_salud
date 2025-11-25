@@ -31,3 +31,44 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+=================================================================
+
+Archivos de Eclipse / IDE
+
+=================================================================
+
+.classpath
+.project
+.settings/
+*.log
+*.metadata
+*.tmp
+temp/
+
+Archivos que Eclipse usa para su estado de ejecución
+
+bin/
+
+Si usa la carpeta .vscode (para VS Code, pero es común)
+
+.vscode/
+
+=================================================================
+
+Archivos de Build de Maven (Esta es la carpeta 'target')
+
+=================================================================
+
+target/
+
+Dependencias generadas
+
+pom.xml.tag
+pom.xml.bak
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+build/
