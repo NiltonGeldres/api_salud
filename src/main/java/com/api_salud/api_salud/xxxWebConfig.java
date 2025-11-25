@@ -14,10 +14,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 
-@Configuration
-public class WebConfig {
+//@Configuration
+public class xxxWebConfig {
 
-		
+	/*	
 	
 	 @Bean(name = "db1")
 	 @Primary
@@ -31,7 +31,7 @@ public class WebConfig {
 	 public JdbcTemplate jdbcTemplate(@Qualifier("db1") DataSource ds) {
 		 return new JdbcTemplate(ds);
 	 }
-
+*/
 	
 	/*	
 	
