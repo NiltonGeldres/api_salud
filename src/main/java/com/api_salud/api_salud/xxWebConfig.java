@@ -3,6 +3,8 @@ package com.api_salud.api_salud;
 
 
 import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -15,10 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 //@Configuration
-public class xxxWebConfig {
-
-	/*	
-	
+public class xxWebConfig {
+	/*
 	 @Bean(name = "db1")
 	 @Primary
 	 @ConfigurationProperties(prefix = "spring.datasource")

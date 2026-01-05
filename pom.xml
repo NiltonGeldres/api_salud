@@ -65,12 +65,19 @@
 		    <artifactId>spring-security-crypto</artifactId>
 		    <version>5.7.3</version> 
 		</dependency>
- 		<!-- 8- POstgresql -->
+ 		<!-- 8- POstgresql 
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <version>42.4.3</version> 
 		</dependency>
+-->
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>		
+		
  		<!-- 9- PConfiguration Processor -->
 		<dependency>
 		   <groupId>org.springframework.boot</groupId>
