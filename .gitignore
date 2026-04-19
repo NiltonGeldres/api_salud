@@ -1,0 +1,8 @@
+target/
+*.jar
+.mvn/
+.idea/
+.vscode/
+mvnw
+mvnw.cmd
+application-dev.properties
