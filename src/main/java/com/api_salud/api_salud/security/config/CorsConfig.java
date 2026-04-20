@@ -15,7 +15,7 @@ public class CorsConfig implements WebMvcConfigurer {
     		             "http://localhost:3000",
     		             "http://192.168.0.200:3000",
     		             "http://192.168.0.6:3000",
-    		             "https://*.onrender.com"    		             
+    		             "http://190.117.218.137:3000"
     		   )
         .allowedMethods( "GET","POST", "PUT","DELETE")
         .allowedHeaders("*") // <--- MUY IMPORTANTE
