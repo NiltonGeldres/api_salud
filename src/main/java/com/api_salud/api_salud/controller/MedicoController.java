@@ -20,6 +20,12 @@ public class MedicoController {
 	@Autowired
 	MedicoService medicoService;
 
+	@PostMapping("/medicosEntidad")
+	   public ResponseEntity<MedicoResponse> medicoEntidad(@RequestBody MedicoRequest request){
+	        MedicoResponse response = medicoService.medicoEntidad(request);
+	        return new ResponseEntity(response, HttpStatus.OK);
+	}
+	   
     @PostMapping("/medicosEspecialidad")
 	   public ResponseEntity<MedicoResponse> medicoEspecialidad(@RequestBody MedicoRequest request){
 	        MedicoResponse response = medicoService.medicoEspecialidad(request);

@@ -4,6 +4,7 @@ public class MedicoDTO {
 	
 	int  idMedico;
 	String nombres;
+	String nombreEspecialidad ;	
 	int preciounitario ;
 	
 	public int getIdMedico() {
@@ -24,7 +25,12 @@ public class MedicoDTO {
 	public void setPreciounitario(int preciounitario) {
 		this.preciounitario = preciounitario;
 	}
-	
+	public String getNombreEspecialidad() {
+		return nombreEspecialidad;
+	}
+	public void setNombreEspecialidad(String nombreEspecialidad) {
+		this.nombreEspecialidad = nombreEspecialidad;
+	}	
 	
 	
 }

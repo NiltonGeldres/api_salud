@@ -28,6 +28,7 @@ public class CitaSeparadaEntity {
     int precioUnitario;
     int idCita;
     String destino_cuenta;
+    String estadoReserva;        
     
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
@@ -149,7 +150,12 @@ public class CitaSeparadaEntity {
 	public void setDestino_cuenta(String destino_cuenta) {
 		this.destino_cuenta = destino_cuenta;
 	}
-
+	public String getEstadoReserva() {
+		return estadoReserva;
+	}
+	public void setEstadoReserva(String estadoReserva) {
+		this.estadoReserva = estadoReserva;
+	}
 	
     
     

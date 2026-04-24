@@ -11,5 +11,6 @@ public interface MedicoDao {
 	public List<MedicoDTO> medicoEspecialidad(int idEspecialidad);	
 	public int  medicoXUsuarioLeer(String usuario) ;
 	public int tiempoPromedioAtencion_leer(int idMedico, int idEspecialidad) ;	
-	public MedicoResponse medicoXIdMedicosXEspecialidad(int idEspecialidad, int idMedico) ;		
+	public MedicoResponse medicoXIdMedicosXEspecialidad(int idEspecialidad, int idMedico) ;
+	public List<MedicoDTO> medicoEntidad(int idEntidad);			
 }

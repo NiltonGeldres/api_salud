@@ -3,7 +3,8 @@ package com.api_salud.api_salud.request;
 public class MedicoRequest {
 	int  idEspecialidad;
 	String  usuario;
-
+	int idEntidad ;
+	
 	public int getIdEspecialidad() {
 		return idEspecialidad;
 	}
@@ -19,7 +20,14 @@ public class MedicoRequest {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
+	
+	public int getIdEntidad() {
+		return idEntidad;
+	}
 
+	public void setIdEntidad(int idEntidad) {
+		this.idEntidad = idEntidad;
+	}
 
 	
 	

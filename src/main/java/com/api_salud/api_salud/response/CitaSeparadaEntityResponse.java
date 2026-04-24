@@ -22,7 +22,7 @@ public class CitaSeparadaEntityResponse {
     int numeroCuenta;
     double precioUnitario;
     int idUsuario;
-    
+    String email;  
     
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
@@ -144,7 +144,12 @@ public class CitaSeparadaEntityResponse {
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
     
     
 

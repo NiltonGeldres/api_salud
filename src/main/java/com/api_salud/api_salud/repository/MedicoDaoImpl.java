@@ -37,6 +37,40 @@ public  class  MedicoDaoImpl implements MedicoDao {
 	private JdbcTemplate jdbcTemplate;  
 	private SimpleJdbcCall simpleJdbcCallMedico;
 
+
+	@Override
+	public List<MedicoDTO> medicoEntidad(int idEntidad) {
+    	System.out.println("Ingreso a medico Dao Impl "+idEntidad);		
+	    List<MedicoEntity> res =new ArrayList<>();
+		jdbcTemplate.setResultsMapCaseInsensitive(true);
+	    SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
+	            .withSchemaName("igm_maestros")
+				    		.withProcedureName("medicos_entidad_leer")
+				            .withoutProcedureColumnMetaDataAccess()
+				            .declareParameters( 
+				            					new SqlParameter("id_entidad", Types.INTEGER)
+				            					,new SqlOutParameter("cur", Types.OTHER )				            					
+				            					);
+	    
+	    SqlParameterSource param = new MapSqlParameterSource()
+	    		.addValue("id_entidad", idEntidad);	    
+   		Map<String, Object> out = call.execute(param);
+   		
+
+	    
+   	 if (out != null && out.get("cur") != null) {
+         List<Map<String, Object>> list = (List<Map<String, Object>>) out.get("cur");
+         ObjectMapper objectMapper = new ObjectMapper();
+         
+         // Devolvemos solo la lista de datos
+         return list.stream()
+             .map(row -> objectMapper.convertValue(row, MedicoDTO.class))
+             .collect(Collectors.toList());
+     }
+     return Collections.emptyList();   	
+	}
+	
+	
 	@Override
 	public List<MedicoDTO> medicoEspecialidad(int idEspecialidad) {
 	    List<MedicoEntity> res =new ArrayList<>();

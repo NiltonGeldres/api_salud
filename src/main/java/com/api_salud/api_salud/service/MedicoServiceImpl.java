@@ -15,6 +15,21 @@ public class MedicoServiceImpl  implements MedicoService{
 
 	@Autowired
 	private MedicoDao medicoDao  ;		
+
+	
+	@Override
+	public MedicoResponse medicoEntidad(MedicoRequest request) {
+	    // 1. Llamamos al DAO para traer los datos crudos (DTOs)
+		int idEntidad = request.getIdEntidad();
+	    List<MedicoDTO> listaMedicos = medicoDao.medicoEntidad(idEntidad);
+	    
+	    // 2. Armamos el MedicoResponse aquí
+	    MedicoResponse response = new MedicoResponse();
+	    response.setMedico(listaMedicos);
+	    response.setTotalRecord(String.valueOf(listaMedicos.size()));
+	    return response;		
+	}
+	
 	
 	@Override
 	public MedicoResponse medicoEspecialidad(MedicoRequest request) {
