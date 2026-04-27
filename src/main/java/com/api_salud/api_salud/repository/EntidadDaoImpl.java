@@ -1,6 +1,109 @@
 package com.api_salud.api_salud.repository;
 
 import java.sql.Types;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct; // Importante: Spring 5+ / Jakarta
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.stereotype.Repository;
+
+import com.api_salud.api_salud.dto.EntidadDto;
+import com.api_salud.api_salud.entity.EntidadEntity;
+import com.api_salud.api_salud.response.EntidadResponse;
+import com.api_salud.api_salud.response.EntidadesResponse;
+
+@Repository
+@Transactional
+public class EntidadDaoImpl implements EntidadDao {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    // Declaramos los objetos para reutilizarlos en memoria
+    private SimpleJdbcCall callPorNombre;
+    private SimpleJdbcCall callXMedico;
+    private SimpleJdbcCall callPorId;
+
+    @PostConstruct
+    public void init() {
+        // Pre-configuramos los calls evitando metadatos y declarando tipos explícitos
+        this.callPorNombre = new SimpleJdbcCall(jdbcTemplate)
+            .withSchemaName("igm_maestros")
+            .withProcedureName("entidades_obtener_por_nombre")
+            .withoutProcedureColumnMetaDataAccess()
+            .declareParameters(
+                new SqlParameter("p_nombre", Types.VARCHAR),
+                new SqlOutParameter("cur", Types.REF_CURSOR, new BeanPropertyRowMapper<>(EntidadDto.class))
+            );
+
+        this.callXMedico = new SimpleJdbcCall(jdbcTemplate)
+            .withProcedureName("igm_maestros.entidades_xmedico_leer")
+            .withoutProcedureColumnMetaDataAccess()
+            .declareParameters(
+                new SqlParameter("p_idmedico", Types.INTEGER),
+                new SqlOutParameter("cur", Types.REF_CURSOR, new BeanPropertyRowMapper<>(EntidadEntity.class))
+            );
+
+        this.callPorId = new SimpleJdbcCall(jdbcTemplate)
+            .withProcedureName("igm_maestros.entidades_x_id_entidad_leer")
+            .withoutProcedureColumnMetaDataAccess()
+            .declareParameters(
+                new SqlParameter("p_identidad", Types.INTEGER),
+                new SqlOutParameter("cur", Types.REF_CURSOR, new BeanPropertyRowMapper<>(EntidadResponse.class))
+            );
+    }
+
+    @Override
+    public List<EntidadDto> obtenerEntidadesPorNombre(String nombre) {
+        try {
+            SqlParameterSource in = new MapSqlParameterSource().addValue("p_nombre", nombre);
+            Map<String, Object> out = callPorNombre.execute(in);
+            return (List<EntidadDto>) out.get("cur");
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public EntidadesResponse xIdMedico(int idMedico) {
+        SqlParameterSource param = new MapSqlParameterSource().addValue("p_idmedico", idMedico);
+        Map<String, Object> out = callXMedico.execute(param);
+        
+        List<EntidadEntity> res = (List<EntidadEntity>) out.get("cur");
+        
+        EntidadesResponse response = new EntidadesResponse();
+        response.setEntidad(res != null ? res : Collections.emptyList());
+        return response;
+    }
+
+    @Override
+    public Optional<EntidadResponse> buscarPorId(Long idEntidad) {
+        SqlParameterSource param = new MapSqlParameterSource().addValue("p_identidad", idEntidad.intValue());
+        Map<String, Object> out = callPorId.execute(param);
+
+        List<EntidadResponse> list = (List<EntidadResponse>) out.get("cur");
+        return (list != null && !list.isEmpty()) ? Optional.of(list.get(0)) : Optional.empty();
+    }
+}
+
+
+
+/*
+package com.api_salud.api_salud.repository;
+
+
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -93,8 +196,6 @@ public class EntidadDaoImpl implements EntidadDao{
 	
 	public Optional<EntidadResponse> buscarPorId(Long idEntidad) {
 	    jdbcTemplate.setResultsMapCaseInsensitive(true);
-
-//	    SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
 	  	    simpleJdbcCallEntidad = new SimpleJdbcCall(jdbcTemplate)
 	        .withProcedureName("igm_maestros.entidades_x_id_entidad_leer")
 	        .withoutProcedureColumnMetaDataAccess()
@@ -130,40 +231,4 @@ public class EntidadDaoImpl implements EntidadDao{
 }
 
 
-
-/*
- * 
-    EntidadResponse response = null;
-    List<EntidadEntity> res = new ArrayList<>();
-
-    jdbcTemplate.setResultsMapCaseInsensitive(true);
-
-    simpleJdbcCallEntidad = new SimpleJdbcCall(jdbcTemplate)
-        .withProcedureName("igm_maestros.entidades_x_id_entidad_leer")
-        .withoutProcedureColumnMetaDataAccess()
-        .declareParameters(
-            new SqlParameter("p_identidad", Types.INTEGER),
-            new SqlOutParameter("cur", Types.OTHER)
-        );
-
-    SqlParameterSource param = new MapSqlParameterSource()
-        .addValue("p_identidad", idEntidad);
-
-    Map<String, Object> out = simpleJdbcCallEntidad.execute(param);
-
-    if (out != null) {
-        List<Object> list = (List<Object>) out.get("cur");
-
-        for (Object row : list) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            EntidadEntity entidad = objectMapper.convertValue(row, EntidadEntity.class);
-            res.add(entidad);
-        }
-
-        response = new EntidadResponse();
-        response.setEntidad(res);
-    }
-
-    return response;
-
- * */
+*/
