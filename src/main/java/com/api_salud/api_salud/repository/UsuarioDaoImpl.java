@@ -1,4 +1,6 @@
+
 package com.api_salud.api_salud.repository;
+
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -81,7 +83,6 @@ public class UsuarioDaoImpl  implements UsuarioDao{
 	    Map<String, Object> out = jdbcCall.execute(in);
 	    return (String) out.get("p_resultado");
 	}	
-	
 	
 	//Testeado
 	@Override  
@@ -273,36 +274,6 @@ public class UsuarioDaoImpl  implements UsuarioDao{
 	    
 	    return null; // Importante para que UserDetailsService lance UsernameNotFoundException
 	}
-	
-/*	
-	@Override
-	public Usuario usuarioUsernameLeer(String  username) {
-		Usuario response = null;
-		jdbcTemplate.setResultsMapCaseInsensitive(true);
-	    simpleJdbcCallUsuario = new SimpleJdbcCall(jdbcTemplate)
-				    		.withProcedureName("igm_security.usuario_username_leer")
-				            .withoutProcedureColumnMetaDataAccess()
-				            .declareParameters( 
-				            					new SqlParameter("p_username", Types.VARCHAR),
-							            		new SqlOutParameter("o_usuario", Types.OTHER) 
-				            					);
-	    SqlParameterSource param = new MapSqlParameterSource()
-	    		 .addValue("p_username",username);
-	    
-   		Map<String, Object> out =   simpleJdbcCallUsuario.execute(param);
- 	    if (out != null)  {
-			List<Object> list =  (List<Object>) out.get("o_usuario") ;
- 			for (Object row : list) {
-	 			Usuario usuario = new Usuario();
-	 			ObjectMapper objectMapper = new ObjectMapper() ;
-	 			usuario = objectMapper.convertValue(row, Usuario.class) ;
-	 			response= usuario;
- 			}	
-     	}
-		return response;
-	}
-
-*/	
 	
 	@Override
 	public Usuario usuarioActualizar(Usuario request) {
