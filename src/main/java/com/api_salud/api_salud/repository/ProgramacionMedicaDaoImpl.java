@@ -53,11 +53,10 @@ public class ProgramacionMedicaDaoImpl  implements ProgramacionMedicaDao{
 	@Override
 	public ProgramacionMedicaResponse  programacionMedicoTodos(int idMedico, int idEspecialidad) {
 
-	    // --- Definición del Formato de Fecha y Fecha Actual (Compatible con Java 8) ---
 	    // Formato requerido 'yyyyMMdd' (ej. 20240704)
 	    final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyyMMdd");
 
-	    // 1. Obtener la fecha de hoy y resetear la hora a 00:00:00 (para comparar solo la fecha)
+	    //  Obtener la fecha de hoy y resetear la hora a 00:00:00 (para comparar solo la fecha)
 	    Calendar cal = Calendar.getInstance();
 	    cal.set(Calendar.HOUR_OF_DAY, 0);
 	    cal.set(Calendar.MINUTE, 0);
@@ -65,11 +64,8 @@ public class ProgramacionMedicaDaoImpl  implements ProgramacionMedicaDao{
 	    cal.set(Calendar.MILLISECOND, 0);
 	    final Date HOY_SIN_HORA_DATE = cal.getTime(); // Objeto Date para comparación robusta
 
-	    // 2. Crear la variable String de la fecha actual formateada (SOLICITADA)
+	    // Crear la variable String de la fecha actual formateada (SOLICITADA)
 	    final String fechaActualFormateada = DATE_FORMATTER.format(HOY_SIN_HORA_DATE);
-	    // --- FIN NUEVO ---
-	    
-	    
 		
 		ProgramacionMedicaResponse response = null;
 	    List<ProgramacionMedicaEntity> res =new ArrayList<>();

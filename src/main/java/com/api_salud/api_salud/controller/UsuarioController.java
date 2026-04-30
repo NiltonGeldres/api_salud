@@ -44,12 +44,12 @@ public class UsuarioController {
 		            .body(response);
 		}
 		
-
+/*
 	    @PostMapping("/signin1")
 	   public ResponseEntity<Usuario> signin(@RequestBody Usuario request){
 	        Usuario response = usuarioService.signin(request);
 	        return new ResponseEntity(response, HttpStatus.OK);
-	    }
+	    }*/
 
 	    
 	    @PostMapping("/getUsuarioUsername")

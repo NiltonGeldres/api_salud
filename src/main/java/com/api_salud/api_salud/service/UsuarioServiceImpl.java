@@ -67,7 +67,7 @@ public class UsuarioServiceImpl implements UsuarioService{
                 log.error("No se pudo obtener un ID válido para el paciente");
                 return crearResponseError("ERROR_CREACION_PACIENTE");
             }
-
+            
             // 4. PREPARACIÓN DEL USUARIO
             // Encriptamos la clave y vinculamos el ID del paciente recién creado
             usuarioEntity.setPassword(encoder.encode(request.getPassword()));
