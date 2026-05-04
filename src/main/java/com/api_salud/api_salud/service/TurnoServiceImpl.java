@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api_salud.api_salud.entity.TurnoEntity;
 import com.api_salud.api_salud.repository.TurnoDao;
@@ -15,6 +16,7 @@ public class TurnoServiceImpl  implements TurnoService{
 	private TurnoDao turnoDao  ;
 
 	@Override
+	@Transactional
 	public List<TurnoEntity> turnos() {
 			return turnoDao.turnoLeer();
 		

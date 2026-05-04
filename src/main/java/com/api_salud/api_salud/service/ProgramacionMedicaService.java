@@ -10,7 +10,7 @@ import com.api_salud.api_salud.response.ProgramacionMedicaResponse;
 
 public interface ProgramacionMedicaService {
 
-	public ProgramacionMedicaResponse medicoTodos(ProgramacionMedicaRequest request) ;  
+//	public ProgramacionMedicaResponse medicoTodos(ProgramacionMedicaRequest request) ;  
 	
 	public ProgramacionMedicaResponse medicoFecha(ProgramacionMedicaRequest request) ;  
 
@@ -20,7 +20,7 @@ public interface ProgramacionMedicaService {
 	
 	public ProgramacionMedicaMesResponse  programacionMedicoCrear(ProgramacionMedicaCrearRequest request ,int idUsuario) ;
 	
-	public ProgramacionMedicaMesResponse  programacionMedicaActualizar(ProgramacionMedicaCrearRequest request ,int idUsuario) ;
+//	public ProgramacionMedicaMesResponse  programacionMedicaActualizar(ProgramacionMedicaCrearRequest request ,int idUsuario) ;
 	
 		
 }

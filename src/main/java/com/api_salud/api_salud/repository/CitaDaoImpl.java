@@ -201,18 +201,18 @@ public class CitaDaoImpl implements CitaDao{
 		//-------------------------------------------------------- 
 		
 		/* Recorrer programaciones del dia sin tomar la hora final de programacion*/
-		List<CitaDisponibleResponse> citaProgramadaDia = new ArrayList<>();
-		List<String> citasProgramadasDiaTodas = new ArrayList<>();
+		List<CitaDisponibleResponse> cuposProgramadaDia = new ArrayList<>();
+		List<String> cuposProgramadasDiaTodas = new ArrayList<>();
 		for(ProgramacionMedicaEntity p : programacionMedica.getProgramacionMedica()) {
-			citasProgramadasDiaTodas = crearCitasProgramadasDiaTodas(p.getFecha(),p.getHoraInicio(),p.getHoraFin(),tiempoPromedioAtencion);
-			for (String  element : citasProgramadasDiaTodas) {
+			cuposProgramadasDiaTodas = crearCuposProgramadasDiaTodas(p.getFecha(),p.getHoraInicio(),p.getHoraFin(),tiempoPromedioAtencion);
+			for (String  element : cuposProgramadasDiaTodas) {
 				if (!element.equals( p.getHoraFin())) {   //no exeder cupos no tomar hora de fin de programacion
 					CitaDisponibleResponse e =new CitaDisponibleResponse();
 					e.setIdProgramacion(p.getIdProgramacionMedica());
 					e.setIdServicio(p.getIdServicio());
 					e.setNombreServicio(p.getNombreServicio());
 					e.setHoraInicio(element);
-					citaProgramadaDia.add(e);
+					cuposProgramadaDia.add(e);
 				}
 			}			
 		}
@@ -220,7 +220,7 @@ public class CitaDaoImpl implements CitaDao{
 		
 		//Obtener Citas No disponibles o ya registradas 
 		List<String> citaRegistrada = new ArrayList<>();
-		citaRegistrada = citasNoDisponibleDia(idMedico,fecha,idEspecialidad);
+		citaRegistrada = cuposNoDisponibleDia(idMedico,fecha,idEspecialidad);
 		
 		//Obtener Citas Bloqueadas
 		List<String>  citaBloqueada = new ArrayList<>(); 
@@ -236,8 +236,9 @@ public class CitaDaoImpl implements CitaDao{
 		//Quitando los que ya estan registrados 
 		if (!citaRegistrada.isEmpty() ) {
 
-            for(CitaDisponibleResponse citaProgramada:  citaProgramadaDia) {
+            for(CitaDisponibleResponse citaProgramada:  cuposProgramadaDia) {
             	boolean isExists = citaRegistrada.contains(citaProgramada.getHoraInicio());
+            	
             	if(!isExists) {
                     sinRegistrar.add(citaProgramada);
                     
@@ -245,7 +246,7 @@ public class CitaDaoImpl implements CitaDao{
 		    }
 			 			 
 		}  else {
-            for(CitaDisponibleResponse citaProgramada:  citaProgramadaDia) {
+            for(CitaDisponibleResponse citaProgramada:  cuposProgramadaDia) {
                     sinRegistrar.add(citaProgramada);
             }
 		} 
@@ -268,15 +269,10 @@ public class CitaDaoImpl implements CitaDao{
 	}
 	
 
-
-	
-	
-/* METODOS  UTILIS NO INTERFAZ*/
-	
 /*1*/
 	
 	@Override
-	public List<String> crearCitasProgramadasDiaTodas(String fecha, String horaInicio, String horaFin, int tiempoPromedioAtencion) {
+	public List<String> crearCuposProgramadasDiaTodas(String fecha, String horaInicio, String horaFin, int tiempoPromedioAtencion) {
 	    // 1. Usar DateTimeFormatter (H:mm es más flexible que concatenar ceros manualmente)
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 	    List<String> cupos = new ArrayList<>();
@@ -311,15 +307,15 @@ public class CitaDaoImpl implements CitaDao{
 	
 /*2*/
 	@Override
-	public List<String> citasNoDisponibleDia(int idMedico, String fecha, int idEspecialidad) {
+	public List<String> cuposNoDisponibleDia(int idMedico, String fecha, int idEspecialidad) {
 		List<String> citaAsignada = new ArrayList<>();
-		CitaResponse data =	asignadas( idMedico, fecha , idEspecialidad );
-		for (CitaDisponibleResponse  element : data.getCita()) {
+		CitaResponse citasAsignadas =	obtenerCitasAsignadasDia( idMedico, fecha , idEspecialidad );
+		for (CitaDisponibleResponse  element : citasAsignadas.getCita()) {
 			citaAsignada.add(element.getHoraInicio());
 		}
 		
-		CitaResponse dataSeparada =	leerCitaSeparada( idMedico, fecha , idEspecialidad );
-		for (CitaDisponibleResponse  element1 : dataSeparada.getCita()) {
+		CitaResponse citasSeparada =	obtenerCitaSeparada( idMedico, fecha , idEspecialidad );
+		for (CitaDisponibleResponse  element1 : citasSeparada.getCita()) {
 			citaAsignada.add(element1.getHoraInicio());
 		}
 		
@@ -329,7 +325,7 @@ public class CitaDaoImpl implements CitaDao{
 	}
 /*3*/
 	
-	public CitaResponse asignadas(int idMedico, String fecha, int idEspecialidad) {
+	public CitaResponse obtenerCitasAsignadasDia(int idMedico, String fecha, int idEspecialidad) {
 		CitaResponse response = null;
 	    List<CitaDisponibleResponse> res =new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
@@ -363,7 +359,7 @@ public class CitaDaoImpl implements CitaDao{
 	}
 
 	// Lista todas las citas ya registradas  al cliente
-	public CitaResponse leerCitaSeparada(int idMedico, String fecha, int idEspecialidad) {
+	public CitaResponse obtenerCitaSeparada(int idMedico, String fecha, int idEspecialidad) {
 			CitaResponse response = null;
 		    List<CitaDisponibleResponse> res =new ArrayList<>();
 			jdbcTemplate.setResultsMapCaseInsensitive(true);

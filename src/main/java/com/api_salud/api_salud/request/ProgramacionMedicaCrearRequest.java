@@ -16,6 +16,8 @@ public class ProgramacionMedicaCrearRequest {
 	//List<ProgramacionMedicaCrearDetalleRequest> programacion ;
 	List<ProgramacionMedicaDiaResponse> programacion ;
 	String usuario;
+	
+	
 	public String getFecha() {
 		return fecha;
 	}

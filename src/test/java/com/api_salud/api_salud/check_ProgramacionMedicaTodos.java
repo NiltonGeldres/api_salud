@@ -26,11 +26,11 @@ public class check_ProgramacionMedicaTodos {
 		request.setIdEspecialidad(9);
 		request.setIdMedico(1762);
 		
-		ProgramacionMedicaResponse data1 = programacionMedicadService.medicoTodos(request);
-			System.out.println("***************************************FECHA");
-		for (ProgramacionMedicaEntity element1 : data1.getProgramacionMedica()) {
-			System.out.println("Elemento Entity :  " +element1.getFecha());
-		}
+//		ProgramacionMedicaResponse data1 = programacionMedicadService.medicoTodos(request);
+//			System.out.println("***************************************FECHA");
+//		for (ProgramacionMedicaEntity element1 : data1.getProgramacionMedica()) {
+//			System.out.println("Elemento Entity :  " +element1.getFecha());
+//		}
 	
 	}
 

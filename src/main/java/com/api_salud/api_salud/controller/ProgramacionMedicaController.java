@@ -33,15 +33,25 @@ public class ProgramacionMedicaController {
 	
 	@Autowired
 	MedicoService medicoService;	
-
+	// 
+    @PostMapping("/programacionMedicaCrear")
+	public ResponseEntity<?> programacionMedicaCrear(@RequestBody ProgramacionMedicaCrearRequest request) {
+    	int   idUsuario = usuarioService.xusername_leer(request.getUsuario());  
+		ProgramacionMedicaMesResponse response =  programacionMedicaService.programacionMedicoCrear(request,  idUsuario);
+		if (response!= null)
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		else
+		return null;	
+	}
 	
+	/*
     @PostMapping("/programacionMedicoTodos")
    public ResponseEntity<ProgramacionMedicaResponse> medicoTodos(@RequestBody ProgramacionMedicaRequest request){
         ProgramacionMedicaResponse response =  programacionMedicaService.medicoTodos(request);
         return new ResponseEntity<ProgramacionMedicaResponse>(response, HttpStatus.OK);
         		
     }
-    
+ */   
     
     @PostMapping("/programacionMedicoMes")
 	public ResponseEntity<?> programacionMedicoMesLeer(@RequestBody ProgramacionMedicaDTO  request) {
@@ -49,14 +59,6 @@ public class ProgramacionMedicaController {
 		int idMedico = 0;
 		String usuario= request.getUsuario();
 		 idMedico = medicoService.medicoXUsuarioLeer(usuario);    	
-		
-		/*ProgramacionMedicaMesResponse response =  programacionMedicaService.programacionMedicoMesLeer(
-        		request.getMes(),
-        		request.getAnio(),
-        		idMedico,
-        		request.getIdEspecialidad()
-        		);*/
-		
 		ProgramacionMedicaMesResponse response =  programacionMedicaService.programacionMedicoMesLeer(
 	 		request.getMes(),
 	 		request.getAnio(),
@@ -89,16 +91,7 @@ public class ProgramacionMedicaController {
 		return null;	
 	}
 	
-    @PostMapping("/programacionMedicaCrear")
-	public ResponseEntity<?> programacionMedicaCrear(@RequestBody ProgramacionMedicaCrearRequest request) {
-    	int   idUsuario = usuarioService.xusername_leer(request.getUsuario());  
-		ProgramacionMedicaMesResponse response =  programacionMedicaService.programacionMedicoCrear(request,  idUsuario);
-		if (response!= null)
-			return new ResponseEntity<>(response, HttpStatus.OK);
-		else
-		return null;	
-	}
-	
+
 
     
 	  static class medicoMesRequest  {

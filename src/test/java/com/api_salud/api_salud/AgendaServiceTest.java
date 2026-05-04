@@ -24,9 +24,9 @@ public class AgendaServiceTest {
 		ProgramacionMedicaRequest x = new ProgramacionMedicaRequest();
 		x.setIdMedico(1762);
 		x.setIdEspecialidad(9);
-		ResponseEntity   data = programacionMedicaController.medicoTodos(x);
+//		ResponseEntity   data = programacionMedicaController.medicoTodos(x);
 		System.out.println("******************************** TODOS ");
-		System.out.println(data.toString());		
+//		System.out.println(data.toString());		
 
 		
 	}	
