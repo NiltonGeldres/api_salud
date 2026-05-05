@@ -46,7 +46,25 @@ public class JwtUtilService {
     return extractExpiration(token).before(new Date());
   }
 
+  public String generateToken(
+		  UserDetails userDetails, 
+		  int idRol, 
+		  int idEntidad,
+		  int idReferencia,
+		  int idUsuario) {
+      Map<String, Object> claims = new HashMap<>();
+      
+      // 1. Guardamos todos los roles, no solo el primero
+      GrantedAuthority  rol = userDetails.getAuthorities().stream().collect(Collectors.toList()).get(0);
+      claims.put("rol", rol);
+      claims.put("idRol", idRol);
+      claims.put("idEntidad", idEntidad);
+      claims.put("idreferencia", idReferencia);
+      claims.put("idUsuario", idUsuario);
+      return createToken(claims, userDetails.getUsername());
+  }
 
+  /*
   public String generateToken(
 		  UserDetails userDetails, 
 		  String  usuarioNombres,
@@ -64,7 +82,7 @@ public class JwtUtilService {
       claims.put("idPaciente", idPaciente);
       return createToken(claims, userDetails.getUsername());
   }
-
+*/
   private String createToken(Map<String, Object> claims, String subject) {
 
     return Jwts.builder()
