@@ -4,6 +4,7 @@ import com.api_salud.api_salud.dto.UsuarioDto;
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.entity.UsuarioEntity;
 import com.api_salud.api_salud.response.UsuarioContextoResponse;
+import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 
  
 
@@ -27,5 +28,7 @@ public interface UsuarioDao {
 	public Usuario usuarioActualizar(Usuario request);
 
 	UsuarioContextoResponse usuarioObtenerDatosContextoPorUsername(String username);
+
+	UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario);
 
 }

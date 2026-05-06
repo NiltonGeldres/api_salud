@@ -27,6 +27,7 @@ import com.api_salud.api_salud.dto.UsuarioDto;
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.entity.UsuarioEntity;
 import com.api_salud.api_salud.response.UsuarioContextoResponse;
+import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 
 
 @Repository
@@ -54,6 +55,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
     private SimpleJdbcCall callUsuarioUsernameLeer;
     private SimpleJdbcCall callActualizar;
     private SimpleJdbcCall callObtenerDatosJwtPorUsername;
+    private SimpleJdbcCall callUsuarioDatosGlobales;    
 
     @PostConstruct
     public void init() {
@@ -158,13 +160,22 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
                 );
         
+        this.callUsuarioDatosGlobales = new SimpleJdbcCall(jdbcTemplate)
+                .withSchemaName("igm_security")
+                .withProcedureName("usuario_obtener_datos_globales")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_id_usuario", Types.INTEGER),
+                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
+                );
+        
         this.callObtenerDatosJwtPorUsername = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_security")
                 .withProcedureName("usuario_obtener_datos_contexto_por_username")
                 .withoutProcedureColumnMetaDataAccess()
                 .declareParameters(
                         new SqlParameter("p_username", Types.VARCHAR),
-                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
+                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(UsuarioContextoResponse.class))
                 );        
 
         this.callActualizar = new SimpleJdbcCall(jdbcTemplate)
@@ -286,6 +297,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     //validado
+    
     @Override
     public Usuario usuarioUsernameLeer(String username) {
         try {
@@ -299,6 +311,19 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
     }
 
+    @Override
+    public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
+        try {
+            SqlParameterSource param = new MapSqlParameterSource().addValue("p_id_usuario", idUsuario);
+            Map<String, Object> out = callUsuarioDatosGlobales.execute(param);
+            List<UsuarioDatosGlobalesResponse> list = (List<UsuarioDatosGlobalesResponse>) out.get("o_usuario");
+            return (list != null && !list.isEmpty()) ? list.get(0) : null;
+        } catch (Exception e) {
+            log.error("Error al leer Usuario Datos Globales : ", e);
+            return null;
+        }
+    }
+    
     //validado
     @Override
     public UsuarioContextoResponse usuarioObtenerDatosContextoPorUsername(String username) {

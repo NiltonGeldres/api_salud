@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api_salud.api_salud.entity.Usuario;
 //import com.api_salud.api_salud.entity.UsuarioResponse;
 import com.api_salud.api_salud.request.UsuarioRequest;
+import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 import com.api_salud.api_salud.response.UsuarioResponse;
 import com.api_salud.api_salud.service.UsuarioService;
 
@@ -58,6 +59,13 @@ public class UsuarioController {
 	        return new ResponseEntity(response, HttpStatus.OK);
 	    }
 
+	    @PostMapping("/usuarioDatosGlobales")
+	   public ResponseEntity<UsuarioDatosGlobalesResponse> getDatosGlobales(@RequestBody Usuario request){
+	    	int idUsuario =0;
+	    	UsuarioDatosGlobalesResponse response = usuarioService.usuarioDatosGlobales(idUsuario);
+	        return new ResponseEntity(response, HttpStatus.OK);
+	    }
+	    
 	    @PostMapping("/updateUsuario")
 	   public ResponseEntity<Usuario> UsuarioActualizar(@RequestBody Usuario request){
 	        Usuario response = usuarioService.usuarioActualizar(request);

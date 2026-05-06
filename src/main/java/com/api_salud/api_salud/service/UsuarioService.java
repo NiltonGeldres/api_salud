@@ -5,6 +5,7 @@ import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.entity.UsuarioEntity;
 
 import com.api_salud.api_salud.request.UsuarioRequest;
+import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 import com.api_salud.api_salud.response.UsuarioResponse;
 
 public interface UsuarioService {
@@ -20,5 +21,7 @@ public interface UsuarioService {
 	public Usuario usuarioActualizar(Usuario request) ;	
 
 	public Usuario usuarioLeer(int id_usuario) ;
+
+	UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario);
 
 }

@@ -13,6 +13,7 @@ import com.api_salud.api_salud.mapper.UsuarioMapper;
 import com.api_salud.api_salud.repository.RoleDao;
 import com.api_salud.api_salud.repository.UsuarioDao;
 import com.api_salud.api_salud.request.UsuarioRequest;
+import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 import com.api_salud.api_salud.response.UsuarioResponse;
 
 import org.slf4j.Logger;
@@ -110,6 +111,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 		// TODO Auto-generated method stub
 		return usuarioDao.usuarioUsernameLeer(username);
 	}
+
+	
+	@Override
+	public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
+		// TODO Auto-generated method stub
+		return usuarioDao.usuarioDatosGlobales(idUsuario);
+	}
+
 	
 	@Override
 	public Usuario usuarioActualizar(Usuario request) {

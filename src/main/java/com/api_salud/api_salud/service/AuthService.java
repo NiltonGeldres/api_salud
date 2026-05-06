@@ -37,19 +37,19 @@ public class AuthService {
 	public TokenInfo login(String user, String password) {
 	    authManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
 	    //UsuarioJwtResponse  usuario = usuarioDao.usuarioUsernameLeer(user);
-	    UsuarioContextoResponse  usuario = usuarioDao.usuarioObtenerDatosContextoPorUsername(user);
+	    UsuarioContextoResponse  usuarioContexto = usuarioDao.usuarioObtenerDatosContextoPorUsername(user);
 	    
-	    if (usuario == null) {
+	    if (usuarioContexto == null) {
 	        throw new RuntimeException("Usuario no encontrado");
 	    }
 	    
 	    final UserDetails userDetails = usuarioDetailsService.loadUserByUsername(user);
 	    String jwt = jwtUtilService.generateToken(
 	        userDetails, 
-	        usuario.getIdRol(),   
-	        usuario.getIdEntidad(), 
-	        usuario.getIdReferencia(),
-	        usuario.getIdUsuario()
+	        usuarioContexto.getIdRol(),   
+	        usuarioContexto.getIdEntidad(), 
+	        usuarioContexto.getIdReferencia(),
+	        usuarioContexto.getIdUsuario()
 	    );
 
 	    return new TokenInfo(jwt);
