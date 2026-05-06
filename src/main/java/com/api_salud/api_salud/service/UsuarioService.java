@@ -22,6 +22,6 @@ public interface UsuarioService {
 
 	public Usuario usuarioLeer(int id_usuario) ;
 
-	UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario);
+	UsuarioDatosGlobalesResponse usuarioDatosGlobales();
 
 }

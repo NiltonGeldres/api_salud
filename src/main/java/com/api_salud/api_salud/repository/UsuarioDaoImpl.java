@@ -51,7 +51,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
     private SimpleJdbcCall callGuardar;
     private SimpleJdbcCall callCrear;
     private SimpleJdbcCall callLeer;
-    private SimpleJdbcCall callXUsernameLeer;
+    private SimpleJdbcCall callUsuarioIdXUsernameLeer;
     private SimpleJdbcCall callUsuarioUsernameLeer;
     private SimpleJdbcCall callActualizar;
     private SimpleJdbcCall callObtenerDatosJwtPorUsername;
@@ -142,9 +142,9 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
                 );
 
-        this.callXUsernameLeer = new SimpleJdbcCall(jdbcTemplate)
+        this.callUsuarioIdXUsernameLeer = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_security")
-                .withProcedureName("usuario_xusername_leer")
+                .withProcedureName("usuario_id_xusername_leer")
                 .withoutProcedureColumnMetaDataAccess()
                 .declareParameters(
                         new SqlParameter("p_usuario", Types.VARCHAR),
@@ -290,9 +290,9 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     @Override
-    public int xusername_leer(String p_usuario) {
+    public int UsuarioIdxusername_leer(String p_usuario) {
         SqlParameterSource param = new MapSqlParameterSource().addValue("p_usuario", p_usuario);
-        Map<String, Object> out = callXUsernameLeer.execute(param);
+        Map<String, Object> out = callUsuarioIdXUsernameLeer.execute(param);
         return (int) out.getOrDefault("p_id_usuario", 0);
     }
 
@@ -313,10 +313,12 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
+    	System.out.println("idUsuario:   "+idUsuario);
         try {
             SqlParameterSource param = new MapSqlParameterSource().addValue("p_id_usuario", idUsuario);
             Map<String, Object> out = callUsuarioDatosGlobales.execute(param);
             List<UsuarioDatosGlobalesResponse> list = (List<UsuarioDatosGlobalesResponse>) out.get("o_usuario");
+        	System.out.println("Retorno:   "+out);
             return (list != null && !list.isEmpty()) ? list.get(0) : null;
         } catch (Exception e) {
             log.error("Error al leer Usuario Datos Globales : ", e);

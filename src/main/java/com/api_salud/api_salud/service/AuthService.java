@@ -38,7 +38,7 @@ public class AuthService {
 	    authManager.authenticate(new UsernamePasswordAuthenticationToken(user, password));
 	    //UsuarioJwtResponse  usuario = usuarioDao.usuarioUsernameLeer(user);
 	    UsuarioContextoResponse  usuarioContexto = usuarioDao.usuarioObtenerDatosContextoPorUsername(user);
-	    
+	     System.out.println(usuarioContexto.getIdReferencia()); 
 	    if (usuarioContexto == null) {
 	        throw new RuntimeException("Usuario no encontrado");
 	    }

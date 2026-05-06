@@ -44,14 +44,6 @@ public class UsuarioController {
 		            .status(HttpStatus.CREATED)
 		            .body(response);
 		}
-		
-/*
-	    @PostMapping("/signin1")
-	   public ResponseEntity<Usuario> signin(@RequestBody Usuario request){
-	        Usuario response = usuarioService.signin(request);
-	        return new ResponseEntity(response, HttpStatus.OK);
-	    }*/
-
 	    
 	    @PostMapping("/getUsuarioUsername")
 	   public ResponseEntity<Usuario> getUsuarioUsernameLeer(@RequestBody Usuario request){
@@ -61,8 +53,8 @@ public class UsuarioController {
 
 	    @PostMapping("/usuarioDatosGlobales")
 	   public ResponseEntity<UsuarioDatosGlobalesResponse> getDatosGlobales(@RequestBody Usuario request){
-	    	int idUsuario =0;
-	    	UsuarioDatosGlobalesResponse response = usuarioService.usuarioDatosGlobales(idUsuario);
+	    	System.out.println("usuarioDatosGlobales");
+	    	UsuarioDatosGlobalesResponse response = usuarioService.usuarioDatosGlobales();
 	        return new ResponseEntity(response, HttpStatus.OK);
 	    }
 	    

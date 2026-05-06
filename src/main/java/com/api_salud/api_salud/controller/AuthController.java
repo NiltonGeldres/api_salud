@@ -27,7 +27,7 @@ public class AuthController {
 	    private AuthService authService; // Creamos un servicio para orquestar esto
 
 	    @PostMapping("/auth")
-	    public ResponseEntity<TokenInfo> authenticate(@RequestBody AuthenticationReq authReq) {
+	    public ResponseEntity<TokenInfo> authenticate(@RequestBody AuthenticationReq authReq) {	    	System.out.println("Ingreso authenticate");
 	        TokenInfo tokenInfo = authService.login(authReq.getUser(), authReq.getPassword());
 	        return ResponseEntity.ok(tokenInfo);
 	    }

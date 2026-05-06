@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.dto.UsuarioDto;
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.entity.UsuarioEntity;
@@ -102,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	@Override
 	public Integer xusername_leer(String request) {		// TODO Auto-generated method stub
-		return usuarioDao.xusername_leer(request);
+		return usuarioDao.UsuarioIdxusername_leer(request);
 	}
 	
 		
@@ -114,9 +115,10 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	
 	@Override
-	public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
+	public UsuarioDatosGlobalesResponse usuarioDatosGlobales() {
 		// TODO Auto-generated method stub
-		return usuarioDao.usuarioDatosGlobales(idUsuario);
+       int idUsuario = TenantContext.getUsuarioId();
+       return usuarioDao.usuarioDatosGlobales(idUsuario);
 	}
 
 	

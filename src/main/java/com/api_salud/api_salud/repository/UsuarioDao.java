@@ -21,7 +21,7 @@ public interface UsuarioDao {
 	
 	public Usuario usuarioLeer(int id_usuario);
 
-	public int xusername_leer(String usuario);
+	public int UsuarioIdxusername_leer(String usuario);
 	
 	public Usuario usuarioUsernameLeer(String username);
 	
