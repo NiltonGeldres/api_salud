@@ -68,9 +68,10 @@ public class CitaSeparadaController {
     public ResponseEntity<?> leerCitaSeparadaXIdPaciente(   @RequestBody CitaSeparadaRequest request  ){
 	    String textError="";
 	    
-		int idUsuario = 0;
+//		int idUsuario = 0;
 		String usuario= request.getUsuario();
-		 idUsuario = usuarioService.xusername_leer(usuario);
+//		 idUsuario = usuarioService.xusername_leer(usuario);
+   	 	Integer idUsuario = TenantContext.getUsuarioId();
 		if (idUsuario==0  ) {
 			textError= "Usuario: se encuentra de baja" ;
 	        return new ResponseEntity<String>(textError, HttpStatus.BAD_REQUEST);

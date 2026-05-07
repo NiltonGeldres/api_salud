@@ -103,6 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	@Override
 	public Integer xusername_leer(String request) {		// TODO Auto-generated method stub
+       System.out.println("USerName "+request);
 		return usuarioDao.UsuarioIdxusername_leer(request);
 	}
 	
@@ -118,7 +119,6 @@ public class UsuarioServiceImpl implements UsuarioService{
 	public UsuarioDatosGlobalesResponse usuarioDatosGlobales() {
 		// TODO Auto-generated method stub
        Integer idUsuario = TenantContext.getUsuarioId();
-       System.out.println("idUsuario"+idUsuario);
        if (idUsuario == null) {
     	    // Aquí puedes lanzar una excepción personalizada o retornar un error 401
     	    throw new RuntimeException("No se encontró el ID de usuario en el contexto de la petición");
