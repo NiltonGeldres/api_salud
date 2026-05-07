@@ -12,6 +12,6 @@ public interface  EntidadDao {
 
 	public List<EntidadDto> obtenerEntidadesPorNombre(String nombre); 	
 	public EntidadesResponse   xIdMedico(int idMedicos);
-	public Optional<EntidadResponse> buscarPorId(Long idEntidad);
+	public Optional<EntidadResponse> buscarPorId( Integer idEntidad);
 
 }

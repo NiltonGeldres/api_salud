@@ -166,7 +166,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 .withoutProcedureColumnMetaDataAccess()
                 .declareParameters(
                         new SqlParameter("p_id_usuario", Types.INTEGER),
-                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
+                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(UsuarioDatosGlobalesResponse.class))
                 );
         
         this.callObtenerDatosJwtPorUsername = new SimpleJdbcCall(jdbcTemplate)

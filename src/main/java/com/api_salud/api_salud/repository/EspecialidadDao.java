@@ -6,6 +6,6 @@ public interface EspecialidadDao {
 //	public  EspecialidadResponse webJdbcTemplates();
 	public EspecialidadResponse web();
 	public EspecialidadResponse xIdMedico(int idMedico) ;
-	public EspecialidadResponse xIdEntidad(Long idEntidad) ;
+	public EspecialidadResponse xIdEntidad( Integer idEntidad) ;
 	
 }

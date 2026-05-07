@@ -88,7 +88,7 @@ public class EntidadDaoImpl implements EntidadDao {
     }
 
     @Override
-    public Optional<EntidadResponse> buscarPorId(Long idEntidad) {
+    public Optional<EntidadResponse> buscarPorId( Integer idEntidad) {
         SqlParameterSource param = new MapSqlParameterSource().addValue("p_identidad", idEntidad.intValue());
         Map<String, Object> out = callPorId.execute(param);
 

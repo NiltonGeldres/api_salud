@@ -2,7 +2,7 @@ package com.api_salud.api_salud.context;
 
 public class TenantContext {
 
-    private static final ThreadLocal<Long> ENTIDAD_ID = new ThreadLocal<>();
+    private static final ThreadLocal< Integer> ENTIDAD_ID = new ThreadLocal<>();
     private static final ThreadLocal<String> CURRENT_USER = new ThreadLocal<>();
     private static final ThreadLocal<Integer> ROL_ID = new ThreadLocal<>();
     private static final ThreadLocal<Integer> REFERENCIA_ID = new ThreadLocal<>();
@@ -17,8 +17,8 @@ public class TenantContext {
     public static String getCurrentUser() { return CURRENT_USER.get(); }
 
     // ID de Entidad (Clínica/Hospital)
-    public static void setEntidadId(Long entidadId) { ENTIDAD_ID.set(entidadId); }
-    public static Long getEntidadId() { return ENTIDAD_ID.get(); }
+    public static void setEntidadId(Integer entidadId) { ENTIDAD_ID.set(entidadId); }
+    public static Integer getEntidadId() { return ENTIDAD_ID.get(); }
 
     // ID de Rol (Médico=1, Paciente=2, etc.)
     public static void setRolId(Integer rolId) { ROL_ID.set(rolId); }

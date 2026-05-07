@@ -100,19 +100,33 @@ public class JwtUtilService {
   }
  
   /* agregado para el contexto */
-  public Long extractIdEntidad(String token) {
+  /*public Long extractIdEntidad(String token) {
 	    Claims claims = extractAllClaims(token);
 	    Object value = claims.get("idEntidad");
 	    return value != null ? ((Number) value).longValue() : null;
-	}
+	}*/
 
-	public Long extractIdMedico(String token) {
-	    Claims claims = extractAllClaims(token);
-	    Object value = claims.get("idMedico");
-	    return value != null ? ((Number) value).longValue() : null;
-	}
   
-  
+	public Integer extractIdUsuario(String token) {
+        return extractClaim(token, claims -> (Integer) claims.get("idUsuario"));
+    }
+
+    public Integer extractIdEntidad(String token) {
+        return extractClaim(token, claims -> (Integer) claims.get("idEntidad"));
+/*        return extractClaim(token, claims -> {
+            Object value = claims.get("idEntidad");
+            return value != null ? ((Number) value).longValue() : null;
+        });*/
+    }
+
+    public Integer extractIdRol(String token) {
+        return extractClaim(token, claims -> (Integer) claims.get("idRol"));
+    }
+
+    public Integer extractIdReferencia(String token) {
+        return extractClaim(token, claims -> (Integer) claims.get("idReferencia"));
+    }
+    
     
 }
 

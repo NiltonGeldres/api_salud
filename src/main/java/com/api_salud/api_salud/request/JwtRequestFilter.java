@@ -42,19 +42,30 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwt = null;
-        Long idEntidad = null;
-        Long idMedico = null;
+       // Long idEntidad = null;
+       // Long idMedico = null;
         
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             username = jwtUtilService.extractUsername(jwt);
             
             // ✅ Extraer idEntidad e idMedico
-            idEntidad = jwtUtilService.extractIdEntidad(jwt);
-            idMedico = jwtUtilService.extractIdMedico(jwt);
+            //idEntidad = jwtUtilService.extractIdEntidad(jwt);
+            //idMedico = jwtUtilService.extractIdMedico(jwt);
 
+            Integer idEntidad = jwtUtilService.extractIdEntidad(jwt);
+            Integer idUsuario = jwtUtilService.extractIdUsuario(jwt); // <--- ESTO ES LO QUE FALTABA
+            Integer idRol = jwtUtilService.extractIdRol(jwt);
+            Integer idReferencia = jwtUtilService.extractIdReferencia(jwt);
+            
             // ✅ Llenar TenantContext
-            TenantContext.setEntidadId(idEntidad);            
+//            TenantContext.setEntidadId(idEntidad); 
+
+            TenantContext.setCurrentUser(username);
+            TenantContext.setEntidadId(idEntidad);
+            TenantContext.setUsuarioId(idUsuario); // <--- Ahora el servicio sí lo encontrará
+            TenantContext.setRolId(idRol);
+            TenantContext.setReferenciaId(idReferencia);            
         }
 
         try {
@@ -72,7 +83,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     } finally {
-        // ✅ Limpiar TenantContext al final
+        // Limpiar TenantContext al final
         TenantContext.clear();
     }
     }

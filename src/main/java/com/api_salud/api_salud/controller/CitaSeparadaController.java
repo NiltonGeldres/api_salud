@@ -43,7 +43,7 @@ public class CitaSeparadaController {
     	
     	
         // Asignación de datos desde el contexto
-        Long idEntidadContexto = TenantContext.getEntidadId();
+    	 Integer idEntidadContexto = TenantContext.getEntidadId();
         String usuarioContexto = TenantContext.getCurrentUser();
         
         if (idEntidadContexto != null) request.setIdEntidad(idEntidadContexto.intValue());

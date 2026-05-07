@@ -117,7 +117,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	public UsuarioDatosGlobalesResponse usuarioDatosGlobales() {
 		// TODO Auto-generated method stub
-       int idUsuario = TenantContext.getUsuarioId();
+       Integer idUsuario = TenantContext.getUsuarioId();
+       System.out.println("idUsuario"+idUsuario);
+       if (idUsuario == null) {
+    	    // Aquí puedes lanzar una excepción personalizada o retornar un error 401
+    	    throw new RuntimeException("No se encontró el ID de usuario en el contexto de la petición");
+    	}
+       
        return usuarioDao.usuarioDatosGlobales(idUsuario);
 	}
 

@@ -5,7 +5,7 @@ public class UsuarioDatosGlobalesResponse {
       String nombresUsuario;
       String nombreEntidad;
       String email ;
-      int numeroCelular;
+      String numeroCelular;
 	  public String getNombresUsuario() {
 		  return nombresUsuario;
 	  }
@@ -24,12 +24,11 @@ public class UsuarioDatosGlobalesResponse {
 	  public void setEmail(String email) {
 		  this.email = email;
 	  }
-	  public int getNumeroCelular() {
+	  public String getNumeroCelular() {
 		  return numeroCelular;
 	  }
-	  public void setNumeroCelular(int numeroCelular) {
+	  public void setNumeroCelular(String numeroCelular) {
 		  this.numeroCelular = numeroCelular;
-	  } 
-      
+	  }
       
 }

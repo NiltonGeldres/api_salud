@@ -28,7 +28,7 @@ public class CitaBloqueadaServiceImpl implements CitaBloqueadaService{
 	@Override
 	public CitaBloqueadaResponse crearCitaBloqueada(CitaBloqueadaRequest request) {
 		
-		Long idEntidadContexto = TenantContext.getEntidadId();
+		 Integer idEntidadContexto = TenantContext.getEntidadId();
 
 		if (idEntidadContexto != null) {
 		    request.setIdEntidad(idEntidadContexto.intValue());

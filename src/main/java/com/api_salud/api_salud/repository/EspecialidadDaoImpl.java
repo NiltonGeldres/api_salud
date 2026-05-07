@@ -62,7 +62,7 @@ public class EspecialidadDaoImpl implements EspecialidadDao {
     }
 
     @Override
-    public EspecialidadResponse xIdEntidad(Long idEntidad) {
+    public EspecialidadResponse xIdEntidad( Integer idEntidad) {
         SqlParameterSource param = new MapSqlParameterSource().addValue("p_identidad", idEntidad);
         return ejecutarConsulta(callXIdEntidad, param);
     }

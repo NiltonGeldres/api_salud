@@ -48,7 +48,7 @@ public class TurnoDaoImpl implements TurnoDao {
 
     @Override
     public List<TurnoEntity> turnoLeer() {
-        Long entidadId = TenantContext.getEntidadId();
+    	 Integer entidadId = TenantContext.getEntidadId();
         
         // Validación preventiva para evitar NullPointerException
         if (entidadId == null) {

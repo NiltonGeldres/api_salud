@@ -37,7 +37,7 @@ public class EspecialidadServiceImpl  implements EspecialidadService {
 	public EspecialidadResponse xIdEntidad() {
 		
         // 1️⃣ Obtener el id de la entidad desde el contexto (JWT → Filter)
-        Long entidadId = TenantContext.getEntidadId();
+        Integer entidadId = TenantContext.getEntidadId();
 
         if (entidadId == null) {
             throw new RuntimeException("No se encontró la entidad en el contexto");
