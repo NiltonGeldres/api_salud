@@ -1,38 +1,32 @@
 package com.api_salud.api_salud.response;
 
 public class UsuarioContextoResponse {
-	int idReferencia;
-	int idEntidad;
-	int idUsuario;
-	int idRol;
-	
-	public int getIdReferencia() {
+	Integer idReferencia;
+	Integer idEntidad;
+	Integer idUsuario;
+	Integer idRol;
+	public Integer getIdReferencia() {
 		return idReferencia;
 	}
-	public void setIdReferencia(int idReferencia) {
+	public void setIdReferencia(Integer idReferencia) {
 		this.idReferencia = idReferencia;
 	}
-	public int getIdEntidad() {
+	public Integer getIdEntidad() {
 		return idEntidad;
 	}
-	public void setIdEntidad(int idEntidad) {
+	public void setIdEntidad(Integer idEntidad) {
 		this.idEntidad = idEntidad;
 	}
-	public int getIdUsuario() {
+	public Integer getIdUsuario() {
 		return idUsuario;
 	}
-	public void setIdUsuario(int idUsuario) {
+	public void setIdUsuario(Integer idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public int getIdRol() {
+	public Integer getIdRol() {
 		return idRol;
 	}
-	public void setIdRol(int idRol) {
+	public void setIdRol(Integer idRol) {
 		this.idRol = idRol;
 	}
-	
-	
-
-	
-
 }

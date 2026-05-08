@@ -63,19 +63,19 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
 
         
-        // 1. Obtener datos del usuario/paciente
+        // Obtener datos del usuario/paciente
         int idUsuario = usuarioService.xusername_leer(request.getUsuario());
         if (idUsuario == 0) throw new RuntimeException("Usuario no encontrado o de baja");
         
-        int idPaciente = pacienteService.leerIdPacientexIdUsuario(idUsuario);
-        request.setIdPaciente(idPaciente);
+       // int idPaciente = pacienteService.leerIdPacientexIdUsuario(idUsuario);
+       // request.setIdPaciente(idPaciente);
 
-        // 2. Ejecutar SimpleJdbcCall (a través del DAO)
+        // Ejecutar SimpleJdbcCall (a través del DAO)
         int idCitaSeparada = ejecutarPersistencia(request, idUsuario);
 
         if (idCitaSeparada == 0) throw new RuntimeException("Error al insertar en Base de Datos");
 
-        // 3. Procesar respuesta y Email
+        // Procesar respuesta y Email
         return procesarPostRegistro(idCitaSeparada, idUsuario);
         
 

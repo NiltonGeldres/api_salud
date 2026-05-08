@@ -63,17 +63,17 @@ public class UsuarioServiceImpl implements UsuarioService{
 
             // 3. CREACIÓN DEL PACIENTE (Capa de Negocio)
             // Delegamos la creación al PacienteService y obtenemos el id_paciente
-            int idPaciente = pacienteService.crearDesdeRegistro(request);
+          //  int idPaciente = pacienteService.crearDesdeRegistro(request);
             
-            if (idPaciente <= 0) {
-                log.error("No se pudo obtener un ID válido para el paciente");
-                return crearResponseError("ERROR_CREACION_PACIENTE");
-            }
+           // if (idPaciente <= 0) {
+             //   log.error("No se pudo obtener un ID válido para el paciente");
+            //    return crearResponseError("ERROR_CREACION_PACIENTE");
+            //}
             
             // 4. PREPARACIÓN DEL USUARIO
             // Encriptamos la clave y vinculamos el ID del paciente recién creado
             usuarioEntity.setPassword(encoder.encode(request.getPassword()));
-            usuarioEntity.setIdPaciente(idPaciente); // Vinculación 1 a 1
+           // usuarioEntity.setIdPaciente(idPaciente); // Vinculación 1 a 1
 
             // 5. GUARDAR USUARIO, ROL Y AUDITORÍA
             int idUsuario = usuarioDao.guardar(usuarioEntity);

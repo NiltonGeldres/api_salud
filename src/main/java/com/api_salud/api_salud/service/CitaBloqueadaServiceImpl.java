@@ -45,8 +45,8 @@ public class CitaBloqueadaServiceImpl implements CitaBloqueadaService{
 		CitaBloqueadaResponse response = null;
 
 		String usuario= request.getUsuario();
-		System.out.println("USUARIO REQUEST  "+usuario);
 		 idUsuario = usuarioService.xusername_leer(usuario);
+		 
 		if (idUsuario!=0  ) {
 		    response = new CitaBloqueadaResponse();
 			response = citaBloqueadaDao.crearCitaBloqueada(
@@ -64,6 +64,8 @@ public class CitaBloqueadaServiceImpl implements CitaBloqueadaService{
 					);
 		
 		}
+		System.out.println("USUARIO xusername_leer RESPONSE  "+response.getIdUsuario());
+		
 		return response;
 	}
 

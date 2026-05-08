@@ -48,10 +48,10 @@ public class JwtUtilService {
 
   public String generateToken(
 		  UserDetails userDetails, 
-		  int idRol, 
-		  int idEntidad,
-		  int idReferencia,
-		  int idUsuario) {
+		  Integer idRol, 
+		  Integer idEntidad,
+		  Integer idReferencia,
+		  Integer idUsuario) {
       Map<String, Object> claims = new HashMap<>();
       
       // 1. Guardamos todos los roles, no solo el primero
