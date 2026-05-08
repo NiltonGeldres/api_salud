@@ -288,7 +288,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         List<Usuario> list = (List<Usuario>) out.get("o_usuario");
         return (list != null && !list.isEmpty()) ? list.get(0) : null;
     }
-
+    //validado
     @Override
     public int UsuarioIdxusername_leer(String p_usuario) {
         SqlParameterSource param = new MapSqlParameterSource().addValue("p_usuario", p_usuario);
@@ -296,8 +296,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return (int) out.getOrDefault("p_id_usuario", 0);
     }
 
+   
     //validado
-    
     @Override
     public Usuario usuarioUsernameLeer(String username) {
         try {
@@ -310,7 +310,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return null;
         }
     }
-
+    //validado
     @Override
     public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
     	System.out.println("idUsuario:   "+idUsuario);
