@@ -23,6 +23,7 @@ public interface CitaSeparadaPagoVirtualDao {
 		    int idUsuario
 		    
 			) ;	
+//	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico( int idMedicos) ;	
 	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico( int idMedicos) ;	
 
 }

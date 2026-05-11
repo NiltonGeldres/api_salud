@@ -64,7 +64,6 @@ public class CitaBloqueadaServiceImpl implements CitaBloqueadaService{
 					);
 		
 		}
-		System.out.println("USUARIO xusername_leer RESPONSE  "+response.getIdUsuario());
 		
 		return response;
 	}

@@ -10,7 +10,8 @@ public interface  CitaSeparadaPagoVirtualService {
 	
 	public CitaSeparadaPagoVirtualResponse crearCitaSeparadaPagoVirtual(CitaSeparadaPagoVirtualRequest request ) ;
 	
-	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico(int idMedico ) ;
+//	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico(int idMedico ) ;
+	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico() ;
 	
 
 }

@@ -8,10 +8,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.entity.CitaSeparadaPagadaEntity;
 import com.api_salud.api_salud.repository.CitaSeparadaPagoVirtualDao;
 import com.api_salud.api_salud.request.CitaSeparadaPagoVirtualRequest;
 import com.api_salud.api_salud.response.CitaSeparadaPagoVirtualResponse;
+import com.api_salud.api_salud.shared.constants.Roles;
 
 @Service
 public class CitaSeparadaPagoVirtualServiceImpl  implements CitaSeparadaPagoVirtualService
@@ -52,11 +54,21 @@ public class CitaSeparadaPagoVirtualServiceImpl  implements CitaSeparadaPagoVirt
 	}
 
 	@Override
-	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico(int idMedico) {
-
-		List<CitaSeparadaPagadaEntity> response =	
-				citaSeparadaPagoVirtualDao.leerCitaSeparadaPagadaXMedico(idMedico);
-		return response;
+	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico() {
+		Integer idMedico = TenantContext.getReferenciaId();
+		Integer idRol = TenantContext.getRolId();
+		if (!Roles.MEDICOS.equals(idRol) || idMedico == null) {
+	        throw new org.springframework.security.access.AccessDeniedException(
+	            "El usuario no tiene un perfil médico vinculado."
+	        );
+	    }
+		
+		return citaSeparadaPagoVirtualDao.leerCitaSeparadaPagadaXMedico(idMedico);
+//				citaSeparadaDao.leerCitaSeparadaMedicoConPagoVirtual(idMedico);
+		
+//			List<CitaSeparadaPagadaEntity> response =	
+//				citaSeparadaPagoVirtualDao.leerCitaSeparadaPagadaXMedico(idMedico);
+//		return response;
 	}
 
 	

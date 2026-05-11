@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api_salud.api_salud.entity.CitaSeparadaPagadaEntity;
 import com.api_salud.api_salud.request.CitaSeparadaPagadaXMedicoRequest;
 import com.api_salud.api_salud.request.CitaSeparadaPagoVirtualRequest;
+import com.api_salud.api_salud.request.CitaSeparadaRequest;
 import com.api_salud.api_salud.response.CitaSeparadaPagoVirtualResponse;
+import com.api_salud.api_salud.response.CitaSeparadaResponse;
 import com.api_salud.api_salud.service.CitaSeparadaPagoVirtualService;
 import com.api_salud.api_salud.service.UsuarioService;
 
@@ -28,6 +30,9 @@ public class CitaSeparadaPagoVirtualController {
 
 	@Autowired
 	UsuarioService usuarioService;	
+
+
+         
 	
     @PostMapping("/citaSeparadaPagoVirtualCrear")
     public ResponseEntity<?> crearCitaSeparadaPagoVirtualCrear( @RequestBody CitaSeparadaPagoVirtualRequest request  ){
@@ -102,16 +107,17 @@ public class CitaSeparadaPagoVirtualController {
 	
     @PostMapping("/citaSeparadaConPagoVirtualXMedicoLeer")
     public ResponseEntity<?> leerCitaSeparadaPagadaXMedico( @RequestBody CitaSeparadaPagadaXMedicoRequest   request  ){
-		 int idMedico =1762;    	
-	    String textError="";
-	    if(request.getIdMedico()==0 ) {
-			textError= "IdMedico: no ha sido ingresado" ;
-	        return new ResponseEntity<String>(textError, HttpStatus.BAD_REQUEST);
-	    } 	
+//		 int idMedico =1762;    	
+//	    String textError="";
+//	    if(request.getIdMedico()==0 ) {
+//			textError= "IdMedico: no ha sido ingresado" ;
+//	        return new ResponseEntity<String>(textError, HttpStatus.BAD_REQUEST);
+//	    } 	
 	
 	    
 		List<CitaSeparadaPagadaEntity> response = null; 
-    	response = citaSeparadaPagoVirtualService.leerCitaSeparadaPagadaXMedico(request.getIdMedico());
+//    	response = citaSeparadaPagoVirtualService.leerCitaSeparadaPagadaXMedico(request.getIdMedico());
+    	response = citaSeparadaPagoVirtualService.leerCitaSeparadaPagadaXMedico();
             return new ResponseEntity<List<CitaSeparadaPagadaEntity>>(response, HttpStatus.OK);
 	
             
@@ -120,3 +126,14 @@ public class CitaSeparadaPagoVirtualController {
 
     
 }
+
+/*
+@PostMapping("/citaSeparadaConPagoVirtualLeer")
+public ResponseEntity<?> leerCitaSeparadaMedicoConPagoVirtual(   @RequestBody CitaSeparadaRequest request  ){
+	System.out.println("Controller leerCitaSeparadaMedicoConPagoVirtual ");
+	
+    CitaSeparadaResponse response = null; 
+	response = citaSeparadaService.leerCitaSeparadaMedicoConPagoVirtual();
+     return new ResponseEntity<CitaSeparadaResponse>(response, HttpStatus.OK);
+
+*/
