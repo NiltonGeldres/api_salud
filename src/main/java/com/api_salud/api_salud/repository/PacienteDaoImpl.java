@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,27 @@ public class PacienteDaoImpl implements PacienteDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    
+    @Override
+    public Integer obtenerIdPacientePorIdUsuario(int idUsuario) {
+        try {
+            // Preparamos la llamada al SP
+            SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                    .withSchemaName("igm_security") // Según tu último SP
+                    .withProcedureName("obtener_id_paciente_por_id_usuario");
+            // Pasamos el parámetro de entrada
+            Map<String, Object> inParams = new HashMap<>();
+            inParams.put("p_id_usuario", idUsuario);
+            // Ejecutamos y obtenemos el mapa de salida
+            Map<String, Object> out = jdbcCall.execute(inParams);
+            // Extraemos el valor del parámetro OUT
+            return (Integer) out.get("o_id_paciente");
+        } catch (Exception e) {
+            log.error("Error al obtener id_paciente para el usuario {}: {}", idUsuario, e.getMessage());
+            return null; 
+        }
+    }
+    
     @Override
     public int pacienteCrear(PacienteEntity paciente) {
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
@@ -56,6 +78,7 @@ public class PacienteDaoImpl implements PacienteDao {
         }
     }
 
+    
 	@Override
 	public int crear(
 		     String nroHistoriaClinica,

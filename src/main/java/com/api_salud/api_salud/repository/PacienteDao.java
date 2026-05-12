@@ -54,4 +54,6 @@ public interface PacienteDao {
 	public PacienteEntity leerNombres(String nombres) ;
 	public PacienteEntity actualizar(PacienteEntity request) ;
 	public PacienteEntity leerIdUsuario(int idUsuario) ;
+
+	Integer obtenerIdPacientePorIdUsuario(int idUsuario);
 }

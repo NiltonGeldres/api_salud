@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import com.api_salud.api_salud.entity.CajaComprobantePagoEntity;
@@ -29,7 +30,9 @@ import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.repository.CitaSeparadaDao;
 import com.api_salud.api_salud.repository.UsuarioDao;
 import com.api_salud.api_salud.request.CitaFacturacionRequest;
+import com.api_salud.api_salud.request.CitaSeparadaFacturarRequest;
 import com.api_salud.api_salud.request.CitaSeparadaRequest;
+import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 import com.api_salud.api_salud.response.CitaSeparadaResponse;
 
@@ -58,7 +61,40 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	private FacturacionService facturacionService;
 	
 	
-	
+	@Transactional 
+    public CitaResponse procesarConfirmacionCita(CitaSeparadaFacturarRequest request) {
+        
+		// A. Obtener datos de la reserva
+	    CitaSeparadaEntityResponse cs = this.leerCitaSeparadaXIdCitaSeparada(request.getIdCitaSeparada());
+	    
+	    // B. Obtener o Crear el Paciente (Idempotencia)
+	    int idPaciente = pacienteService.obtenerOCrearDesdeCita(cs);
+        
+        // 3. Mapear al objeto de facturación (Lógica interna del Service)
+        CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
+        facturaCita.setIdCitaSeparada(cs.getIdCitaSeparada());
+        facturaCita.setIdPaciente(idPaciente); 
+        facturaCita.setIdMedico(cs.getIdMedico());
+        facturaCita.setFecha(cs.getFecha());
+        facturaCita.setHoraInicio(cs.getHoraInicio());
+        facturaCita.setHoraFin(cs.getHoraFin());
+        facturaCita.setIdServicio(cs.getIdServicio());
+        facturaCita.setIdProgramacion(cs.getIdProgramacion());
+        facturaCita.setPrecioUnitario(cs.getPrecioUnitario());
+        facturaCita.setIdUsuario(cs.getIdUsuario());
+        
+        // Valores por defecto de negocio
+        facturaCita.setIdPuntoCarga(0);
+        facturaCita.setIdTipoFinanciamiento(1);
+        facturaCita.setIdFuenteFinanciamiento(1);
+
+        // 4. Confirmar en DB (esto debería actualizar igm_citas.citas_separadas)
+        int idCita = this.confirmarCitaSeparada(facturaCita);
+        
+        return citaService.leerCita(idCita);
+    }
+
+
 	@Override
 	public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
 

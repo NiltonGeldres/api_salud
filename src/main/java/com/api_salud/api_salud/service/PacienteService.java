@@ -4,10 +4,12 @@ import com.api_salud.api_salud.entity.PacienteEntity;
 import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.request.PacienteRequest;
 import com.api_salud.api_salud.request.UsuarioRequest;
+import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 
 public interface PacienteService {
 
-	public int crearDesdeRegistro(UsuarioRequest request);
+	int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita);
+//	public int crearDesdeRegistro(UsuarioRequest request);
     public int pacienteCrear(PacienteRequest request) ;
 	public int crear(PacienteEntity request) ;
 	public PacienteEntity leerNroDocumento(PacienteEntity request) ;

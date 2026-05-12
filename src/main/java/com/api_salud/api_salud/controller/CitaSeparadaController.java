@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.request.CitaFacturacionRequest;
+import com.api_salud.api_salud.request.CitaSeparadaFacturarRequest;
 import com.api_salud.api_salud.request.CitaSeparadaRequest;
 import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
@@ -136,10 +137,27 @@ public class CitaSeparadaController {
          return new ResponseEntity<CitaSeparadaResponse>(response, HttpStatus.OK);
 	
     }
+  
+    @PostMapping("/confirmarCitaSeparada")
+    @PreAuthorize("hasAnyRole('USUARIOS', 'PACIENTE')") // Seguridad por Rol
+    public ResponseEntity<CitaResponse> confirmarCitaSeparada(@RequestBody CitaSeparadaFacturarRequest request) {
+        // Toda la lógica de "preparación" ocurre en el Service
+        CitaResponse response = citaSeparadaService.procesarConfirmacionCita(request);
         
+        if (response != null && 
+            response.getCita() != null && 
+            !response.getCita().isEmpty() && 
+            response.getCita().get(0).getIdCita() != 0) {
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
-    @PostMapping("/confimarCitaSeparada")
-    public ResponseEntity<?> confirmarCitaSeparada( @RequestBody citaSeparadaFacturarRequest   request ){
+    @PostMapping("/confimarCitaSeparada1")
+    public ResponseEntity<?> confirmarCitaSeparada1( @RequestBody CitaSeparadaFacturarRequest   request ){
 	    CitaResponse response = null;
 		CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
 	    CitaSeparadaEntityResponse cs = new CitaSeparadaEntityResponse();
@@ -176,10 +194,10 @@ public class CitaSeparadaController {
 
        
    //Entity
-   static class citaSeparadaFacturarRequest {
+ /*  static class citaSeparadaFacturarRequest {
 	int idCitaSeparada ;
-	
 	String usuario ;
+	
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
 	}
@@ -193,7 +211,7 @@ public class CitaSeparadaController {
 		this.usuario = usuario;
 	}
    	   
- }
+ }*/
        
    
 	

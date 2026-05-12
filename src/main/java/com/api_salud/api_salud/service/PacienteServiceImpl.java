@@ -13,6 +13,7 @@ import com.api_salud.api_salud.mapper.PacienteMapper;
 import com.api_salud.api_salud.repository.PacienteDao;
 import com.api_salud.api_salud.request.PacienteRequest;
 import com.api_salud.api_salud.request.UsuarioRequest;
+import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 
 
 @Service
@@ -29,16 +30,37 @@ public class PacienteServiceImpl implements PacienteService{
 	    @Autowired
 	    private PacienteMapper pacienteMapper; // Mapper para convertir Request -> Entity
 
-	
+/*	
 	    @Override
 	    @Transactional(propagation = Propagation.REQUIRED)
 	    public int crearDesdeRegistro(UsuarioRequest request) {
 	        PacienteEntity entidad = pacienteMapper.usuarioRequestToPacienteEntity(request);
 	        return pacienteDao.pacienteCrear(entidad);
 	    }
-	
+	*/
 	 
+	    @Override
+	    @Transactional(propagation = Propagation.REQUIRED)
+	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita) {
+	        // Buscamos si el usuario ya tiene un ID de paciente vinculado
+	        // Esto evita duplicados en igm_clientes.pacientes
+	        Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
+	        
+	        if (idPacienteExistente != null && idPacienteExistente > 0) {
+	            return idPacienteExistente;
+	        }
 
+	        // Si no existe, mapeamos y creamos
+	        // Usamos los datos que ya tenemos en la cita o consultamos al usuario
+	        PacienteEntity pacienteEntidad = new PacienteEntity();
+	        pacienteEntidad.setIdUsuarioRegistro(cita.getIdUsuario());
+	        pacienteEntidad.setIdEntidad(cita.getIdEntidad());
+	  
+	        
+	        // ... setear otros campos obligatorios que vengan del perfil del usuario
+	        
+	        return pacienteDao.pacienteCrear(pacienteEntidad);
+	    }    
 	    
 	    @Override
 	    @Transactional(propagation = Propagation.REQUIRED) // Se une a la transacción de UsuarioService
