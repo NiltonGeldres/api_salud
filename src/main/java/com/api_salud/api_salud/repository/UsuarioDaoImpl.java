@@ -56,7 +56,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
     private SimpleJdbcCall callActualizar;
     private SimpleJdbcCall callObtenerDatosJwtPorUsername;
     private SimpleJdbcCall callUsuarioDatosGlobales;    
-
+    private SimpleJdbcCall callObtenerUsuarioPorIdUsuario;
     @PostConstruct
     public void init() {
         jdbcTemplate.setResultsMapCaseInsensitive(true);
@@ -142,6 +142,15 @@ public class UsuarioDaoImpl implements UsuarioDao {
                         new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(Usuario.class))
                 );
 
+        this.callObtenerUsuarioPorIdUsuario = new SimpleJdbcCall(jdbcTemplate)
+                .withSchemaName("igm_security")
+                .withProcedureName("usuario_obtener_por_id")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_id_usuario", Types.INTEGER),
+                        new SqlOutParameter("o_usuario", Types.REF_CURSOR, new BeanPropertyRowMapper<>(UsuarioEntity.class))
+                );
+                
         this.callUsuarioIdXUsernameLeer = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_security")
                 .withProcedureName("usuario_id_xusername_leer")
@@ -280,6 +289,17 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return null;
     }
+
+    
+    @Override
+    public UsuarioEntity obtenerUsuarioPorId(int idUsuario) {
+        SqlParameterSource param = new MapSqlParameterSource().addValue("p_id_usuario", idUsuario);
+        Map<String, Object> out = callObtenerUsuarioPorIdUsuario.execute(param);
+        List<UsuarioEntity> list = (List<UsuarioEntity>) out.get("o_usuario");
+        return (list != null && !list.isEmpty()) ? list.get(0) : null;
+    }
+    
+
     
     @Override
     public Usuario usuarioLeer(int id_usuario) {
@@ -288,6 +308,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
         List<Usuario> list = (List<Usuario>) out.get("o_usuario");
         return (list != null && !list.isEmpty()) ? list.get(0) : null;
     }
+    
+    
     //validado
     @Override
     public int UsuarioIdxusername_leer(String p_usuario) {

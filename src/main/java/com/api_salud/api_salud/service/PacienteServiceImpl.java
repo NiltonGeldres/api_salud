@@ -39,28 +39,28 @@ public class PacienteServiceImpl implements PacienteService{
 	    }
 	*/
 	 
+
+	    
 	    @Override
 	    @Transactional(propagation = Propagation.REQUIRED)
-	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita) {
-	        // Buscamos si el usuario ya tiene un ID de paciente vinculado
-	        // Esto evita duplicados en igm_clientes.pacientes
+	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita, UsuarioRequest request) {
+	        // Buscamos si ya existe (usando el SP que creamos antes)
 	        Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
 	        
 	        if (idPacienteExistente != null && idPacienteExistente > 0) {
 	            return idPacienteExistente;
 	        }
 
-	        // Si no existe, mapeamos y creamos
-	        // Usamos los datos que ya tenemos en la cita o consultamos al usuario
-	        PacienteEntity pacienteEntidad = new PacienteEntity();
-	        pacienteEntidad.setIdUsuarioRegistro(cita.getIdUsuario());
-	        pacienteEntidad.setIdEntidad(cita.getIdEntidad());
-	  
+	        //  SI NO EXISTE, USAMOS EL MAPPER
+	        PacienteEntity entidad = pacienteMapper.usuarioRequestToPacienteEntity(request);
 	        
-	        // ... setear otros campos obligatorios que vengan del perfil del usuario
-	        
-	        return pacienteDao.pacienteCrear(pacienteEntidad);
-	    }    
+	        // Ajustamos datos específicos que vienen de la cita separada
+	        entidad.setIdUsuarioRegistro(cita.getIdUsuario()); 
+	        entidad.setIdEntidad(cita.getIdEntidad());
+
+	        // Guardamos en la tabla igm_clientes.pacientes
+	        return pacienteDao.pacienteCrear(entidad);
+	    }	    
 	    
 	    @Override
 	    @Transactional(propagation = Propagation.REQUIRED) // Se une a la transacción de UsuarioService

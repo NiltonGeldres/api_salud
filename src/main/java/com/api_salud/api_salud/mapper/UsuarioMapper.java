@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import com.api_salud.api_salud.dto.UsuarioDto;
+import com.api_salud.api_salud.entity.Usuario;
 import com.api_salud.api_salud.entity.UsuarioEntity;
 import com.api_salud.api_salud.request.UsuarioRequest;
 import com.api_salud.api_salud.response.UsuarioResponse;
@@ -19,6 +20,7 @@ public class UsuarioMapper {
         return entity;
     }
 
+    
     // Convierte lo que sale de la DB (Entity/Dto interno) a la respuesta final (Response)
     public UsuarioResponse dtoToResponse(UsuarioDto dto) {
         if (dto == null) return null;
@@ -34,4 +36,12 @@ public class UsuarioMapper {
         
         return response;
     }
+    
+    public UsuarioRequest entityToRequest(UsuarioEntity entity) {
+        if (entity == null) return null;
+        UsuarioRequest request = new UsuarioRequest();
+        BeanUtils.copyProperties(entity, request); // Copia campos con nombres iguales
+        return request;
+    }
+    
 }

@@ -140,6 +140,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 		
 	}	
 
+	public UsuarioEntity obtenerUsuarioPorId(int id_usuario) {
+		
+		return usuarioDao.obtenerUsuarioPorId(id_usuario);
+		
+	}	
+		
     // Método utilitario para centralizar los errores de respuesta
     private UsuarioResponse crearResponseError(String mensaje) {
         UsuarioResponse errorResponse = new UsuarioResponse();

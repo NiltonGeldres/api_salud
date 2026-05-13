@@ -24,4 +24,6 @@ public interface UsuarioService {
 
 	UsuarioDatosGlobalesResponse usuarioDatosGlobales();
 
+
+	public UsuarioEntity obtenerUsuarioPorId(int id_usuario) ;	
 }

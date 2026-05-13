@@ -10,6 +10,8 @@ import com.api_salud.api_salud.response.UsuarioDatosGlobalesResponse;
 
 public interface UsuarioDao {
 
+	public UsuarioEntity obtenerUsuarioPorId(int idUsuario);
+	
 	public String validarRegistroCompleto(UsuarioEntity usuario) ;
 	
 	public UsuarioDto buscarPorIdUsuario(int idUsuario) ;
@@ -30,5 +32,6 @@ public interface UsuarioDao {
 	UsuarioContextoResponse usuarioObtenerDatosContextoPorUsername(String username);
 
 	UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario);
+
 
 }

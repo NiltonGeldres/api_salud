@@ -8,7 +8,8 @@ import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 
 public interface PacienteService {
 
-	int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita);
+    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita, UsuarioRequest request) ;
+//	int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita);
 //	public int crearDesdeRegistro(UsuarioRequest request);
     public int pacienteCrear(PacienteRequest request) ;
 	public int crear(PacienteEntity request) ;

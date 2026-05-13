@@ -26,6 +26,8 @@ import com.api_salud.api_salud.entity.FacturacionOrdenServicioPagoEntity;
 import com.api_salud.api_salud.entity.FacturacionServicioDespachoEntity;
 import com.api_salud.api_salud.entity.FacturacionServicioPagoEntity;
 import com.api_salud.api_salud.entity.Usuario;
+import com.api_salud.api_salud.mapper.PacienteMapper;
+import com.api_salud.api_salud.mapper.UsuarioMapper;
 //import com.api_salud.api_salud.entity.UsuarioResponse;
 import com.api_salud.api_salud.repository.CitaSeparadaDao;
 import com.api_salud.api_salud.repository.UsuarioDao;
@@ -35,7 +37,7 @@ import com.api_salud.api_salud.request.CitaSeparadaRequest;
 import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 import com.api_salud.api_salud.response.CitaSeparadaResponse;
-
+import com.api_salud.api_salud.request.UsuarioRequest;
 @Service
 public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	
@@ -60,15 +62,22 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	@Autowired
 	private FacturacionService facturacionService;
 	
+    @Autowired
+    private UsuarioMapper usuarioMapper; // Mapper para convertir Request -> Entity	
+
+	
 	
 	@Transactional 
     public CitaResponse procesarConfirmacionCita(CitaSeparadaFacturarRequest request) {
-        
 		// A. Obtener datos de la reserva
 	    CitaSeparadaEntityResponse cs = this.leerCitaSeparadaXIdCitaSeparada(request.getIdCitaSeparada());
-	    
+	//    if (cs == null) throw new EntityNotFoundException("Reserva no encontrada");
+        System.out.println("Service procesarConfirmacionCita CS" );
+
+        UsuarioRequest datosCompletosUsuario =  usuarioMapper.entityToRequest(usuarioService.obtenerUsuarioPorId(cs.getIdUsuario()));
 	    // B. Obtener o Crear el Paciente (Idempotencia)
-	    int idPaciente = pacienteService.obtenerOCrearDesdeCita(cs);
+	    int idPaciente = pacienteService.obtenerOCrearDesdeCita(cs, datosCompletosUsuario);
+        System.out.println("Service procesarConfirmacionCita id paciente"+idPaciente );
         
         // 3. Mapear al objeto de facturación (Lógica interna del Service)
         CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();

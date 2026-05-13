@@ -19,6 +19,8 @@ public class UsuarioDto {
 	private String estado ; 
 	private int idEntidad ; 
 	private int idReferenciaRol ;
+	private int idPaciente ;
+	
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -126,6 +128,12 @@ public class UsuarioDto {
 	}
 	public void setIdReferenciaRol(int idReferenciaRol) {
 		this.idReferenciaRol = idReferenciaRol;
+	}
+	public int getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
 	}
 	
 	
