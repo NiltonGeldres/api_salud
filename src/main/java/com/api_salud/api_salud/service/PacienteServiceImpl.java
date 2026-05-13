@@ -53,11 +53,12 @@ public class PacienteServiceImpl implements PacienteService{
 
 	        //  SI NO EXISTE, USAMOS EL MAPPER
 	        PacienteEntity entidad = pacienteMapper.usuarioRequestToPacienteEntity(request);
+	        System.out.println("PACIENTE request.getIdEntidad()  "+entidad.getIdEntidad());
 	        
 	        // Ajustamos datos específicos que vienen de la cita separada
 	        entidad.setIdUsuarioRegistro(cita.getIdUsuario()); 
-	        entidad.setIdEntidad(cita.getIdEntidad());
-
+	        //entidad.setIdEntidad(cita.getIdEntidad());
+	        System.out.println("CITA request.getIdEntidad()  "+cita.getIdEntidad());
 	        // Guardamos en la tabla igm_clientes.pacientes
 	        return pacienteDao.pacienteCrear(entidad);
 	    }	    

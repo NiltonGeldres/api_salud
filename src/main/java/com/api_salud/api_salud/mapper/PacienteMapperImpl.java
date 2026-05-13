@@ -75,7 +75,7 @@ public class PacienteMapperImpl implements PacienteMapper {
     	    entity.setTelefono(request.getNumeroCelular());
     	    entity.setEmail(request.getEmail());
     	    entity.setIdTipoSexo(request.getIdSexo());
-    	    
+  	    
     	    // 2. Campos obligatorios para el SP que nacen con valores por defecto o NULL
     	    entity.setNroHistoriaClinica(null); // Se genera tras el pago
     	    entity.setFechaNacimiento(null);  

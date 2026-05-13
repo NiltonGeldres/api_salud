@@ -40,7 +40,6 @@ public class PacienteDaoImpl implements PacienteDao {
     @Override
     public Integer obtenerIdPacientePorIdUsuario(int idUsuario) {
         try {
-            // Preparamos la llamada al SP
             SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
                     .withSchemaName("igm_security") // Según tu último SP
                     .withProcedureName("obtener_id_paciente_por_id_usuario");

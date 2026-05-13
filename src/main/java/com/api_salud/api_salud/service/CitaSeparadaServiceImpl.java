@@ -75,6 +75,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         System.out.println("Service procesarConfirmacionCita CS" );
 
         UsuarioRequest datosCompletosUsuario =  usuarioMapper.entityToRequest(usuarioService.obtenerUsuarioPorId(cs.getIdUsuario()));
+        
 	    // B. Obtener o Crear el Paciente (Idempotencia)
 	    int idPaciente = pacienteService.obtenerOCrearDesdeCita(cs, datosCompletosUsuario);
         System.out.println("Service procesarConfirmacionCita id paciente"+idPaciente );
@@ -211,7 +212,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	
 	//@Transactional 
 	public int confirmarCitaSeparada( CitaFacturacionRequest request) {
-		
+       System.out.println("Service procesarConfirmacionCita id paciente"+request.getIdCitaSeparada() );	
 		int response =0 ;
 		
 		//citaService.crearCita(request);
@@ -354,6 +355,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			ccp.setIdTipoFinanciamiento(request.getIdTipoFinanciamiento());
 			ccp.setDni("");
 			ccp.setIdCuentaAtencion(0);
+         System.out.println("Service procesarConfirmacionCita facturacion"+request.getIdCitaSeparada() );	
 			
 			facturacionService.FacturacionDigital(
 					fca,fos,listFacturacionServicioDespacho,fosp,listFacturacionServicioPago,ccp
@@ -361,6 +363,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			int idCita = citaService.crearCita(c);
 			
 			citaSeparadaDao.actualizaIdCita( request.getIdCitaSeparada(), idCita);
+       System.out.println("Service procesarConfirmacionCita CITA "+request.getIdCitaSeparada() );	
 			
 			response= idCita;
 		}  
