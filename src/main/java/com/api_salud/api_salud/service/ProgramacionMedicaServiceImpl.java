@@ -106,7 +106,6 @@ public class ProgramacionMedicaServiceImpl implements ProgramacionMedicaService{
 	    
 	    // 2. CONTROL DE VACÍO: Si no hay datos, devolvemos el mes en blanco de inmediato
 	    // Esto evita procesar el mapa y el bucle innecesariamente
-	    System.out.println("PASO MES LEER ");
 	    if (lista == null || lista.isEmpty()) {
 	        return programacionMedicoMesBlancoLeer(mes, ano, idMedico, idEspecialidad);
 	    }
@@ -213,7 +212,6 @@ public class ProgramacionMedicaServiceImpl implements ProgramacionMedicaService{
 	        
 	        listaDias.add(p);
 	    }
-	    System.out.println("termino en blanco ");
 	    
 	    response.setProgramacionMedicaDiaResponse(listaDias);
 	    return response;	

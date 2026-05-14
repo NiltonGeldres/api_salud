@@ -53,7 +53,6 @@ public class UsuarioController {
 
 	    @PostMapping("/usuarioDatosGlobales")
 	   public ResponseEntity<UsuarioDatosGlobalesResponse> getDatosGlobales(@RequestBody Usuario request){
-	    	System.out.println("usuarioDatosGlobales");
 	    	UsuarioDatosGlobalesResponse response = usuarioService.usuarioDatosGlobales();
 	        return new ResponseEntity(response, HttpStatus.OK);
 	    }

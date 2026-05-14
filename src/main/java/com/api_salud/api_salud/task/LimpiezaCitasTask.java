@@ -4,10 +4,12 @@ package com.api_salud.api_salud.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component // 1. Esto es obligatorio para que @Scheduled funcione
+@EnableScheduling
 public class LimpiezaCitasTask {
 
     @Autowired // 2. Inyectar el JdbcTemplate

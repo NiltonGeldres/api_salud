@@ -141,7 +141,6 @@ public class CitaSeparadaController {
     @PostMapping("/confimarCitaSeparada")
 //    @PreAuthorize("hasAnyRole('USUARIOS', 'PACIENTE')") // Seguridad por Rol
     public ResponseEntity<CitaResponse> confirmarCitaSeparada(@RequestBody CitaSeparadaFacturarRequest request) {
-        System.out.println("Controller confirmarCitaSeparada");    	
         // Toda la lógica de "preparación" ocurre en el Service
         CitaResponse response = citaSeparadaService.procesarConfirmacionCita(request);
         
@@ -160,7 +159,6 @@ public class CitaSeparadaController {
 /*
     @PostMapping("/confimarCitaSeparada")
     public ResponseEntity<?> confirmarCitaSeparada1( @RequestBody CitaSeparadaFacturarRequest   request ){
-        System.out.println("Controller confirmarCitaSeparada");    	
 	    CitaResponse response = null;
 		CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
 	    CitaSeparadaEntityResponse cs = new CitaSeparadaEntityResponse();

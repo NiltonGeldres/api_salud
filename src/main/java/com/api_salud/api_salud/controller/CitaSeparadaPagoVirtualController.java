@@ -127,13 +127,3 @@ public class CitaSeparadaPagoVirtualController {
     
 }
 
-/*
-@PostMapping("/citaSeparadaConPagoVirtualLeer")
-public ResponseEntity<?> leerCitaSeparadaMedicoConPagoVirtual(   @RequestBody CitaSeparadaRequest request  ){
-	System.out.println("Controller leerCitaSeparadaMedicoConPagoVirtual ");
-	
-    CitaSeparadaResponse response = null; 
-	response = citaSeparadaService.leerCitaSeparadaMedicoConPagoVirtual();
-     return new ResponseEntity<CitaSeparadaResponse>(response, HttpStatus.OK);
-
-*/

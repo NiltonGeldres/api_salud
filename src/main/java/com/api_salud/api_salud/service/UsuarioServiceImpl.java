@@ -103,7 +103,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
 	@Override
 	public Integer xusername_leer(String request) {		// TODO Auto-generated method stub
-       System.out.println("USerName "+request);
+
 		return usuarioDao.UsuarioIdxusername_leer(request);
 	}
 	

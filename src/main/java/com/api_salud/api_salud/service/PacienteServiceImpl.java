@@ -45,9 +45,9 @@ public class PacienteServiceImpl implements PacienteService{
 	    @Transactional(propagation = Propagation.REQUIRED)
 	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita, UsuarioRequest request) {
 	        // Buscamos si ya existe (usando el SP que creamos antes)
-	        System.out.println("PACIENTE cita.getIdUsuario()  "+cita.getIdUsuario());
 
-	    	Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
+//	    	Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
+	    	Integer idPacienteExistente = request.getIdPaciente();
 	        
 	        if (idPacienteExistente != null && idPacienteExistente > 0) {
 	            return idPacienteExistente;
@@ -55,12 +55,10 @@ public class PacienteServiceImpl implements PacienteService{
 
 	        //  SI NO EXISTE, USAMOS EL MAPPER
 	        PacienteEntity entidad = pacienteMapper.usuarioRequestToPacienteEntity(request);
-	        System.out.println("PACIENTE request.getIdEntidad()  "+entidad.getIdEntidad());
 	        
 	        // Ajustamos datos específicos que vienen de la cita separada
 	        entidad.setIdUsuarioRegistro(cita.getIdUsuario()); 
 	        //entidad.setIdEntidad(cita.getIdEntidad());
-	        System.out.println("CITA request.getIdEntidad()  "+cita.getIdEntidad());
 	        // Guardamos en la tabla igm_clientes.pacientes
 	        return pacienteDao.pacienteCrear(entidad);
 	    }	    
@@ -71,17 +69,14 @@ public class PacienteServiceImpl implements PacienteService{
 	        try {
 	            log.debug("Iniciando creación de paciente para documento: {}", request.getNroDocumento());
 
-	            // 1. Transformamos el DTO de entrada (Request) a nuestra Entidad de persistencia
+	            // Transformamos el DTO de entrada (Request) a nuestra Entidad de persistencia
 	            PacienteEntity pacienteEntity = pacienteMapper.requestToEntity(request);
 
-	            // 2. Aplicamos Reglas de Negocio iniciales
+	            // Aplicamos Reglas de Negocio iniciales
 	            // El número de historia clínica es NULL hasta que el cajero valide el primer pago
 	            pacienteEntity.setNroHistoriaClinica(null);
 	            
-	            // Si el request trae el id_entidad, lo seteamos; si no, podemos manejar un default
-	            // pacienteEntity.setIdEntidad(request.getIdEntidad());
-
-	            // 3. Llamamos al DAO que ejecuta el SP "igm_clientes.paciente_crear"
+	            // Llamamos al DAO que ejecuta el SP "igm_clientes.paciente_crear"
 	            int idGenerado = pacienteDao.pacienteCrear(pacienteEntity);
 
 	            if (idGenerado <= 0) {

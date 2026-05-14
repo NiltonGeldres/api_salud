@@ -74,10 +74,8 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	//    if (cs == null) throw new EntityNotFoundException("Reserva no encontrada");
 
         UsuarioRequest datosCompletosUsuario =  usuarioMapper.entityToRequest(usuarioService.obtenerUsuarioPorId(cs.getIdUsuario()));
-        
 	    // B. Obtener o Crear el Paciente (Idempotencia)
 	    int idPaciente = pacienteService.obtenerOCrearDesdeCita(cs, datosCompletosUsuario);
-        System.out.println("Service procesarConfirmacionCita id paciente"+idPaciente );
         
         // 3. Mapear al objeto de facturación (Lógica interna del Service)
         CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
@@ -214,7 +212,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	
 	//@Transactional 
 	public int confirmarCitaSeparada( CitaFacturacionRequest request) {
-       System.out.println("Service procesarConfirmacionCita id paciente"+request.getIdCitaSeparada() );	
+	
 		int response =0 ;
 		
 		//citaService.crearCita(request);
@@ -358,7 +356,6 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			ccp.setIdTipoFinanciamiento(request.getIdTipoFinanciamiento());
 			ccp.setDni("");
 			ccp.setIdCuentaAtencion(0);
-         System.out.println("Service procesarConfirmacionCita facturacion"+request.getIdCitaSeparada() );	
 			
 			facturacionService.FacturacionDigital(
 					fca,fos,listFacturacionServicioDespacho,fosp,listFacturacionServicioPago,ccp
@@ -366,7 +363,6 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			int idCita = citaService.crearCita(c);
 			
 			citaSeparadaDao.actualizaIdCita( request.getIdCitaSeparada(), idCita);
-       System.out.println("Service procesarConfirmacionCita CITA "+request.getIdCitaSeparada() );	
 			
 			response= idCita;
 		}  

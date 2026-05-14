@@ -33,7 +33,6 @@ public class CitaBloqueadaController {
     
     @PostMapping("/citaBloquear")
     public ResponseEntity<CitaBloqueadaResponse> citaBloquear(@RequestBody CitaBloqueadaRequest request){
-    	System.out.println("Controller citaBloquear");
     	CitaBloqueadaResponse response = citaBloqueadaService.crearCitaBloqueada(request);
          return new ResponseEntity<CitaBloqueadaResponse>(response, HttpStatus.OK);
      }

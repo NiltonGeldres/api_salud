@@ -137,7 +137,6 @@ public class CitaDaoImpl implements CitaDao{
 	
 	@Override
 	public int crearCita(CitaEntity citaEntity) {
-		System.out.println("crearCita  citaEntity.getIdEspecialidad()"+citaEntity.getIdEspecialidad());
     	int  response = 0;
     	List<CitaDisponibleResponse> res =new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);

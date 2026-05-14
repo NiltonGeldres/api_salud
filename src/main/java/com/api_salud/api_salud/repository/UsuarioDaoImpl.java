@@ -335,12 +335,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
     //validado
     @Override
     public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
-    	System.out.println("idUsuario:   "+idUsuario);
         try {
             SqlParameterSource param = new MapSqlParameterSource().addValue("p_id_usuario", idUsuario);
             Map<String, Object> out = callUsuarioDatosGlobales.execute(param);
             List<UsuarioDatosGlobalesResponse> list = (List<UsuarioDatosGlobalesResponse>) out.get("o_usuario");
-        	System.out.println("Retorno:   "+out);
             return (list != null && !list.isEmpty()) ? list.get(0) : null;
         } catch (Exception e) {
             log.error("Error al leer Usuario Datos Globales : ", e);
