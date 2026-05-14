@@ -72,7 +72,6 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 		// A. Obtener datos de la reserva
 	    CitaSeparadaEntityResponse cs = this.leerCitaSeparadaXIdCitaSeparada(request.getIdCitaSeparada());
 	//    if (cs == null) throw new EntityNotFoundException("Reserva no encontrada");
-        System.out.println("Service procesarConfirmacionCita CS" );
 
         UsuarioRequest datosCompletosUsuario =  usuarioMapper.entityToRequest(usuarioService.obtenerUsuarioPorId(cs.getIdUsuario()));
         
@@ -92,6 +91,9 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         facturaCita.setIdProgramacion(cs.getIdProgramacion());
         facturaCita.setPrecioUnitario(cs.getPrecioUnitario());
         facturaCita.setIdUsuario(cs.getIdUsuario());
+        facturaCita.setIdMedicoEspecialdiad(cs.getIdMedicoEspecialidad());
+        facturaCita.setIdEspecialidad(cs.getIdEspecialidad());
+
         
         // Valores por defecto de negocio
         facturaCita.setIdPuntoCarga(0);
@@ -252,6 +254,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 		    c.setEsCitaAdicional(false);
 		    c.setIdProducto(request.getIdProducto());
 		    c.setIdUsuario(request.getIdUsuario());
+		    c.setIdMedicoEspecialidad(request.getIdMedicoEspecialdiad());
 		    
 		    // Crear Cuenta de Atencion
 	 		FacturacionCuentaAtencionEntity fca = new FacturacionCuentaAtencionEntity() ;

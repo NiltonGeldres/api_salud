@@ -24,6 +24,8 @@ public class CitaSeparadaEntityResponse {
     int idUsuario;
     String email; 
     int idEntidad;
+    int idMedicoEspecialidad;
+    
     
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
@@ -156,6 +158,12 @@ public class CitaSeparadaEntityResponse {
 	}
 	public void setIdEntidad(int idEntidad) {
 		this.idEntidad = idEntidad;
+	}
+	public int getIdMedicoEspecialidad() {
+		return idMedicoEspecialidad;
+	}
+	public void setIdMedicoEspecialidad(int idMedicoEspecialidad) {
+		this.idMedicoEspecialidad = idMedicoEspecialidad;
 	}
     
     

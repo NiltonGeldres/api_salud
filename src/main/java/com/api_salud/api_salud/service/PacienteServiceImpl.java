@@ -45,7 +45,9 @@ public class PacienteServiceImpl implements PacienteService{
 	    @Transactional(propagation = Propagation.REQUIRED)
 	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita, UsuarioRequest request) {
 	        // Buscamos si ya existe (usando el SP que creamos antes)
-	        Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
+	        System.out.println("PACIENTE cita.getIdUsuario()  "+cita.getIdUsuario());
+
+	    	Integer idPacienteExistente = pacienteDao.obtenerIdPacientePorIdUsuario(cita.getIdUsuario());
 	        
 	        if (idPacienteExistente != null && idPacienteExistente > 0) {
 	            return idPacienteExistente;

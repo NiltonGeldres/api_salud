@@ -19,7 +19,6 @@ public class CitaFacturacionRequest {
 	@NotNull(message = "El dato idEspecialidad, no puede estar en blanco")
 	int idEspecialidad;
 	
-//	@NotNull(message = "El idMedico, nopuede estar en blanco")
     int	idCita;
 	
 	@NotEmpty
@@ -32,13 +31,7 @@ public class CitaFacturacionRequest {
 	
 	@NotNull(message = "El dato idPaciente, no puede estar en blanco")
     int idPaciente;
-/*	
-	@NotNull(message = "El dato idEstadoCita, no puede estar en blanco")
-    int idEstadoCita;
 	
-	@NotNull(message = "El dato idAtencion, no puede estar en blanco")
-    int idAtencion;
-*/	
 	@NotNull(message = "El dato idServicio, no puede estar en blanco")
     int idServicio;
 	
@@ -52,35 +45,7 @@ public class CitaFacturacionRequest {
 	@NotEmpty
 	@NotNull(message = "El dato horaSolicitud, no puede estar en blanco")
     String horaSolicitud;
-/*	
-	@NotEmpty
-	@NotNull(message = "El dato esCitaAdicional, no puede estar en blanco")
-    String esCitaAdicional;
-*/	
-/*	
-	@NotEmpty
-	@NotNull(message = "El dato servicio, no puede estar en blanco")
-    String servicio;
 	
-	@NotEmpty
-	@NotNull(message = "El dato medico, no puede estar en blanco")
-    String medico ;
-	
-	@NotNull(message = "El dato idTipoServicio, no puede estar en blanco")
-    int idTipoServicio;
-	
-	@NotNull(message = "El dato idTipoCondicionAlEstab, no puede estar en blanco")
-    int idTipoCondicionAlEstab;
-	
-	@NotNull(message = "El dato idTipoEdad, no puede estar en blanco")
-    int idTipoEdad    ;
-	
-	@NotNull(message = "El dato idOrigenAtencion, no puede estar en blanco")
-    int idOrigenAtencion ;
-	
-	@NotNull(message = "El dato idTipoCondicionAlServicio, no puede estar en blanco")
-    int idTipoCondicionAlServicio;
-*/	
 	@NotNull(message = "El dato idProducto, no puede estar en blanco")
     int idProducto ;
 	
@@ -90,19 +55,7 @@ public class CitaFacturacionRequest {
 	@NotEmpty
 	@NotNull(message = "El dato usuario, no puede estar en blanco")
     String usuario;
-/*	
-	@NotEmpty
-	@NotNull(message = "El dato numeroOperacion, no puede estar en blanco")
-    String numeroOperacion;
-	
-	@NotEmpty
-	@NotNull(message = "El dato numeroTelefono, no puede estar en blanco")
-    String numeroTelefono;
-	
-	@NotEmpty
-	@NotNull(message = "El dato EntidadDestino, no puede estar en blanco")
-    String EntidadDestino;
-*/
+
 
 	@NotEmpty
 	@NotNull(message = "El dato precioUnitrio, no puede estar en blanco")
@@ -121,6 +74,7 @@ public class CitaFacturacionRequest {
 	@NotNull(message = "El dato idUsuario, no puede estar en blanco")
     int idUsuario ;
     
+    int idMedicoEspecialdiad ;
     
     
 	public int getIdCitaSeparada() {
@@ -242,6 +196,12 @@ public class CitaFacturacionRequest {
 	}
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
+	}
+	public int getIdMedicoEspecialdiad() {
+		return idMedicoEspecialdiad;
+	}
+	public void setIdMedicoEspecialdiad(int idMedicoEspecialdiad) {
+		this.idMedicoEspecialdiad = idMedicoEspecialdiad;
 	}
 		
 	
