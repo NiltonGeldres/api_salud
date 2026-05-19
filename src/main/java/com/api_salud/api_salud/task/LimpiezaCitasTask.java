@@ -57,7 +57,8 @@ public class LimpiezaCitasTask {
      * Se ejecuta todos los días a las 12:00 AM (Medianoche).
      * Formato Cron: "segundo minuto hora día mes día-semana"
      */
-    @Scheduled(cron = "0 0 0 * * *") 
+   // @Scheduled(cron = "0 0 0 * * *") 
+    @Scheduled(cron = "0 0 0 * * *", zone = "America/Lima")    
     public void ejecutarDepuracionCitasSeparadasExpiradas() {
         try {
             log.info("Iniciando: Depuración diaria de citas anuladas (Limpieza profunda)...");

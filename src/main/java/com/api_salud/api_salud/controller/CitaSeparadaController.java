@@ -68,8 +68,6 @@ public class CitaSeparadaController {
     @PostMapping("/citaSeparadaLeer")
     public ResponseEntity<?> leerCitaSeparadaXIdPaciente(   @RequestBody CitaSeparadaRequest request  ){
 	    String textError="";
-	    
-//		int idUsuario = 0;
 		String usuario= request.getUsuario();
 //		 idUsuario = usuarioService.xusername_leer(usuario);
    	 	Integer idUsuario = TenantContext.getUsuarioId();
