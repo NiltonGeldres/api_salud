@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.entity.CitaSeparadaPagadaEntity;
 import com.api_salud.api_salud.request.CitaSeparadaPagadaXMedicoRequest;
 import com.api_salud.api_salud.request.CitaSeparadaPagoVirtualRequest;
@@ -40,7 +41,9 @@ public class CitaSeparadaPagoVirtualController {
 
 		int idUsuario = 0;
 		String usuario= request.getUsuario();
-		 idUsuario = usuarioService.xusername_leer(usuario);
+//		 idUsuario = usuarioService.xusername_leer(usuario);
+		 idUsuario = TenantContext.getUsuarioId();
+
 		 
 		 request.setIdUsuario(idUsuario);
 		if (idUsuario==0  ) {
