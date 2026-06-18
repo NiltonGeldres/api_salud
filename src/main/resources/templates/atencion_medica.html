@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Historia Clínica Electrónica</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; color: #333; line-height: 1.4; }
+        .header { text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 10px; }
+        .section { margin-top: 20px; page-break-inside: avoid; }
+        .section-title { font-size: 14px; font-weight: bold; background-color: #f3f4f6; padding: 5px; color: #0284c7; border-left: 4px solid #0284c7; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #e5e7eb; padding: 8px; text-align: left; font-size: 11px; }
+        th { background-color: #f9fafb; width: 25%; }
+        .footer { margin-top: 50px; text-align: right; font-size: 11px; page-break-inside: avoid; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>HISTORIA CLÍNICA DE ATENCIÓN MÉDICA</h2>
+        <p><strong>N° Atención:</strong> <span th:text="${idAtencion}">0000</span> | <strong>Fecha:</strong> <span th:text="${fecha}">00/00/0000</span></p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">1. DATOS DEL ACTO MÉDICO</div>
+        <table>
+            <tr>
+                <th>ID Paciente:</th>
+                <td th:text="${atencion.idPaciente}">-</td>
+                <th>ID Servicio/Especialidad:</th>
+                <td th:text="${atencion.idServicio}">-</td>
+            </tr>
+            <tr>
+                <th>Estado Firma:</th>
+                <td th:text="${atencion.estadoFirma}">-</td>
+                <th>Origen Registro:</th>
+                <td th:text="${atencion.origenRegistroUsuario}">-</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.antecedentes != null and !atencion.antecedentes.isEmpty()}">
+        <div class="section-title">2. ANTECEDENTES DEL PACIENTE</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Catálogo ID</th>
+                    <th style="width: 20%;">Tipo</th>
+                    <th>Descripción Médica Detallada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ant : ${atencion.antecedentes}">
+                    <td th:text="${ant.idAntecedente}">-</td>
+                    <td th:text="${ant.idTipoAntecedente}">-</td>
+                    <td th:text="${ant.descripcion}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.sintomas != null and !atencion.sintomas.isEmpty()}">
+        <div class="section-title">3. SÍNTOMAS PRESENTADOS</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Catálogo ID</th>
+                    <th>Descripción Médica Detallada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="sintoma : ${atencion.sintomas}">
+                    <td th:text="${sintoma.idSintoma}">-</td>
+                    <td th:text="${sintoma.descripcion}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.examenFisico != null and !atencion.examenFisico.isEmpty()}">
+        <div class="section-title">4. EXAMEN FÍSICO</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Catálogo ID</th>
+                    <th style="width: 20%;">Tipo Examen</th>
+                    <th>Descripción Detallada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ef : ${atencion.examenFisico}">
+                    <td th:text="${ef.idExamenFisico}">-</td>
+                    <td th:text="${ef.idTipoExamenFisico}">-</td>
+                    <td th:text="${ef.descripcion}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.triaje != null and !atencion.triaje.isEmpty()}">
+        <div class="section-title">5. TRIAJE (SIGNOS VITALES)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 30%;">ID Tipo Triaje</th>
+                    <th>Valor Registrado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="t : ${atencion.triaje}">
+                    <td th:text="${t.idTipoTriaje}">-</td>
+                    <td th:text="${t.valorTriaje}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.diagnosticos != null and !atencion.diagnosticos.isEmpty()}">
+        <div class="section-title">6. DIAGNÓSTICOS (CIE-10)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">ID Diagnóstico</th>
+                    <th style="width: 20%;">Orden</th>
+                    <th>Subclasificación / Lab</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="diag : ${atencion.diagnosticos}">
+                    <td th:text="${diag.idDiagnostico}">-</td>
+                    <td th:text="${diag.idDiagnosticoOrden}">-</td>
+                    <td th:text="${'Sub: ' + (diag.idSubclasificacion != null ? diag.idSubclasificacion : '0') + ' | Lab: ' + (diag.idLab1 != null ? diag.idLab1 : '0')}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.examenesAuxiliares != null and !atencion.examenesAuxiliares.isEmpty()}">
+        <div class="section-title">7. PLAN DE TRABAJO (EXÁMENES AUXILIARES)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">ID Producto</th>
+                    <th style="width: 10%;">Cant.</th>
+                    <th style="width: 15%;">Asoc. Diag.</th>
+                    <th>Observación / Plan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ea : ${atencion.examenesAuxiliares}">
+                    <td th:text="${ea.idProducto}">-</td>
+                    <td th:text="${ea.cantidad}">-</td>
+                    <td th:text="${ea.idDiagnostico}">-</td>
+                    <td th:text="${ea.observacion}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.medicacion != null and !atencion.medicacion.isEmpty()}">
+        <div class="section-title">8. TRATAMIENTO (MEDICACIÓN)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Dosis</th>
+                    <th>Frecuencia</th>
+                    <th>Periodo</th>
+                    <th>Vía</th>
+                    <th>Total</th>
+                    <th>Indicaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="med : ${atencion.medicacion}">
+                    <td th:text="${med.idProducto}">-</td>
+                    <td th:text="${med.cantidadDosis + ' (UM:' + med.idUmDosis + ')'}">-</td>
+                    <td th:text="${'Cada Frec:' + med.idFrecuenciaDosis}">-</td>
+                    <td th:text="${med.cantidadPeriodo + ' días'}">-</td>
+                    <td th:text="${'Vía:' + med.idViaAdministracion}">-</td>
+                    <td th:text="${med.cantidadTotal}">-</td>
+                    <td th:text="${med.indicaciones}">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" th:if="${atencion.alta != null}">
+        <div class="section-title">9. PLAN DE ALTA / INDICACIONES</div>
+        <table>
+            <tr>
+                <th>Descripción del Alta:</th>
+                <td th:text="${atencion.alta.descripcion}">-</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>_____________________________________</p>
+        <p>Firma Electrónica del Médico Tratante</p>
+    </div>
+
+</body>
+</html>
