@@ -14,6 +14,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Service
 public class AtencionMedicaServiceImpl implements AtencionMedicaService {
@@ -22,7 +25,6 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
     private final ObjectMapper objectMapper;
     private final PdfGeneratorService pdfGeneratorService;
 
-    // 🎯 Inyectamos la ruta de la unidad D:\ configurada en tus properties
     @Value("${app.storage.ruta-pdfs}")
     private String rutaBasePdfs;
 
@@ -42,42 +44,78 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             String jsonPayload = objectMapper.writeValueAsString(request);
             Long idAtencionGenerado = atencionMedicaRepository.guardarAtencionMedicaCompleta(jsonPayload);
 
-            String rutaPdfFinal = null;
+            String rutaPdfAbsoluta = null;
 
-            // STEP 2: Si el estado de la firma es definitivo, procesamos el archivo físico
+            // STEP 2: Si el estado de la firma es el definitivo, procesamos el documento físico
             if ("FIRMADO_ELECTRONICO".equals(request.getEstadoFirma())) {
                 
-                // 2.1 Generamos el PDF crudo en memoria (HTML -> PDF)
-                byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(idAtencionGenerado, request);
+                // Mapeamos el payload crudo para interactuar de forma ágil y segura en Thymeleaf
+                Map<String, Object> payloadMap = objectMapper.readValue(jsonPayload, Map.class);
+                Map<String, Object> patientMap = (Map<String, Object>) payloadMap.get("patient");
+
+                // Extraemos identificadores inmutables de negocio del JSON del frontend
+                String numeroHistoriaClinica = String.valueOf(patientMap.get("hc")); 
+                String nombrePaciente = String.valueOf(patientMap.get("name"));
                 
-                // 2.2 Estampamos la rúbrica del médico leyéndola desde la carpeta de firmas de la unidad D
-                byte[] pdfFirmadoBytes = pdfGeneratorService.estamparRubricaMedico(pdfBytes, request.getIdMedicoIngreso());
+                // Datos Institucionales del Médico Firmante (Se extraerán de tu sesión/entidad Médico)
+                Integer idMedico = request.getIdMedicoIngreso(); // p.ej. 1
+                String nombreMedicoCompleto = "DR(A). REGALADO MONTEVERDE MIGUEL ANGEL";
+                String cmpMedico = "CMP-48592"; 
+
+                // 2.1 Generamos el PDF crudo basándonos en la estructura exacta del front (Thymeleaf)
+                // Se pasa el 'payloadMap' completo para renderizar las colecciones e inputs directamente
+                byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(
+                        idAtencionGenerado, 
+                        request, 
+                        nombrePaciente, 
+                        numeroHistoriaClinica, 
+                        "MEDICINA INTERNA", // Aquí puedes pasar la especialidad resuelta
+                        nombreMedicoCompleto
+                );
+
+                // 2.2 Estampamos el bloque indivisible de validación en la base de cada hoja mediante iText
+                byte[] pdfFirmadoBytes = pdfGeneratorService.estamparRubricaMedico(
+                        pdfBytes, 
+                        idMedico, 
+                        nombreMedicoCompleto, 
+                        cmpMedico
+                );
                 
-                // 2.3 Guardamos el archivo final directamente en tu disco local D:\08_PROYECTOS\STORAGE\pdfs\
-                String nombreArchivo = "HCE_Atencion_" + idAtencionGenerado + ".pdf";
-                rutaPdfFinal = this.rutaBasePdfs + nombreArchivo;
+                // 2.3 📂 ESTRUCTURA DE ALMACENAMIENTO JERÁRQUICO POR PACIENTE
+                String carpetaPacienteDestino = this.rutaBasePdfs + "pacientes/" + numeroHistoriaClinica + "/";
+                File directorio = new File(carpetaPacienteDestino);
+                if (!directorio.exists()) {
+                    directorio.mkdirs(); 
+                }
+
+                // Bautizamos el documento unificando ID y fecha para auditorías ágiles
+                String stringFecha = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+                String nombreArchivo = "ATENCION_" + idAtencionGenerado + "_" + stringFecha + ".pdf";
                 
-                Path path = Paths.get(rutaPdfFinal);
-                Files.write(path, pdfFirmadoBytes); // Escribe los bytes directamente al disco duro de tu PC
+                rutaPdfAbsoluta = carpetaPacienteDestino + nombreArchivo;
                 
-                // 2.4 Registramos la ruta física absoluta en la base de datos para auditorías de Susalud
-                atencionMedicaRepository.actualizarRutaPdf(idAtencionGenerado, rutaPdfFinal);
+                // Escribimos los bytes finales en el volumen físico
+                Path path = Paths.get(rutaPdfAbsoluta);
+                Files.write(path, pdfFirmadoBytes);
+                
+                // 2.4 Guardamos la dirección del archivo en la base de datos
+                atencionMedicaRepository.actualizarRutaPdf(idAtencionGenerado, rutaPdfAbsoluta);
             }
 
-            // STEP 3: Construimos la respuesta limpia para el frontend en React
+            // STEP 3: Respuesta limpia y desacoplada para el frontend
             AtencionMedicaResponse response = new AtencionMedicaResponse(
                     true,
-                    "Atención procesada correctamente",
+                    "Atención procesada e impresa correctamente al formato institucional.",
                     idAtencionGenerado,
                     request.getIdEstadoAtencion(),
                     request.getEstadoFirma()
             );
             
-            response.setRutaPdfFirmado(rutaPdfFinal); 
+            response.setRutaPdfFirmado(rutaPdfAbsoluta); 
             return response;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error crítico en el flujo transaccional y físico de la atención médica: " + e.getMessage(), e);
+            throw new RuntimeException("Error crítico en el motor de renderizado y persistencia física HCE: " + e.getMessage(), e);
         }
     }
 }

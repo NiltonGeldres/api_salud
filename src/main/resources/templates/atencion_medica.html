@@ -2,202 +2,175 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Historia Clínica Electrónica</title>
+    <title>Historia Clínica Ambulatoria</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; color: #333; line-height: 1.4; }
-        .header { text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 10px; }
-        .section { margin-top: 20px; page-break-inside: avoid; }
-        .section-title { font-size: 14px; font-weight: bold; background-color: #f3f4f6; padding: 5px; color: #0284c7; border-left: 4px solid #0284c7; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e5e7eb; padding: 8px; text-align: left; font-size: 11px; }
-        th { background-color: #f9fafb; width: 25%; }
-        .footer { margin-top: 50px; text-align: right; font-size: 11px; page-break-inside: avoid; }
+        @page {
+            size: a4;
+            margin: 20mm 15mm 45mm 15mm; /* Margen inferior amplio para reservar el espacio de la firma */
+            @bottom-left {
+                content: "Expediente Electrónico de Atención Ambulatoria";
+                font-size: 8px;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                color: #888;
+            }
+        }
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            color: #333333; 
+            line-height: 1.5; 
+            font-size: 11px;
+        }
+        
+        /* CABECERA AL ESTILO FRONTEND */
+        .header-container { width: 100%; border-bottom: 3px solid #0066ff; padding-bottom: 8px; margin-bottom: 15px; }
+        .header-left { float: left; width: 60%; }
+        .header-right { float: right; width: 40%; text-align: right; }
+        .clear { clear: both; }
+        .clinic-name { font-size: 16px; font-weight: bold; color: #0066ff; margin: 0; }
+        .clinic-sub { font-size: 9px; color: #666; margin: 2px 0 0 0; }
+        .doc-title { font-size: 12px; font-weight: bold; color: #111; margin: 0; text-transform: uppercase; }
+        .doc-date { font-size: 10px; color: #555; margin: 3px 0 0 0; }
+
+        /* PANEL PACIENTE (CARD) */
+        .patient-card { 
+            border: 1px solid #e2e8f0; 
+            border-radius: 6px; 
+            padding: 10px 15px; 
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+        .patient-grid { width: 100%; }
+        .patient-grid td { padding: 4px 0; vertical-align: middle; }
+        .label-muted { color: #64748b; font-size: 11px; }
+        .value-bold { font-weight: bold; color: #0f172a; font-size: 11px; }
+
+        /* SECCIONES CON SIMULACIÓN DE ICONOS */
+        .section-box { margin-bottom: 18px; page-break-inside: avoid; }
+        .section-header { 
+            font-size: 10px; 
+            font-weight: bold; 
+            color: #1e3a8a; 
+            text-transform: uppercase; 
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        /* CONTENIDOS FLUIDOS TEXTUALES */
+        .text-content { 
+            font-size: 11px; 
+            color: #334155; 
+            padding-left: 5px;
+        }
+
+        /* TRIAJE EN LÍNEA (INPUTS SIMULADOS) */
+        .triaje-container { width: 100%; }
+        .triaje-box { 
+            border: 1px solid #cbd5e1; 
+            border-radius: 4px; 
+            padding: 6px 10px; 
+            display: inline-block; 
+            width: 28%; 
+            margin-right: 3%;
+            background-color: #ffffff;
+        }
+        .triaje-box:last-child { margin-right: 0; }
+
+        /* LISTAS MODERNAS (SIN BORDES PESADOS DE BD) */
+        .clinical-list { list-style: none; padding: 0; margin: 0; }
+        .clinical-list li { 
+            padding: 5px 0; 
+            border-bottom: 1px solid #f1f5f9; 
+            color: #334155;
+        }
+        .clinical-list li:last-child { border-bottom: none; }
+        .badge-italic { font-style: italic; color: #64748b; font-size: 10px; }
+
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>HISTORIA CLÍNICA DE ATENCIÓN MÉDICA</h2>
-        <p><strong>N° Atención:</strong> <span th:text="${idAtencion}">0000</span> | <strong>Fecha:</strong> <span th:text="${fecha}">00/00/0000</span></p>
+    <div class="header-container">
+        <div class="header-left">
+            <h1 class="clinic-name">CLINICA REGALADO SAC</h1>
+            <p class="clinic-sub">Expediente Electrónico de Atención Ambulatoria</p>
+        </div>
+        <div class="header-right">
+            <h2 class="doc-title">HISTORIA CLINICA</h2>
+            <p class="doc-date">Fecha: <span th:text="${fecha}">19/06/2026</span></p>
+        </div>
+        <div class="clear"></div>
     </div>
 
-    <div class="section">
-        <div class="section-title">1. DATOS DEL ACTO MÉDICO</div>
-        <table>
+    <div class="patient-card">
+        <table class="patient-grid">
             <tr>
-                <th>ID Paciente:</th>
-                <td th:text="${atencion.idPaciente}">-</td>
-                <th>ID Servicio/Especialidad:</th>
-                <td th:text="${atencion.idServicio}">-</td>
-            </tr>
-            <tr>
-                <th>Estado Firma:</th>
-                <td th:text="${atencion.estadoFirma}">-</td>
-                <th>Origen Registro:</th>
-                <td th:text="${atencion.origenRegistroUsuario}">-</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.antecedentes != null and !atencion.antecedentes.isEmpty()}">
-        <div class="section-title">2. ANTECEDENTES DEL PACIENTE</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">Catálogo ID</th>
-                    <th style="width: 20%;">Tipo</th>
-                    <th>Descripción Médica Detallada</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ant : ${atencion.antecedentes}">
-                    <td th:text="${ant.idAntecedente}">-</td>
-                    <td th:text="${ant.idTipoAntecedente}">-</td>
-                    <td th:text="${ant.descripcion}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.sintomas != null and !atencion.sintomas.isEmpty()}">
-        <div class="section-title">3. SÍNTOMAS PRESENTADOS</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">Catálogo ID</th>
-                    <th>Descripción Médica Detallada</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="sintoma : ${atencion.sintomas}">
-                    <td th:text="${sintoma.idSintoma}">-</td>
-                    <td th:text="${sintoma.descripcion}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.examenFisico != null and !atencion.examenFisico.isEmpty()}">
-        <div class="section-title">4. EXAMEN FÍSICO</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">Catálogo ID</th>
-                    <th style="width: 20%;">Tipo Examen</th>
-                    <th>Descripción Detallada</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ef : ${atencion.examenFisico}">
-                    <td th:text="${ef.idExamenFisico}">-</td>
-                    <td th:text="${ef.idTipoExamenFisico}">-</td>
-                    <td th:text="${ef.descripcion}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.triaje != null and !atencion.triaje.isEmpty()}">
-        <div class="section-title">5. TRIAJE (SIGNOS VITALES)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 30%;">ID Tipo Triaje</th>
-                    <th>Valor Registrado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="t : ${atencion.triaje}">
-                    <td th:text="${t.idTipoTriaje}">-</td>
-                    <td th:text="${t.valorTriaje}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.diagnosticos != null and !atencion.diagnosticos.isEmpty()}">
-        <div class="section-title">6. DIAGNÓSTICOS (CIE-10)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 20%;">ID Diagnóstico</th>
-                    <th style="width: 20%;">Orden</th>
-                    <th>Subclasificación / Lab</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="diag : ${atencion.diagnosticos}">
-                    <td th:text="${diag.idDiagnostico}">-</td>
-                    <td th:text="${diag.idDiagnosticoOrden}">-</td>
-                    <td th:text="${'Sub: ' + (diag.idSubclasificacion != null ? diag.idSubclasificacion : '0') + ' | Lab: ' + (diag.idLab1 != null ? diag.idLab1 : '0')}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.examenesAuxiliares != null and !atencion.examenesAuxiliares.isEmpty()}">
-        <div class="section-title">7. PLAN DE TRABAJO (EXÁMENES AUXILIARES)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">ID Producto</th>
-                    <th style="width: 10%;">Cant.</th>
-                    <th style="width: 15%;">Asoc. Diag.</th>
-                    <th>Observación / Plan</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ea : ${atencion.examenesAuxiliares}">
-                    <td th:text="${ea.idProducto}">-</td>
-                    <td th:text="${ea.cantidad}">-</td>
-                    <td th:text="${ea.idDiagnostico}">-</td>
-                    <td th:text="${ea.observacion}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.medicacion != null and !atencion.medicacion.isEmpty()}">
-        <div class="section-title">8. TRATAMIENTO (MEDICACIÓN)</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Dosis</th>
-                    <th>Frecuencia</th>
-                    <th>Periodo</th>
-                    <th>Vía</th>
-                    <th>Total</th>
-                    <th>Indicaciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="med : ${atencion.medicacion}">
-                    <td th:text="${med.idProducto}">-</td>
-                    <td th:text="${med.cantidadDosis + ' (UM:' + med.idUmDosis + ')'}">-</td>
-                    <td th:text="${'Cada Frec:' + med.idFrecuenciaDosis}">-</td>
-                    <td th:text="${med.cantidadPeriodo + ' días'}">-</td>
-                    <td th:text="${'Vía:' + med.idViaAdministracion}">-</td>
-                    <td th:text="${med.cantidadTotal}">-</td>
-                    <td th:text="${med.indicaciones}">-</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section" th:if="${atencion.alta != null}">
-        <div class="section-title">9. PLAN DE ALTA / INDICACIONES</div>
-        <table>
-            <tr>
-                <th>Descripción del Alta:</th>
-                <td th:text="${atencion.alta.descripcion}">-</td>
+                <td style="width: 12%;" class="label-muted">Paciente:</td>
+                <td style="width: 53%;" class="value-bold" th:text="${atencion.patient.name}">CAYO BOHORQUEZ MARIA CONCEPCION</td>
+                <td style="width: 15%;" class="label-muted">N° Historia:</td>
+                <td style="width: 20%;" class="value-bold" th:text="${atencion.patient.hc}">34</td>
             </tr>
         </table>
     </div>
 
-    <div class="footer">
-        <p>_____________________________________</p>
-        <p>Firma Electrónica del Médico Tratante</p>
+    <div class="section-box" th:if="${atencion.patient.triaje != null}">
+        <div class="section-header">📋 TRIAJE / SIGNOS VITALES</div>
+        <div class="triaje-container">
+            <div class="triaje-box" th:each="t : ${atencion.patient.triaje}">
+                <span class="label-muted" th:text="${t.nombre + ': '}">Temperatura:</span>
+                <span class="value-bold" th:text="${t.valor != null and t.valor != '' ? t.valor : t.placeholder} + ' ' + ${t.unidad}">36 °C</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelAntecedentes != null}">
+        <div class="section-header">📋 ANTECEDENTES</div>
+        <div class="text-content" th:text="${atencion.attentionDetails.PanelAntecedentes}">Familiares,: Cancer Colon</div>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelSintomas != null}">
+        <div class="section-header">📋 SÍNTOMAS</div>
+        <div class="text-content" th:text="${atencion.attentionDetails.PanelSintomas}">Dolor espalda baja</div>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelExamenFisico != null}">
+        <div class="section-header">📋 EXAMEN FÍSICO</div>
+        <div class="text-content" th:text="${atencion.attentionDetails.PanelExamenFisico}">Inflamacion muscular en la espalda baj</div>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelDiagnostico != null}">
+        <div class="section-header">📋 DIAGNÓSTICOS</div>
+        <ul class="clinical-list">
+            <li th:each="diag : ${atencion.attentionDetails.PanelDiagnostico}">
+                • <strong th:text="${diag.diagnostico}">Obesidad Debida a Exceso de Calorías</strong> 
+                <span class="label-muted" th:text="' [CIE-10: ' + ${diag.codigoCIE} + '] - '"> [CIE-10: E66.0] - </span>
+                <span class="badge-italic" th:text="${diag.clasificacion}">presuntivo</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelPlanTrabajo != null}">
+        <div class="section-header">📋 EXÁMENES</div>
+        <ul class="clinical-list">
+            <li th:each="ex : ${atencion.attentionDetails.PanelPlanTrabajo}">
+                • <strong th:text="${ex.examen}">Perfil Lipídico (Colesterol, Triglicéridos)</strong> 
+                <span class="label-muted" th:text="' (CPT: ' + ${ex.codigoProcedimiento} + ')'"> (CPT: 80061)</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelTratamientos != null}">
+        <div class="section-header">📋 MEDICACIÓN</div>
+        <ul class="clinical-list">
+            <li th:each="t : ${atencion.attentionDetails.PanelTratamientos}">
+                • <strong th:text="${t.descripcion}">Omeprazol 20mg</strong> - 
+                <span th:text="'Vía: ' + ${t.via} + ' (Dosis: ' + ${t.dosis} + ') cada ' + ${t.frecuencia} + ' horas por ' + ${t.periodo} + ' días [Cantidad: ' + ${t.cantidad} + ' und]'">Vía: Oral (Dosis: 20.0) cada 2 horas por 14 días [Cantidad: 28 und]</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section-box" th:if="${atencion.attentionDetails.PanelAlta != null}">
+        <div class="section-header">📋 ALTA</div>
+        <div class="text-content" th:text="${atencion.attentionDetails.PanelAlta}">Regresar en 16 dias</div>
     </div>
 
 </body>
