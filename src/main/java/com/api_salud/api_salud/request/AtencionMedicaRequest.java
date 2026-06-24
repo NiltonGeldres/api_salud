@@ -1,13 +1,16 @@
 package com.api_salud.api_salud.request;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.OffsetDateTime;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,121 +20,109 @@ public class AtencionMedicaRequest {
     private Long idAtencion;
 
     @NotNull(message = "El idPaciente es obligatorio.")
-    @Min(value = 1, message = "El idPaciente debe ser un ID válido.")
+    @Min(value = 1, message = "El idPaciente debe ser un identificador numérico válido.")
     private Integer idPaciente;
 
     @NotNull(message = "El idCuentaAtencion es obligatorio.")
-    @Min(value = 1, message = "El idCuentaAtencion debe ser un ID válido.")
+    @Min(value = 1, message = "El idCuentaAtencion debe ser un identificador numérico válido.")
     private Integer idCuentaAtencion;
 
     @NotNull(message = "El idServicio es obligatorio.")
-    @Min(value = 1, message = "El idServicio debe ser un ID válido.")
+    @Min(value = 1, message = "El idServicio debe ser un identificador numérico válido.")
     private Integer idServicio;
 
+    @NotNull(message = "El idMedicoIngreso es obligatorio.")
+    @Min(value = 1, message = "El idMedicoIngreso debe ser un identificador numérico válido.")
+    private Integer idMedicoIngreso;
+
     @NotNull(message = "El idEstadoAtencion es obligatorio.")
-    private Integer idEstadoAtencion; 
+    @Min(value = 1, message = "El idEstadoAtencion debe ser un identificador numérico válido.")
+    private Integer idEstadoAtencion;
 
-    @NotNull(message = "El estadoFirma es obligatorio.")
-    @Pattern(regexp = "^(BORRADOR|FIRMADO_ELECTRONICO)$", message = "El estado de la firma solo permite: BORRADOR o FIRMADO_ELECTRONICO")
-    private String estadoFirma;
+    @NotNull(message = "El idUsuarioRegistro es obligatorio.")
+    @Min(value = 1, message = "El idUsuarioRegistro debe ser un identificador numérico válido.")
+    private Integer idUsuarioRegistro;
 
-    private OffsetDateTime tsIngreso;
-    
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "El origen del usuario contiene caracteres no permitidos.")
+    @NotBlank(message = "El origen del registro no puede estar vacío.")
+    @Size(max = 50, message = "El origen del registro no puede exceder los 50 caracteres.")
     private String origenRegistroUsuario;
 
-    private String rutaPdfFirmado;
-    private String rutaImagenFirma;
-    private String hashDocumento;
-    
-    // 🔄 CORRECCIÓN 1: Nombre alineado exactamente a la clave JSON que busca el SP y la columna DDL
-    @NotNull(message = "El idMedicoIngreso es obligatorio.")
-    private Integer idMedicoIngreso;
-    
-    // 🔄 CORRECCIÓN 2: Validación añadida para proteger el esquema Multi-tenant desde Java
-    @NotNull(message = "El idEntidad es obligatorio.")
+    @NotBlank(message = "El estado de la firma es obligatorio.")
+    @Pattern(regexp = "^(BORRADOR|PENDIENTE|FIRMADO_ELECTRONICO)$", 
+             message = "El estado de la firma no corresponde a los valores permitidos.")
+    private String estadoFirma;
+
+    @NotNull(message = "El idEntidad es mandatorio para el aislamiento Multi-tenant.")
+    @Min(value = 1, message = "El idEntidad debe ser un identificador numérico válido.")
     private Integer idEntidad;
-    
-    @NotNull(message = "El idUsuarioRegistro es obligatorio.")
-    private Integer idUsuarioRegistro;
-    
-    // Listas internas validadas en cascada profunda
-    private List<@Valid AtencionMedicaAntecedenteRequest> antecedentes;
-    private List<@Valid AtencionMedicaSintomaRequest> sintomas;
-    private List<@Valid AtencionMedicaExamenFisicoRequest> examenFisico;
-    private List<@Valid AtencionMedicaTriajeRequest> triaje;
-    private List<@Valid AtencionMedicaDiagnosticoRequest> diagnosticos;
-    private List<@Valid AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares;
-    private List<@Valid AtencionMedicaMedicacionRequest> medicacion;
-    
+
+    // Métricas y soporte de Renderizado PDF HCE
+    @NotNull(message = "El objeto paciente de apoyo no puede ser nulo.")
+    @Valid
+    private AtencionMedicaPacienteRequest paciente; 
+
     @Valid
     private AtencionMedicaAltaRequest alta;
 
-    // --- GETTERS Y SETTERS TRADICIONALES ---
+    @Valid
+    private List<AtencionMedicaTriajeRequest> triaje;
+
+    @Valid
+    private List<AtencionMedicaAntecedenteRequest> antecedentes;
+
+    @Valid
+    private List<AtencionMedicaSintomaRequest> sintomas;
+
+    @Valid
+    private List<AtencionMedicaExamenFisicoRequest> examenFisico;
+
+    @NotEmpty(message = "La atención debe registrar obligatoriamente al menos un diagnóstico.")
+    @Valid
+    private List<AtencionMedicaDiagnosticoRequest> diagnosticos;
+
+    @Valid
+    private List<AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares;
+
+    @Valid
+    private List<AtencionMedicaMedicacionRequest> medicacion;
+
+    // --- GETTERS Y SETTERS ---
     public Long getIdAtencion() { return idAtencion; }
     public void setIdAtencion(Long idAtencion) { this.idAtencion = idAtencion; }
-
     public Integer getIdPaciente() { return idPaciente; }
     public void setIdPaciente(Integer idPaciente) { this.idPaciente = idPaciente; }
-
     public Integer getIdCuentaAtencion() { return idCuentaAtencion; }
     public void setIdCuentaAtencion(Integer idCuentaAtencion) { this.idCuentaAtencion = idCuentaAtencion; }
-
     public Integer getIdServicio() { return idServicio; }
     public void setIdServicio(Integer idServicio) { this.idServicio = idServicio; }
-
-    public Integer getIdEstadoAtencion() { return idEstadoAtencion; }
-    public void setIdEstadoAtencion(Integer idEstadoAtencion) { this.idEstadoAtencion = idEstadoAtencion; }
-
-    public String getEstadoFirma() { return estadoFirma; }
-    public void setEstadoFirma(String estadoFirma) { this.estadoFirma = estadoFirma; }
-
-    public OffsetDateTime getTsIngreso() { return tsIngreso; }
-    public void setTsIngreso(OffsetDateTime tsIngreso) { this.tsIngreso = tsIngreso; }
-
-    public String getOrigenRegistroUsuario() { return origenRegistroUsuario; }
-    public void setOrigenRegistroUsuario(String origenRegistroUsuario) { this.origenRegistroUsuario = origenRegistroUsuario; }
-
-    public String getRutaPdfFirmado() { return rutaPdfFirmado; }
-    public void setRutaPdfFirmado(String rutaPdfFirmado) { this.rutaPdfFirmado = rutaPdfFirmado; }
-
-    public String getRutaImagenFirma() { return rutaImagenFirma; }
-    public void setRutaImagenFirma(String rutaImagenFirma) { this.rutaImagenFirma = rutaImagenFirma; }
-
-    public String getHashDocumento() { return hashDocumento; }
-    public void setHashDocumento(String hashDocumento) { this.hashDocumento = hashDocumento; }
-
-    // 🔄 CORRECCIÓN GET/SET: idMedicoIngreso
     public Integer getIdMedicoIngreso() { return idMedicoIngreso; }
     public void setIdMedicoIngreso(Integer idMedicoIngreso) { this.idMedicoIngreso = idMedicoIngreso; }
-    
-    public Integer getIdEntidad() { return idEntidad; }
-    public void setIdEntidad(Integer idEntidad) { this.idEntidad = idEntidad; }
-
+    public Integer getIdEstadoAtencion() { return idEstadoAtencion; }
+    public void setIdEstadoAtencion(Integer idEstadoAtencion) { this.idEstadoAtencion = idEstadoAtencion; }
     public Integer getIdUsuarioRegistro() { return idUsuarioRegistro; }
     public void setIdUsuarioRegistro(Integer idUsuarioRegistro) { this.idUsuarioRegistro = idUsuarioRegistro; }
-
-    public List<AtencionMedicaAntecedenteRequest> getAntecedentes() { return antecedentes; }
-    public void setAntecedentes(List<AtencionMedicaAntecedenteRequest> antecedentes) { this.antecedentes = antecedentes; }
-
-    public List<AtencionMedicaSintomaRequest> getSintomas() { return sintomas; }
-    public void setSintomas(List<AtencionMedicaSintomaRequest> sintomas) { this.sintomas = sintomas; }
-
-    public List<AtencionMedicaExamenFisicoRequest> getExamenFisico() { return examenFisico; }
-    public void setExamenFisico(List<AtencionMedicaExamenFisicoRequest> examenFisico) { this.examenFisico = examenFisico; }
-
-    public List<AtencionMedicaTriajeRequest> getTriaje() { return triaje; }
-    public void setTriaje(List<AtencionMedicaTriajeRequest> triaje) { this.triaje = triaje; }
-
-    public List<AtencionMedicaDiagnosticoRequest> getDiagnosticos() { return diagnosticos; }
-    public void setDiagnosticos(List<AtencionMedicaDiagnosticoRequest> diagnosticos) { this.diagnosticos = diagnosticos; }
-
-    public List<AtencionMedicaExamenAuxiliarRequest> getExamenesAuxiliares() { return examenesAuxiliares; }
-    public void setExamenesAuxiliares(List<AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares) { this.examenesAuxiliares = examenesAuxiliares; }
-
-    public List<AtencionMedicaMedicacionRequest> getMedicacion() { return medicacion; }
-    public void setMedicacion(List<AtencionMedicaMedicacionRequest> medicacion) { this.medicacion = medicacion; }
-
+    public String getOrigenRegistroUsuario() { return origenRegistroUsuario; }
+    public void setOrigenRegistroUsuario(String origenRegistroUsuario) { this.origenRegistroUsuario = origenRegistroUsuario; }
+    public String getEstadoFirma() { return estadoFirma; }
+    public void setEstadoFirma(String estadoFirma) { this.estadoFirma = estadoFirma; }
+    public Integer getIdEntidad() { return idEntidad; }
+    public void setIdEntidad(Integer idEntidad) { this.idEntidad = idEntidad; }
+    public AtencionMedicaPacienteRequest getPaciente() { return paciente; }
+    public void setPaciente(AtencionMedicaPacienteRequest paciente) { this.paciente = paciente; }
     public AtencionMedicaAltaRequest getAlta() { return alta; }
     public void setAlta(AtencionMedicaAltaRequest alta) { this.alta = alta; }
+    public List<AtencionMedicaTriajeRequest> getTriaje() { return triaje; }
+    public void setTriaje(List<AtencionMedicaTriajeRequest> triaje) { this.triaje = triaje; }
+    public List<AtencionMedicaAntecedenteRequest> getAntecedentes() { return antecedentes; }
+    public void setAntecedentes(List<AtencionMedicaAntecedenteRequest> antecedentes) { this.antecedentes = antecedentes; }
+    public List<AtencionMedicaSintomaRequest> getSintomas() { return sintomas; }
+    public void setSintomas(List<AtencionMedicaSintomaRequest> sintomas) { this.sintomas = sintomas; }
+    public List<AtencionMedicaExamenFisicoRequest> getExamenFisico() { return examenFisico; }
+    public void setExamenFisico(List<AtencionMedicaExamenFisicoRequest> examenFisico) { this.examenFisico = examenFisico; }
+    public List<AtencionMedicaDiagnosticoRequest> getDiagnosticos() { return diagnosticos; }
+    public void setDiagnosticos(List<AtencionMedicaDiagnosticoRequest> diagnosticos) { this.diagnosticos = diagnosticos; }
+    public List<AtencionMedicaExamenAuxiliarRequest> getExamenesAuxiliares() { return examenesAuxiliares; }
+    public void setExamenesAuxiliares(List<AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares) { this.examenesAuxiliares = examenesAuxiliares; }
+    public List<AtencionMedicaMedicacionRequest> getMedicacion() { return medicacion; }
+    public void setMedicacion(List<AtencionMedicaMedicacionRequest> medicacion) { this.medicacion = medicacion; }
 }

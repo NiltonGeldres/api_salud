@@ -14,4 +14,5 @@ public interface AtencionMedicaService {
      * @return AtencionMedicaResponse Metadatos de éxito y el ID definitivo de la atención.
      */
     AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request);
+    AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion);
 }
