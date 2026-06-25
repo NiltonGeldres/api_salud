@@ -54,9 +54,9 @@ public class GuardarAtencionAndPdfTest {
                     "    \"name\": \"CAYO BOHORQUEZ MARIA CONCEPCION\"\n" +
                     "  },\n" +
                     "  \"triaje\": [\n" +
-                    "    {\"idTipoTriaje\":1,\"valorTriaje\":\"37\"},\n" +
-                    "    {\"idTipoTriaje\":2,\"valorTriaje\":\"70\"},\n" +
-                    "    {\"idTipoTriaje\":3,\"valorTriaje\":\"160\"}\n" +
+                    "    {\"idTriaje\":49,\"valorTriaje\":\"37\"},\n" +
+                    "    {\"idTriaje\":50,\"valorTriaje\":\"70\"},\n" +
+                    "    {\"idTriaje\":51,\"valorTriaje\":\"160\"}\n" +
                     "  ],\n" +
                     "  \"antecedentes\": [\n" +
                     "    {\"descripcion\":\"Familiares: Cancer Colon\"}\n" +
@@ -68,7 +68,7 @@ public class GuardarAtencionAndPdfTest {
                     "    {\"descripcion\":\"Inflamacion muscular en la espalda baja\"}\n" +
                     "  ],\n" +
                     "  \"diagnosticos\": [\n" +
-                    "    {\"idDiagnostico\":201,\"idDiagnosticoOrden\":1,\"idSubclasificacion\":1}\n" +
+                    "    {\"idDiagnostico\":174,\"idDiagnosticoOrden\":1,\"idSubclasificacion\":1}\n" +
                     "  ],\n" +
                     "  \"examenesAuxiliares\": [\n" +
                     "    {\"idPuntoCarga\":1,\"idProducto\":80061,\"cantidad\":1,\"observacion\":\"Perfil Lipídico\",\"idDiagnostico\":201},\n" +

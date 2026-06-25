@@ -9,14 +9,27 @@ public class AtencionMedicaTriajeRequest {
 
     @NotNull(message = "El idTipoTriaje es requerido.")
     @Min(value = 1, message = "idTipoTriaje inválido.")
-    private Integer idTipoTriaje;
+    private Integer idTriaje;
 
     @NotBlank(message = "El valor del triaje no puede estar vacío.")
     @Size(max = 50, message = "El valor del triaje supera los 50 caracteres.")
     private String valorTriaje;
 
-    public Integer getIdTipoTriaje() { return idTipoTriaje; }
-    public void setIdTipoTriaje(Integer idTipoTriaje) { this.idTipoTriaje = idTipoTriaje; }
-    public String getValorTriaje() { return valorTriaje; }
-    public void setValorTriaje(String valorTriaje) { this.valorTriaje = valorTriaje; }
+	public Integer getIdTriaje() {
+		return idTriaje;
+	}
+
+	public void setIdTriaje(Integer idTriaje) {
+		this.idTriaje = idTriaje;
+	}
+
+	public String getValorTriaje() {
+		return valorTriaje;
+	}
+
+	public void setValorTriaje(String valorTriaje) {
+		this.valorTriaje = valorTriaje;
+	}
+
+    
 }
