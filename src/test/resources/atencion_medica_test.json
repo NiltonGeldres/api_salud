@@ -1,0 +1,42 @@
+{
+  "idPaciente": 36,
+  "idCuentaAtencion": 34,
+  "idServicio": 1,
+  "idEstadoAtencion": 3,
+  "estadoFirma": "PENDIENTE",
+  "origenRegistroUsuario": "MEDICO_MOBILE_APP",
+  "idMedicoIngreso": 2,
+  "idEntidad": 2,
+  "idUsuarioRegistro": 12,
+
+  "triaje": [
+    {"idTriaje": 49, "valorTriaje": "37"},
+    {"idTriaje": 50, "valorTriaje": "70"},
+    {"idTriaje": 51, "valorTriaje": "160"}
+  ],
+  "sintomas": [
+    {"idSintoma": 1, "descripcion": null},
+    {"idSintoma": 0, "descripcion": "Dolor de cabeza intenso referido por paciente"}
+  ],
+  "antecedentes": [
+    {"idAntecedente": 0, "descripcion": "Paciente refiere alergia a penicilina"}
+  ],
+  "examenFisico": [
+    {"idExamenFisico": 0, "descripcion": "Paciente se muestra orientado en tiempo y espacio"}
+  ],
+  "diagnosticos": [
+    {"idDiagnostico": 1, "idDiagnosticoOrden": 1, "idSubclasificacion": 1}
+  ],
+  "examenesAuxiliares": [
+    {"idPuntoCarga": 1, "idProducto": 3, "cantidad": 1, "observacion": "Perfil Lipídico", "idDiagnostico": 1}
+  ],
+  "medicacion": [
+    {"idAlmacen": 1, "idProducto": 854, "cantidadDosis": 1, "idUmDosis": 1, "idFrecuenciaDosis": 1, "cantidadPeriodo": 14, "idViaAdministracion": 1, "cantidadTotal": 28, "idDiagnostico": 1, "indicaciones": "Omeprazol 20mg"}
+  ],
+  "alta": [
+    {"idAlta": 0, "descripcion": "Regresar en 15 días para control de laboratorio"}
+  ]
+}
+
+
+
