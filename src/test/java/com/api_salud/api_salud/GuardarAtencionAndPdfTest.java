@@ -71,12 +71,12 @@ public class GuardarAtencionAndPdfTest {
                     "    {\"idDiagnostico\":174,\"idDiagnosticoOrden\":1,\"idSubclasificacion\":1}\n" +
                     "  ],\n" +
                     "  \"examenesAuxiliares\": [\n" +
-                    "    {\"idPuntoCarga\":1,\"idProducto\":80061,\"cantidad\":1,\"observacion\":\"Perfil Lipídico\",\"idDiagnostico\":201},\n" +
-                    "    {\"idPuntoCarga\":1,\"idProducto\":82947,\"cantidad\":1,\"observacion\":\"Glucosa en ayunas\",\"idDiagnostico\":201}\n" +
+                    "    {\"idPuntoCarga\":1,\"idProducto\":3,\"cantidad\":1,\"observacion\":\"Perfil Lipídico\",\"idDiagnostico\":201},\n" +
+                    "    {\"idPuntoCarga\":1,\"idProducto\":4,\"cantidad\":1,\"observacion\":\"Glucosa en ayunas\",\"idDiagnostico\":201}\n" +
                     "  ],\n" +
                     "  \"medicacion\": [\n" +
-                    "    {\"idAlmacen\":1,\"idProducto\":5001,\"cantidadDosis\":1,\"idUmDosis\":1,\"idFrecuenciaDosis\":2,\"cantidadPeriodo\":14,\"idViaAdministracion\":1,\"cantidadTotal\":28,\"idDiagnostico\":201,\"indicaciones\":\"Omeprazol 20mg\"},\n" +
-                    "    {\"idAlmacen\":1,\"idProducto\":5002,\"cantidadDosis\":2,\"idUmDosis\":1,\"idFrecuenciaDosis\":2,\"cantidadPeriodo\":14,\"idViaAdministracion\":1,\"cantidadTotal\":56,\"idDiagnostico\":201,\"indicaciones\":\"Amoxicilina 500mg\"}\n" +
+                    "    {\"idAlmacen\":1,\"idProducto\":854,\"cantidadDosis\":1,\"idUmDosis\":1,\"idFrecuenciaDosis\":2,\"cantidadPeriodo\":14,\"idViaAdministracion\":1,\"cantidadTotal\":28,\"idDiagnostico\":201,\"indicaciones\":\"Omeprazol 20mg\"},\n" +
+                    "    {\"idAlmacen\":1,\"idProducto\":862,\"cantidadDosis\":2,\"idUmDosis\":1,\"idFrecuenciaDosis\":2,\"cantidadPeriodo\":14,\"idViaAdministracion\":1,\"cantidadTotal\":56,\"idDiagnostico\":201,\"indicaciones\":\"Amoxicilina 500mg\"}\n" +
                     "  ],\n" +
                     "  \"alta\": {\n" +
                     "    \"descripcion\": \"Regresar en 16 dias\"\n" +

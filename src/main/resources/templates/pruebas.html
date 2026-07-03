@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: sans-serif; font-size: 10px; color: #333; }
+        .header { border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px; }
+        .section { margin-bottom: 15px; }
+        .section-title { background: #f0f0f0; padding: 5px; font-weight: bold; margin-bottom: 5px; border-left: 4px solid #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        th, td { border: 1px solid #ddd; padding: 4px; text-align: left; }
+        th { background: #f9f9f9; }
+        .grid-2 { display: table; width: 100%; }
+        .grid-2 td { border: none; padding: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2 style="margin:0; color:#0056b3;">CLINICA REGALADO SAC</h2>
+        <p style="margin:0;">Expediente Electrónico de Atención</p>
+    </div>
+
+    <table class="grid-2">
+        <tr>
+            <td><strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span></td>
+            <td><strong>N° Historia:</strong> <span th:text="${atencion.paciente.hc}"></span></td>
+        </tr>
+    </table>
+
+    <div class="section">
+        <div class="section-title">SIGNOS VITALES / TRIAJE</div>
+        <table>
+            <tr>
+                <th>Tipo ID</th>
+                <th>Valor</th>
+            </tr>
+            <tr th:each="t : ${atencion.triaje}">
+                <td th:text="${'Triaje ' + t.idTriaje}"></td>
+                <td th:text="${t.valorTriaje}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">ANTECEDENTES, SÍNTOMAS Y EXAMEN FÍSICO</div>
+        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion.antecedentes}" th:text="${a.descripcion}"></span></p>
+        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion.sintomas}" th:text="${s.descripcion}"></span></p>
+        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion.examenFisico}" th:text="${ef.descripcion}"></span></p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">DIAGNÓSTICOS</div>
+        <table>
+            <tr><th>Cód. Diagnóstico</th><th>Orden</th><th>Subclasif.</th></tr>
+            <tr th:each="d : ${atencion.diagnosticos}">
+                <td th:text="${d.idDiagnostico}"></td>
+                <td th:text="${d.idDiagnosticoOrden}"></td>
+                <td th:text="${d.idSubclasificacion}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">PLAN DE TRABAJO Y MEDICACIÓN</div>
+        <table>
+            <tr><th>Examen/Observación</th><th>Cant.</th></tr>
+            <tr th:each="ex : ${atencion.examenesAuxiliares}">
+                <td th:text="${ex.observacion}"></td>
+                <td th:text="${ex.cantidad}"></td>
+            </tr>
+        </table>
+        
+        <p><strong>Medicamentos indicados:</strong></p>
+        <ul th:each="m : ${atencion.medicacion}">
+            <li th:text="${m.indicaciones + ' | Dosis: ' + m.cantidadDosis + ' | Total: ' + m.cantidadTotal + ' (Frec: cada ' + m.idFrecuenciaDosis + ' hrs)'}"></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INDICACIONES DE ALTA</div>
+        <p th:text="${atencion.alta.descripcion}"></p>
+    </div>
+
+</body>
+</html>

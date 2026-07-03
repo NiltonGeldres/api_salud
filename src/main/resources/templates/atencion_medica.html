@@ -1,85 +1,120 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <style>
-        body { font-family: sans-serif; font-size: 10px; color: #333; }
-        .header { border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px; }
-        .section { margin-bottom: 15px; }
-        .section-title { background: #f0f0f0; padding: 5px; font-weight: bold; margin-bottom: 5px; border-left: 4px solid #0056b3; }
+        @page { size: A4; margin: 1.5cm; }
+        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 11px; color: #2d3748; line-height: 1.4; }
+        
+        .header { border-bottom: 2px solid #2b6cb0; padding-bottom: 15px; margin-bottom: 25px; }
+        .logo-text { font-size: 22px; font-weight: bold; color: #2b6cb0; margin: 0; }
+        .doc-type { font-size: 12px; color: #718096; text-transform: uppercase; letter-spacing: 1px; }
+
+        .section { margin-bottom: 20px; }
+        .section-title { 
+            background: #eef2f7; 
+            padding: 8px 12px; 
+            font-weight: bold; 
+            color: #2c5282; 
+            border-left: 5px solid #2b6cb0; 
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+
         table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        th, td { border: 1px solid #ddd; padding: 4px; text-align: left; }
-        th { background: #f9f9f9; }
-        .grid-2 { display: table; width: 100%; }
-        .grid-2 td { border: none; padding: 2px; }
+        th { background: #f7fafc; color: #4a5568; font-weight: 600; text-align: left; padding: 8px; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 8px; border-bottom: 1px solid #edf2f7; }
+        
+        .patient-info { background: #f8fafc; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .patient-info td { border: none; padding: 5px; }
+        
+        .footer-note { font-size: 9px; color: #a0aec0; margin-top: 30px; text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2 style="margin:0; color:#0056b3;">CLINICA REGALADO SAC</h2>
-        <p style="margin:0;">Expediente Electrónico de Atención</p>
+        <h1 class="logo-text">CLÍNICA REGALADO SAC</h1>
+        <p class="doc-type">Expediente Médico Electrónico</p>
     </div>
 
-    <table class="grid-2">
+    <table class="patient-info">
         <tr>
-            <td><strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span></td>
-            <td><strong>N° Historia:</strong> <span th:text="${atencion.paciente.hc}"></span></td>
+            <td><strong>Paciente:</strong> <span th:text="${atencion.atenciones_medica.paciente.name}"></span></td>
+            <td><strong>N° Historia:</strong> <span th:text="${atencion.atenciones_medica.paciente.hc}"></span></td>
+            <td><strong>Fecha:</strong> <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span></td>
         </tr>
     </table>
 
     <div class="section">
-        <div class="section-title">SIGNOS VITALES / TRIAJE</div>
+        <div class="section-title">Signos Vitales y Triaje</div>
         <table>
-            <tr>
-                <th>Tipo ID</th>
-                <th>Valor</th>
-            </tr>
-            <tr th:each="t : ${atencion.triaje}">
-                <td th:text="${'Triaje ' + t.idTriaje}"></td>
-                <td th:text="${t.valorTriaje}"></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="t : ${atencion.triajes}">
+                    <td th:text="${t.descripcion}"></td>
+                    <td th:text="${t.valor}"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
     <div class="section">
-        <div class="section-title">ANTECEDENTES, SÍNTOMAS Y EXAMEN FÍSICO</div>
-        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion.antecedentes}" th:text="${a.descripcion}"></span></p>
-        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion.sintomas}" th:text="${s.descripcion}"></span></p>
-        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion.examenFisico}" th:text="${ef.descripcion}"></span></p>
-    </div>
-
-    <div class="section">
-        <div class="section-title">DIAGNÓSTICOS</div>
+        <div class="section-title">Diagnósticos</div>
         <table>
-            <tr><th>Cód. Diagnóstico</th><th>Orden</th><th>Subclasif.</th></tr>
-            <tr th:each="d : ${atencion.diagnosticos}">
-                <td th:text="${d.idDiagnostico}"></td>
-                <td th:text="${d.idDiagnosticoOrden}"></td>
-                <td th:text="${d.idSubclasificacion}"></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Subclasificación</th>
+                    <th>Orden</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="d : ${atencion.diagnosticos}">
+                    <td th:text="${d.idDiagnostico}"></td>
+                    <td th:text="${d.idSubclasificacion}"></td>
+                    <td th:text="${d.idDiagnosticoOrden}"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
     <div class="section">
-        <div class="section-title">PLAN DE TRABAJO Y MEDICACIÓN</div>
+        <div class="section-title">Plan de Trabajo y Medicación</div>
+        <p><strong>Exámenes Solicitados:</strong></p>
         <table>
-            <tr><th>Examen/Observación</th><th>Cant.</th></tr>
-            <tr th:each="ex : ${atencion.examenesAuxiliares}">
-                <td th:text="${ex.observacion}"></td>
-                <td th:text="${ex.cantidad}"></td>
-            </tr>
+            <thead><tr><th>Examen/Servicio</th><th>Cantidad</th></tr></thead>
+            <tbody>
+                <tr th:each="ex : ${atencion.examenes}">
+                    <td th:text="${ex.nombre}"></td>
+                    <td th:text="${ex.cantidad}"></td>
+                </tr>
+            </tbody>
         </table>
         
-        <p><strong>Medicamentos indicados:</strong></p>
-        <ul th:each="m : ${atencion.medicacion}">
-            <li th:text="${m.indicaciones + ' | Dosis: ' + m.cantidadDosis + ' | Total: ' + m.cantidadTotal + ' (Frec: cada ' + m.idFrecuenciaDosis + ' hrs)'}"></li>
+        <p><strong>Medicamentos:</strong></p>
+        <ul>
+            <li th:each="m : ${atencion.medicacion}" style="margin-bottom: 5px;">
+                <strong th:text="${m.nombreProducto}"></strong>: 
+                <span th:text="${m.indicaciones + ' | Dosis: ' + m.cantidadDosis}"></span>
+            </li>
         </ul>
     </div>
 
     <div class="section">
-        <div class="section-title">INDICACIONES DE ALTA</div>
-        <p th:text="${atencion.alta.descripcion}"></p>
+        <div class="section-title">Indicaciones de Alta</div>
+        <p th:text="${atencion.atenciones_medica.alta.descripcion}" style="padding: 10px; border: 1px solid #e2e8f0;"></p>
+    </div>
+
+    <div class="footer-note">
+        Documento generado electrónicamente. Validez legal según normativa vigente de salud.
     </div>
 
 </body>
