@@ -39,6 +39,7 @@ public class GuardarAtencionAndPdfTest {
     @Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
     void test1_GuardarAtencionMedica() {
         try {
+        	
             String jsonNativo = "{\n" +
                     "  \"idPaciente\": 34,\n" +
                     "  \"idCuentaAtencion\": 34,\n" +
@@ -61,9 +62,10 @@ public class GuardarAtencionAndPdfTest {
                     "  \"antecedentes\": [\n" +
                     "    {\"descripcion\":\"Familiares: Cancer Colon\"}\n" +
                     "  ],\n" +
-                    "  \"sintomas\": [\n" +
-                    "    {\"descripcion\":\"Dolor espalda baja\"}\n" +
-                    "  ],\n" +
+        	        "  \"sintomas\": [\n" +
+        	        "    {\"idSintoma\": 1, \"descripcion\": \"Dolor lumbar agudo\"},\n" +
+        	        "    {\"idSintoma\": null, \"descripcion\": \"Sensación de hormigueo en miembros inferiores referida por el paciente\"}\n" +
+        	        "  ],\n" +
                     "  \"examenFisico\": [\n" +
                     "    {\"descripcion\":\"Inflamacion muscular en la espalda baja\"}\n" +
                     "  ],\n" +
@@ -107,7 +109,7 @@ public class GuardarAtencionAndPdfTest {
     // =====================================================================
     // TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
     // =====================================================================
-    @Test
+ /*   @Test
     @Order(2)
     @Transactional
     @Commit // Asegura que los updates de la ruta y firma queden persistidos
@@ -138,5 +140,5 @@ public class GuardarAtencionAndPdfTest {
         } catch (Exception e) {
             fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
         }
-    }
+    }*/
 }

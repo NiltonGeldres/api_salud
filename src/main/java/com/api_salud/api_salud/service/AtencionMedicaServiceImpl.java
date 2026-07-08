@@ -78,7 +78,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             if (jsonPayloadBD == null) {
                 throw new IllegalArgumentException("No se encontró ninguna atención médica registrada con el ID: " + idAtencion);
             }
-
+            System.out.println("******* JSON   "+jsonPayloadBD);
             // Reconstruimos el objeto Request original basándonos estrictamente en la BD
             AtencionMedicaRequest requestBD = objectMapper.readValue(jsonPayloadBD, AtencionMedicaRequest.class);
 

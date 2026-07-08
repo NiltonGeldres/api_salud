@@ -31,12 +31,9 @@
     <div class="section">
         <div class="section-title">SIGNOS VITALES / TRIAJE</div>
         <table>
-            <tr>
-                <th>Tipo ID</th>
-                <th>Valor</th>
-            </tr>
+            <tr><th>Tipo</th><th>Valor</th></tr>
             <tr th:each="t : ${atencion.triaje}">
-                <td th:text="${'Triaje ' + t.idTriaje}"></td>
+                <td th:text="${t.descripcion}"></td>
                 <td th:text="${t.valorTriaje}"></td>
             </tr>
         </table>
@@ -44,19 +41,18 @@
 
     <div class="section">
         <div class="section-title">ANTECEDENTES, SÍNTOMAS Y EXAMEN FÍSICO</div>
-        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion.antecedentes}" th:text="${a.descripcion}"></span></p>
-        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion.sintomas}" th:text="${s.descripcion}"></span></p>
-        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion.examenFisico}" th:text="${ef.descripcion}"></span></p>
+        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion.antecedentes}" th:text="${a.descripcion + ' '}"></span></p>
+        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion.sintomas}" th:text="${s.descripcion + ' '}"></span></p>
+        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion.examenFisico}" th:text="${ef.descripcion + ' '}"></span></p>
     </div>
 
     <div class="section">
         <div class="section-title">DIAGNÓSTICOS</div>
         <table>
-            <tr><th>Cód. Diagnóstico</th><th>Orden</th><th>Subclasif.</th></tr>
+            <tr><th>Descripción</th><th>Orden</th></tr>
             <tr th:each="d : ${atencion.diagnosticos}">
-                <td th:text="${d.idDiagnostico}"></td>
+                <td th:text="${d.descripcion}"></td>
                 <td th:text="${d.idDiagnosticoOrden}"></td>
-                <td th:text="${d.idSubclasificacion}"></td>
             </tr>
         </table>
     </div>
@@ -64,16 +60,16 @@
     <div class="section">
         <div class="section-title">PLAN DE TRABAJO Y MEDICACIÓN</div>
         <table>
-            <tr><th>Examen/Observación</th><th>Cant.</th></tr>
+            <tr><th>Examen</th><th>Cantidad</th></tr>
             <tr th:each="ex : ${atencion.examenesAuxiliares}">
-                <td th:text="${ex.observacion}"></td>
+                <td th:text="${ex.nombre}"></td>
                 <td th:text="${ex.cantidad}"></td>
             </tr>
         </table>
         
         <p><strong>Medicamentos indicados:</strong></p>
         <ul th:each="m : ${atencion.medicacion}">
-            <li th:text="${m.indicaciones + ' | Dosis: ' + m.cantidadDosis + ' | Total: ' + m.cantidadTotal + ' (Frec: cada ' + m.idFrecuenciaDosis + ' hrs)'}"></li>
+            <li th:text="${m.nombreProducto + ' | Dosis: ' + m.cantidadDosis + ' | Total: ' + m.cantidadTotal}"></li>
         </ul>
     </div>
 
