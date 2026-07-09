@@ -26,6 +26,7 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
 
     @Override
     public Long guardarAtencionMedicaCompleta(String jsonPayload) {
+    	System.out.println("JSON ENVIADO   "+jsonPayload);    	
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         // 🔥 Forzamos a Spring a enviar el String con el tipo SQL unificado jsonb
         parameterSource.addValue("p_payload", jsonPayload, Types.OTHER);      

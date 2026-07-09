@@ -62,8 +62,9 @@ public class AtencionMedicaRequest {
     private AtencionMedicaPacienteRequest paciente; 
 
     @Valid
-    private AtencionMedicaAltaRequest alta;
-
+//    private AtencionMedicaAltaRequest alta;
+    private List<AtencionMedicaAltaRequest> alta;
+    
     @Valid
     private List<AtencionMedicaTriajeRequest> triaje;
 
@@ -109,8 +110,8 @@ public class AtencionMedicaRequest {
     public void setIdEntidad(Integer idEntidad) { this.idEntidad = idEntidad; }
     public AtencionMedicaPacienteRequest getPaciente() { return paciente; }
     public void setPaciente(AtencionMedicaPacienteRequest paciente) { this.paciente = paciente; }
-    public AtencionMedicaAltaRequest getAlta() { return alta; }
-    public void setAlta(AtencionMedicaAltaRequest alta) { this.alta = alta; }
+	public List<AtencionMedicaAltaRequest> getAlta() {return alta;}
+	public void setAlta(List<AtencionMedicaAltaRequest> alta) {	this.alta = alta;}
     public List<AtencionMedicaTriajeRequest> getTriaje() { return triaje; }
     public void setTriaje(List<AtencionMedicaTriajeRequest> triaje) { this.triaje = triaje; }
     public List<AtencionMedicaAntecedenteRequest> getAntecedentes() { return antecedentes; }
