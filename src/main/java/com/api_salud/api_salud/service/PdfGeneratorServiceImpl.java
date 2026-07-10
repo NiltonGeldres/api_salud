@@ -1,5 +1,6 @@
 package com.api_salud.api_salud.service;
 
+import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
@@ -33,7 +34,31 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
         this.templateEngine = templateEngine;
     }
 
+    @Override
+    public byte[] generarPdfHistoriaClinica(AtencionMedicaPdfDTO atencionDto) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            Context context = new Context();
+            
+            // Pasamos el DTO completo. En el HTML accederás como:
+            // ${atencion.nombreMedico}, ${atencion.paciente.name}, etc.
+            context.setVariable("atencion", atencionDto);
+            context.setVariable("fecha", LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
+            // Generamos el HTML basándonos únicamente en el DTO
+            String htmlContent = templateEngine.process("atencion_medica", context);
+
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+
+            return outputStream.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar PDF con Flying Saucer: " + e.getMessage(), e);
+        }
+    }
+    
+/*
     @Override
     public byte[] generarPdfHistoriaClinica(Long idAtencion, AtencionMedicaRequest request, 
                                            String nombrePaciente, String numHistoriaClinica, 
@@ -62,7 +87,7 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
             throw new RuntimeException("Error al generar PDF en Flying Saucer: " + e.getMessage(), e);
         }
     }
-
+*/
     @Override
     public byte[] estamparRubricaMedico(byte[] pdfBytes, Integer idMedico, String nombreMedico, String cmpMedico) {
         try {

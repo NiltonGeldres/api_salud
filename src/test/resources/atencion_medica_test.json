@@ -1,17 +1,14 @@
 {
-  "idPaciente": 34,
+  "idPaciente": 36,
   "idCuentaAtencion": 34,
   "idServicio": 1,
   "idEstadoAtencion": 3,
   "estadoFirma": "PENDIENTE",
   "origenRegistroUsuario": "MEDICO_MOBILE_APP",
-  "idMedicoIngreso": 1,
+  "idMedicoIngreso": 2,
   "idEntidad": 2,
   "idUsuarioRegistro": 12,
-  "paciente": {
-    "hc": "HC-2026-0034",
-    "name": "CAYO BOHORQUEZ MARIA CONCEPCION"
-  },
+
   "triaje": [
     {"idTriaje": 49, "valorTriaje": "37"},
     {"idTriaje": 50, "valorTriaje": "70"},

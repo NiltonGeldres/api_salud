@@ -2,6 +2,7 @@ package com.api_salud.api_salud.service;
 
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
+import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
 import com.api_salud.api_salud.service.AtencionMedicaService;
 import com.api_salud.api_salud.service.PdfGeneratorService;
@@ -67,6 +68,70 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
     // FLUJO 2: FIRMA ELECTRÓNICA Y GENERACIÓN DE PDF (Paso 3 - Blindado)
     // =====================================================================
     @Override
+    @Transactional 
+    public AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion) {
+        try {
+            System.out.println("🔒 Iniciando proceso de firma electrónica legal para la Atención ID: " + idAtencion);
+
+            // 1. Recuperar datos desde BD
+            String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+            if (jsonPayloadBD == null) {
+                throw new IllegalArgumentException("No se encontró ninguna atención médica con ID: " + idAtencion);
+            }
+
+            // 2. Mapeo directo al DTO de PDF 
+            // Jackson mapeará automáticamente las listas de triaje, sintomas, etc., con sus descripciones
+            AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+            
+            // 3. Mapeo de datos fijos/calculados que no vienen en el JSON base
+            // (Opcional: Si estos datos ya vienen en el JSON, puedes eliminar estas líneas)
+            pdfDto.setNombreEntidad("CLINICA REGALADO SAC"); 
+            pdfDto.setNombreMedico("DR(A). REGALADO MONTEVERDE MIGUEL ANGEL");
+            pdfDto.setCmpMedico("CMP-48592");
+            pdfDto.setNombreServicio("MEDICINA INTERNA");
+            pdfDto.setEstadoFirma("FIRMADO_ELECTRONICO");
+
+            // 4. Renderización: Pasamos el DTO único enriquecido
+            byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
+
+            // 5. Estampado de firma
+            // Usamos los datos del DTO ya populado
+            byte[] pdfFirmadoBytes = pdfGeneratorService.estamparRubricaMedico(
+                    pdfBytes, 
+                    pdfDto.getGetIdMedicoIngreso(), // Asegúrate de tener este campo en el DTO
+                    pdfDto.getNombreMedico(), 
+                    pdfDto.getCmpMedico()
+            );
+            
+            // 6. Almacenamiento
+            String numeroHistoriaClinica = (pdfDto.getPaciente() != null) ? pdfDto.getPaciente().getHc() : "HC-DESCONOCIDA";
+            String carpetaPacienteDestino = this.rutaBasePdfs + "pacientes/" + numeroHistoriaClinica + "/";
+            File directorio = new File(carpetaPacienteDestino);
+            if (!directorio.exists()) directorio.mkdirs(); 
+
+            String nombreArchivo = "ATENCION_" + idAtencion + "_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + ".pdf";
+            String rutaPdfAbsoluta = carpetaPacienteDestino + nombreArchivo;
+            
+            Files.write(Paths.get(rutaPdfAbsoluta), pdfFirmadoBytes);
+            
+            // 7. Persistencia
+            atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaPdfAbsoluta);
+            atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
+
+            // 8. Respuesta
+            AtencionMedicaResponse response = new AtencionMedicaResponse(
+                    true, "Documento firmado digitalmente con éxito.", idAtencion, 3, "FIRMADO_ELECTRONICO"
+            );
+            response.setRutaPdfFirmado(rutaPdfAbsoluta);
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Fallo en el motor de firmado: " + e.getMessage(), e);
+        }
+    }
+    
+/*    @Override
     @Transactional // Transaccional para asegurar consistencia al leer y actualizar el Path final
     public AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion) {
         try {
@@ -139,6 +204,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Fallo en el motor de firmado electrónico HCE: " + e.getMessage(), e);
         }
     }
+*/    
 }
 
 

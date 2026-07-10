@@ -1,7 +1,21 @@
-<table class="grid-2">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Historia Clínica</title>
+</head>
+<body>
+    <!-- Encabezado con datos enriquecidos -->
+    <div class="header">
+        <h2 th:text="${atencion.nombreEntidad}"></h2>
+        <p><strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span></p>
+        <p><strong>Médico:</strong> <span th:text="${atencion.nombreMedico}"></span> (CMP: <span th:text="${atencion.cmpMedico}"></span>)</p>
+    </div>
+
+    <table class="grid-2">
         <tr>
-            <td><strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span></td>
-            <td><strong>N° Historia:</strong> <span th:text="${atencion.paciente.hc}"></span></td>
+            <td><strong>Paciente:</strong> <span th:text="${atencion?.paciente?.name ?: 'N/A'}"></span></td>
+            <td><strong>N° Historia:</strong> <span th:text="${atencion?.paciente?.hc ?: 'N/A'}"></span></td>
         </tr>
     </table>
 
@@ -9,8 +23,8 @@
         <div class="section-title">SIGNOS VITALES / TRIAJE</div>
         <table>
             <tr><th>Tipo</th><th>Valor</th></tr>
-            <tr th:each="t : ${atencion.triaje}">
-                <td th:text="${t.descripcion}"></td>
+            <tr th:each="t : ${atencion?.triaje}">
+                <td th:text="${t.descripcion ?: 'Sin descripción'}"></td>
                 <td th:text="${t.valorTriaje}"></td>
             </tr>
         </table>
@@ -18,18 +32,17 @@
 
     <div class="section">
         <div class="section-title">ANTECEDENTES, SÍNTOMAS Y EXAMEN FÍSICO</div>
-        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion.antecedentes}" th:text="${a.descripcion + ' '}"></span></p>
-        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion.sintomas}" th:text="${s.descripcion + ' '}"></span></p>
-        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion.examenFisico}" th:text="${ef.descripcion + ' '}"></span></p>
+        <p><strong>Antecedentes:</strong> <span th:each="a : ${atencion?.antecedentes}" th:text="${(a.descripcion ?: '') + ' '}"></span></p>
+        <p><strong>Síntomas:</strong> <span th:each="s : ${atencion?.sintomas}" th:text="${(s.descripcion ?: '') + ' '}"></span></p>
+        <p><strong>Examen Físico:</strong> <span th:each="ef : ${atencion?.examenFisico}" th:text="${(ef.descripcion ?: '') + ' '}"></span></p>
     </div>
 
     <div class="section">
         <div class="section-title">DIAGNÓSTICOS</div>
         <table>
-            <tr><th>ID Diagnóstico</th><th>Subclasificación</th></tr>
-            <tr th:each="d : ${atencion.diagnosticos}">
-                <td th:text="${d.idDiagnostico}"></td>
-                <td th:text="${d.idSubclasificacion}"></td>
+            <tr><th>Descripción</th></tr>
+            <tr th:each="d : ${atencion?.diagnosticos}">
+                <td th:text="${d.descripcion ?: 'Diagnóstico sin descripción'}"></td>
             </tr>
         </table>
     </div>
@@ -38,7 +51,7 @@
         <div class="section-title">PLAN DE TRABAJO Y MEDICACIÓN</div>
         <table>
             <tr><th>Examen</th><th>Cantidad</th><th>Observación</th></tr>
-            <tr th:each="ex : ${atencion.examenesAuxiliares}">
+            <tr th:each="ex : ${atencion?.examenesAuxiliares}">
                 <td th:text="${ex.nombre}"></td>
                 <td th:text="${ex.cantidad}"></td>
                 <td th:text="${ex.observacion}"></td>
@@ -47,13 +60,16 @@
         
         <p><strong>Medicamentos indicados:</strong></p>
         <ul>
-            <li th:each="m : ${atencion.medicacion}" 
-                th:text="${'Producto ID: ' + m.idProducto + ' | Dosis: ' + m.indicaciones + ' | Cantidad: ' + m.cantidad}">
+            <li th:each="m : ${atencion?.medicacion}" 
+                th:text="${(m.nombreProducto ?: 'Producto desconocido') + ' - Indicaciones: ' + (m.indicaciones ?: 'N/A') + ' (Cant: ' + (m.cantidad ?: '0') + ')'}">
             </li>
         </ul>
     </div>
 
     <div class="section">
         <div class="section-title">INDICACIONES DE ALTA</div>
-        <p th:each="al : ${atencion.alta}" th:text="${al.descripcion}"></p>
+        <p th:if="${atencion?.alta != null}" th:each="al : ${atencion.alta}" th:text="${al.descripcion}"></p>
+        <p th:if="${atencion?.alta == null}">No se registran indicaciones de alta.</p>
     </div>
+</body>
+</html>
