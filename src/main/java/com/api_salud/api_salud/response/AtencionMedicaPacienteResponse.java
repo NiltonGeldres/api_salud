@@ -1,6 +1,6 @@
 package com.api_salud.api_salud.response;
 
-public class PacienteResponse {
+public class AtencionMedicaPacienteResponse {
 	private String hc;
     private String name;
 	public String getHc() {

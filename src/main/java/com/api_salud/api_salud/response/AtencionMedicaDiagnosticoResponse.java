@@ -1,8 +1,10 @@
 package com.api_salud.api_salud.response;
 
-public class DiagnosticoResponse {
+public class AtencionMedicaDiagnosticoResponse {
 	private Long idDiagnostico;
     private Long idSubclasificacion;
+    private String descripcion;
+    
 	public Long getIdDiagnostico() {
 		return idDiagnostico;
 	}
@@ -14,6 +16,12 @@ public class DiagnosticoResponse {
 	}
 	public void setIdSubclasificacion(Long idSubclasificacion) {
 		this.idSubclasificacion = idSubclasificacion;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
     
 }

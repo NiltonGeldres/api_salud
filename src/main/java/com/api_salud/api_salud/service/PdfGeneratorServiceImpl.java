@@ -24,10 +24,10 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
 
     private final TemplateEngine templateEngine;
 
-    @Value("${app.storage.ruta-firmas:D:/08_PROYECTOS/STORAGE/firmas/}")
+    @Value("${app.storage.ruta-firmas:D:/08 PROYECTOS/STORAGE/firmas/}")
     private String rutaBaseFirmas;
 
-    @Value("${app.storage.ruta-pdfs:D:/08_PROYECTOS/STORAGE/pdfs/}")
+    @Value("${app.storage.ruta-pdfs:D:/08 PROYECTOS/STORAGE/pdfs/}")
     private String rutaBasePdfs;
 
     public PdfGeneratorServiceImpl(TemplateEngine templateEngine) {
@@ -89,14 +89,16 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
     }
 */
     @Override
-    public byte[] estamparRubricaMedico(byte[] pdfBytes, Integer idMedico, String nombreMedico, String cmpMedico) {
+    public byte[] estamparRubricaMedico(byte[] pdfBytes, Long idMedicoIngreso, String nombreMedico, String cmpMedico) {
         try {
             // Mapeo seguro utilizando el ID único del médico para el archivo PNG
-            String rutaFirmaImg = rutaBaseFirmas + "medico_" + idMedico + ".png";
+//            String rutaFirmaImg = rutaBaseFirmas + "medico_" + idMedicoIngreso + ".png";
+            String rutaFirmaImg = rutaBaseFirmas + "medico_" + 2 + ".png";
             File ficheroFirma = new File(rutaFirmaImg);
 
+            System.out.println("RUTA    "+rutaFirmaImg);
             if (!ficheroFirma.exists()) {
-                System.out.println("⚠️ Advertencia: No existe rúbrica física para el médico ID: " + idMedico);
+                System.out.println("⚠️ Advertencia: No existe rúbrica física para el médico ID: " + idMedicoIngreso);
                 return pdfBytes; 
             }
 

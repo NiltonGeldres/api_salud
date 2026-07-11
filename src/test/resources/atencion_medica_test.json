@@ -9,20 +9,22 @@
   "idEntidad": 2,
   "idUsuarioRegistro": 12,
 
-  "triaje": [
+  "triajes": [
     {"idTriaje": 49, "valorTriaje": "37"},
     {"idTriaje": 50, "valorTriaje": "70"},
     {"idTriaje": 51, "valorTriaje": "160"}
   ],
   "sintomas": [
-    {"idSintoma": 1, "descripcion": null},
-    {"idSintoma": 0, "descripcion": "Dolor de cabeza intenso referido por paciente"}
+    {"idSintoma": 1, "nombreSintoma": null},
+    {"idSintoma": 0, "nombreSintoma": "Dolor de cabeza intenso referido por paciente"}
   ],
   "antecedentes": [
-    {"idAntecedente": 0, "descripcion": "Paciente refiere alergia a penicilina"}
+    {"idAntecedente": 1, "nombreAntecedente": null},
+    {"idAntecedente": 0, "nombreAntecedente": "Paciente refiere alergia a penicilina"}
   ],
   "examenFisico": [
-    {"idExamenFisico": 0, "descripcion": "Paciente se muestra orientado en tiempo y espacio"}
+    {"idExamenFisico": 51, "nombreExamenFisico": null},
+    {"idExamenFisico": 0, "nombreExamenFisico": "Paciente se muestra orientado en tiempo y espacio"}
   ],
   "diagnosticos": [
     {"idDiagnostico": 1, "idDiagnosticoOrden": 1, "idSubclasificacion": 1}
@@ -34,9 +36,7 @@
     {"idAlmacen": 1, "idProducto": 854, "cantidadDosis": 1, "idUmDosis": 1, "idFrecuenciaDosis": 1, "cantidadPeriodo": 14, "idViaAdministracion": 1, "cantidadTotal": 28, "idDiagnostico": 1, "indicaciones": "Omeprazol 20mg"}
   ],
   "alta": [
-    {"idAlta": 0, "descripcion": "Regresar en 15 días para control de laboratorio"}
+    {"idAlta": 1, "nombreAlta": null},
+    {"idAlta": 0, "nombreAlta": "Regresar en 15 días para control de laboratorio"}
   ]
 }
-
-
-

@@ -1,8 +1,8 @@
 package com.api_salud.api_salud.response;
 
-public class TriajeResponse {
+public class AtencionMedicaTriajeResponse {
 	private Long idTriaje;
-    private String descripcion;
+    private String nombreTriaje;
     private String valorTriaje;
 	public Long getIdTriaje() {
 		return idTriaje;
@@ -10,11 +10,12 @@ public class TriajeResponse {
 	public void setIdTriaje(Long idTriaje) {
 		this.idTriaje = idTriaje;
 	}
-	public String getDescripcion() {
-		return descripcion;
+
+	public String getNombreTriaje() {
+		return nombreTriaje;
 	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setNombreTriaje(String nombreTriaje) {
+		this.nombreTriaje = nombreTriaje;
 	}
 	public String getValorTriaje() {
 		return valorTriaje;

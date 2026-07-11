@@ -1,8 +1,8 @@
 package com.api_salud.api_salud.response;
 
-public class ExamenAuxiliarResponse {
+public class AtencionMedicaExamenesResponse {
 	private Long idProducto;
-    private String nombre;
+    private String nombreProducto;
     private Integer cantidad;
     private String observacion;
     private Long idPuntoCarga;
@@ -13,11 +13,12 @@ public class ExamenAuxiliarResponse {
 	public void setIdProducto(Long idProducto) {
 		this.idProducto = idProducto;
 	}
-	public String getNombre() {
-		return nombre;
+	
+	public String getNombreProducto() {
+		return nombreProducto;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
 	}
 	public Integer getCantidad() {
 		return cantidad;
