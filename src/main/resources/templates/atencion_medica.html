@@ -13,7 +13,6 @@
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th { background-color: #f2f2f2; border: 1px solid #ddd; padding: 8px; text-align: left; font-weight: bold; }
         td { border: 1px solid #ddd; padding: 8px; }
-        ul { padding-left: 20px; margin: 5px 0; }
         .footer { margin-top: 50px; border-top: 1px solid #ccc; font-size: 10px; color: #777; text-align: center; }
     </style>
 </head>
@@ -26,23 +25,25 @@
     </div>
 
     <div class="info-bar">
-        <span><strong>Paciente:</strong> <span th:text="${atencion?.paciente?.name}"></span></span>
-        <span><strong>N° Historia Clínica:</strong> <span th:text="${atencion?.paciente?.hc}"></span></span>
+        <span><strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span></span>
+        <span><strong>N° Historia Clínica:</strong> <span th:text="${atencion.paciente.hc}"></span></span>
     </div>
 
+    <!-- 1. Signos Vitales -->
     <div class="section">
         <div class="section-title">Signos Vitales y Triaje</div>
         <table>
             <thead><tr><th>Parámetro</th><th>Valor</th></tr></thead>
             <tbody>
-                <tr th:each="t : ${triajes}">
+                <tr th:each="t : ${atencion.triajes}">
                     <td th:text="${t.nombreTriaje}"></td>
-                    <td th:text="${t.valor}"></td>
+                    <td th:text="${t.valorTriaje}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <!-- 2. Evaluación Clínica -->
     <div class="section">
         <div class="section-title">Evaluación Clínica</div>
         <table>
@@ -52,45 +53,55 @@
         </table>
     </div>
 
+    <!-- 3. Diagnósticos -->
     <div class="section">
         <div class="section-title">Diagnósticos</div>
         <table>
-            <thead><tr><th>Descripción del Diagnóstico</th></tr></thead>
+            <thead><tr><th>Diagnóstico</th><th>Tipo</th></tr></thead>
             <tbody>
-                <tr th:each="d : ${atencion?.diagnosticos}">
+                <tr th:each="d : ${atencion.diagnosticos}">
                     <td th:text="${d.descripcion}"></td>
+                    <td th:text="${d.nombreSubclasificacion}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <!-- 4. Plan de Trabajo y Medicación -->
     <div class="section">
         <div class="section-title">Plan de Trabajo y Medicación</div>
         <p><strong>Exámenes Auxiliares:</strong></p>
         <table>
-            <thead><tr><th>Procedimiento</th><th>Cantidad</th><th>Observación</th></tr></thead>
+            <thead><tr><th>Procedimiento</th><th>Diagnóstico Asociado</th><th>Obs.</th></tr></thead>
             <tbody>
-                <tr th:each="ex : ${atencion?.examenesAuxiliares}">
+                <tr th:each="ex : ${atencion.examenesAuxiliares}">
                     <td th:text="${ex.nombreProducto}"></td>
-                    <td th:text="${ex.cantidad}"></td>
+                    <td th:text="${ex.descripcionDiagnostico}"></td>
                     <td th:text="${ex.observacion}"></td>
                 </tr>
             </tbody>
         </table>
         
         <p><strong>Medicamentos indicados:</strong></p>
-        <ul>
-            <li th:each="m : ${atencion?.medicacion}">
-                <strong th:text="${m.nombreProducto}"></strong> - 
-                <span th:text="${'Indicaciones: ' + m.indicaciones}"></span> 
-                <small th:text="${'(Cant: ' + m.cantidad + ')'}"></small>
-            </li>
-        </ul>
+        <table>
+            <thead><tr><th>Medicamento</th><th>Vía</th><th>Dosis/Frecuencia</th><th>Diagnóstico</th></tr></thead>
+            <tbody>
+                <tr th:each="m : ${atencion.medicacion}">
+                    <td th:text="${m.nombreProducto}"></td>
+                    <td th:text="${m.nombreViaAdministracion}"></td>
+                    <td th:text="${m.cantidadDosis + ' - ' + m.nombreFrecuenciaDosis+ ' - X  ' + m.cantidadPeriodo+ '  dias  '}"></td>
+                    <td th:text="${m.descripcionDiagnostico}"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
+    <!-- 5. Indicaciones de Alta -->
     <div class="section">
         <div class="section-title">Indicaciones de Alta</div>
-        <div th:each="al : ${atencion?.alta}" th:text="${al.nombreAlta}" style="padding: 5px 0;"></div>
+        <ul>
+            <li th:each="al : ${atencion.alta}" th:text="${al.nombreAlta}"></li>
+        </ul>
     </div>
 
     <div class="footer">

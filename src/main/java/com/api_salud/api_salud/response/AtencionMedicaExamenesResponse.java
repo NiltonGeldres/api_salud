@@ -7,6 +7,9 @@ public class AtencionMedicaExamenesResponse {
     private String observacion;
     private Long idPuntoCarga;
     private Long idDiagnostico;
+    private String descripcionDiagnostico;
+
+    
 	public Long getIdProducto() {
 		return idProducto;
 	}
@@ -44,6 +47,11 @@ public class AtencionMedicaExamenesResponse {
 	public void setIdDiagnostico(Long idDiagnostico) {
 		this.idDiagnostico = idDiagnostico;
 	}
-    
+	public String getDescripcionDiagnostico() {
+		return descripcionDiagnostico;
+	}
+	public void setDescripcionDiagnostico(String descripcionDiagnostico) {
+		this.descripcionDiagnostico = descripcionDiagnostico;
+	}
     
 }

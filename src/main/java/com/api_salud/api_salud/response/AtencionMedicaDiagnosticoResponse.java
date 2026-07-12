@@ -4,6 +4,9 @@ public class AtencionMedicaDiagnosticoResponse {
 	private Long idDiagnostico;
     private Long idSubclasificacion;
     private String descripcion;
+    private String nombreSubclasificacion;
+    private Long  idDiagnosticoOrden;
+    	
     
 	public Long getIdDiagnostico() {
 		return idDiagnostico;
@@ -22,6 +25,18 @@ public class AtencionMedicaDiagnosticoResponse {
 	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	public String getNombreSubclasificacion() {
+		return nombreSubclasificacion;
+	}
+	public void setNombreSubclasificacion(String nombreSubclasificacion) {
+		this.nombreSubclasificacion = nombreSubclasificacion;
+	}
+	public Long getIdDiagnosticoOrden() {
+		return idDiagnosticoOrden;
+	}
+	public void setIdDiagnosticoOrden(Long idDiagnosticoOrden) {
+		this.idDiagnosticoOrden = idDiagnosticoOrden;
 	}
     
 }

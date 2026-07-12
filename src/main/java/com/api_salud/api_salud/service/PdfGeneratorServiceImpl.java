@@ -111,9 +111,9 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
                 BaseFont fontNormal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
 
                 // 🎯 ESTAMPADO EN CADA HOJA: Bloque indivisible alineado de forma milimétrica
-                for (int i = 1; i <= totalPaginas; i++) {
-                    PdfContentByte canvas = stamper.getOverContent(i);
-
+                //for (int i = 1; i <= totalPaginas; i++) {
+//                    PdfContentByte canvas = stamper.getOverContent(i);
+                    PdfContentByte canvas = stamper.getOverContent(totalPaginas);
                     // 1. Imagen de la firma digital (PNG transparente)
                     Image firmaImg = Image.getInstance(rutaFirmaImg);
                     firmaImg.scaleToFit(110, 50);
@@ -133,7 +133,7 @@ public class PdfGeneratorServiceImpl implements PdfGeneratorService {
                     canvas.setFontAndSize(fontNormal, 8);
                     canvas.showTextAligned(PdfContentByte.ALIGN_CENTER, "CMP: " + cmpMedico + " - FIRMA ELECTRÓNICA", 485, 36, 0);
                     canvas.endText();
-                }
+              //  }
 
                 stamper.close();
                 reader.close();
