@@ -15,5 +15,4 @@ public interface PdfGeneratorService {
         String nombreMedico*/
     );
     
-    byte[] estamparRubricaMedico(byte[] pdfBytes, Long idMedico, String nombreMedico, String cmpMedico);
 }
