@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Historia Clínica Digital</title>
+    <title>Atención de Consulta Externa</title>
     <style>
         @page {
             size: A4;
@@ -13,34 +13,90 @@
 
         body { font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px; color: #333; line-height: 1.4; }
         
-        #header { position: running(header); width: 100%; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
         .header-content h2 { color: #1B50EE; margin: 0; text-transform: uppercase; font-size: 18px; }
         
         #footer { position: running(footer); width: 100%; border-top: 1px solid #ccc; padding-top: 5px; text-align: center; font-size: 9px; color: #777; }
         
         .info-bar { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 10px; margin-bottom: 1px; display: table; width: 100%; }
         .info-bar span { display: table-cell; }
+
+        /* Estilo para el nuevo título del documento */
+        .doc-title { text-align: center; font-size: 16px; font-weight: bold; color: #2c3e50; margin: 15px 0; text-transform: uppercase; }
         
         .section { margin-bottom: 20px; }
         .section-title { background-color: #1B50EE; color: #ffffff; padding: 5px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 10px; text-transform: uppercase; }
         
+        /* Estilos optimizados para Triaje */
+        .triaje-row { display: flex; justify-content: space-around; background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 4px; padding: 10px; margin-bottom: 15px; }
+        .triaje-item { text-align: center; padding: 0 10px; }
+        .triaje-label { font-size: 9px; font-weight: 700; color: #555; text-transform: uppercase; margin-bottom: 3px; }
+        .triaje-value { font-size: 13px; font-weight: 800; color: #000; }
+
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th { background-color: #f2f2f2; border: 1px solid #ddd; padding: 8px; text-align: left; font-weight: bold; }
         td { border: 1px solid #ddd; padding: 8px; }
         
-        /* Contenedor de firma en el flujo del body */
         .firma-container { margin-top: 20px; text-align: right; page-break-inside: avoid; }
+        
+#header { 
+    position: running(header); 
+    width: 100%; 
+    border-bottom: 2px solid #2c3e50; 
+    padding-bottom: 5px;
+    margin-bottom: 10px; /* Separación clara del contenido */
+}
+
+/* Tabla de Triaje Compacta */
+.tabla-triaje-horizontal {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    margin-bottom: 10px; /* Menos espacio abajo */
+}
+
+.celda-triaje {
+    width: 33.33%;
+    text-align: center;
+    padding: 5px; /* Reducción de padding para bajar el alto */
+    border-right: 1px solid #e1e4e8;
+}
+
+.triaje-label {
+    font-size: 11px; /* Todo a 11px como pediste */
+    font-weight: 700;
+    color: #555;
+    text-transform: capitalize;
+    margin-bottom: 0px;
+}
+
+.triaje-value {
+    font-size: 11px; /* Todo a 11px como pediste */
+    font-weight: 800;
+    color: #000;
+}
+
+.doc-title { 
+    text-align: center; 
+    font-size: 14px; 
+    font-weight: bold; 
+    color: #2c3e50; 
+    margin-bottom: 5px;
+    text-transform: uppercase; 
+}      
     </style>
 </head>
 <body>
 
-    <div id="header">
-        <div class="header-content">
-            <h2 th:text="${atencion.nombreEntidad}">Nombre de la Clínica</h2>
-            <p><strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span> | 
-               <strong>Médico:</strong> <span th:text="${atencion.nombreMedico}"></span> (CMP: <span th:text="${atencion.cmpMedico}"></span>)</p>
-        </div>
-    </div>
+	<div class="header-content" id="header">
+	    <h2 th:text="${atencion.nombreEntidad}">Nombre de la Clínica</h2>
+	    <div >
+		    <div class="doc-title">ATENCIÓN DE CONSULTA EXTERNA</div>
+	        <p><strong>Especialidad:</strong> <span th:text="${atencion.nombreEspecialidad}"></span> | 
+	           <strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span> |
+	           <strong>Médico:</strong> <span th:text="${atencion.nombreMedico}"></span> (CMP: <span th:text="${atencion.cmpMedico}"></span>)</p>
+	    </div>
+	</div>
 
     <div id="footer">
         Documento generado automáticamente por sistema HealthTech | ID Atencion: <span th:text="${atencion.idAtencion}"></span>
@@ -51,13 +107,15 @@
         <span><strong>N° Historia Clínica:</strong> <span th:text="${atencion.paciente.hc}"></span></span>
     </div>
 
-<div class="seccion">
-    <table class="tabla-triaje">
+
+    <!-- Sección Triaje Mejorada -->
+<div class="triaje-container">
+    <table class="tabla-triaje-horizontal">
         <tr>
-            <!-- Usamos th:each para iterar dinámicamente -->
+            <!-- Si tienes 3 triajes, esto creará 3 columnas perfectas -->
             <td th:each="triaje : ${atencion.triajes}" class="celda-triaje">
-                <div class="triaje-nombre" th:text="${triaje.nombreTriaje}">Nombre</div>
-                <div class="triaje-valor" th:text="${triaje.valorTriaje}">Valor</div>
+                <div class="triaje-label" th:text="${triaje.nombreTriaje}"></div>
+                <div class="triaje-value" th:text="${triaje.valorTriaje}"></div>
             </td>
         </tr>
     </table>
@@ -72,6 +130,7 @@
         </table>
     </div>
 
+    <!-- Resto del contenido original se mantiene igual... -->
     <div class="section">
         <div class="section-title">Diagnósticos</div>
         <table>
@@ -120,13 +179,12 @@
         </ul>
     </div>
 
-    <!-- Firma posicionada al final del registro -->
-<div class="firma-container">
-    <img th:src="${firmaBase64}" style="width: 140px; height: auto;" />
-    <div style="border-top: 1px solid #000; width: 200px; margin-left: auto;"></div>
-    <p style="font-weight: bold; margin: 2px 0;" th:text="${'Medico: ' +atencion.nombreMedico}"></p>
-    <p style="margin: 0;" th:text="${'CMP: ' + atencion.cmpMedico + ' - FIRMA ELECTRÓNICA'}"></p>
-</div>
+    <div class="firma-container">
+        <img th:src="${firmaBase64}" style="width: 140px; height: auto;" />
+        <div style="border-top: 1px solid #000; width: 200px; margin-left: auto;"></div>
+        <p style="font-weight: bold; margin: 2px 0;" th:text="${'Medico: ' + atencion.nombreMedico}"></p>
+        <p style="margin: 0;" th:text="${'CMP: ' + atencion.cmpMedico + ' - FIRMA ELECTRÓNICA'}"></p>
+    </div>
 
 </body>
 </html>

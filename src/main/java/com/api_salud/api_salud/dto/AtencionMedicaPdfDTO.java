@@ -21,6 +21,7 @@ public class AtencionMedicaPdfDTO {
     private String nombreMedico;
     private String cmpMedico;
     private String nombreServicio;
+    private String nombreEspecialidad;
     private Long idAtencion;
     private String estadoFirma;
     private Long getIdMedicoIngreso;
@@ -132,6 +133,12 @@ public class AtencionMedicaPdfDTO {
 	}
 	public void setAlta(List<AtencionMedicaAltaResponse> alta) {
 		this.alta = alta;
+	}
+	public String getNombreEspecialidad() {
+		return nombreEspecialidad;
+	}
+	public void setNombreEspecialidad(String nombreEspecialidad) {
+		this.nombreEspecialidad = nombreEspecialidad;
 	}
 
  

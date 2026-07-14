@@ -2,6 +2,7 @@
   "idPaciente": 36,
   "idCuentaAtencion": 34,
   "idServicio": 1,
+  "idEspecialidad": 2,
   "idEstadoAtencion": 3,
   "estadoFirma": "PENDIENTE",
   "origenRegistroUsuario": "MEDICO_MOBILE_APP",

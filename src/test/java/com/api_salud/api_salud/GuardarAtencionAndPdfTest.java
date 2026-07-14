@@ -91,7 +91,7 @@ public class GuardarAtencionAndPdfTest {
     @Transactional
     @Commit // Asegura que los updates de la ruta y firma queden persistidos
     void test2_FirmarYGenerarDocumentoPdf() {
-    	Long idAtencionCompartido =193L  ;
+    	Long idAtencionCompartido =200L  ;
     	System.out.println("ANTES JSON RECUPERADO DE BD: " );
     	String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
     	System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
