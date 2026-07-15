@@ -94,7 +94,7 @@
 		    <div class="doc-title">ATENCIÓN DE CONSULTA EXTERNA</div>
 	        <p><strong>Especialidad:</strong> <span th:text="${atencion.nombreEspecialidad}"></span> | 
 	           <strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span> |
-	           <strong>Médico:</strong> <span th:text="${atencion.nombreMedico}"></span> (CMP: <span th:text="${atencion.cmpMedico}"></span>)</p>
+	           <strong>Médico:</strong> <span th:text="${atencion.nombreMedicoIngreso}"></span> (CMP: <span th:text="${atencion.cmpMedico}"></span>)</p>
 	    </div>
 	</div>
 
@@ -182,7 +182,7 @@
     <div class="firma-container">
         <img th:src="${firmaBase64}" style="width: 140px; height: auto;" />
         <div style="border-top: 1px solid #000; width: 200px; margin-left: auto;"></div>
-        <p style="font-weight: bold; margin: 2px 0;" th:text="${'Medico: ' + atencion.nombreMedico}"></p>
+        <p style="font-weight: bold; margin: 2px 0;" th:text="${'Medico: ' + atencion.nombreMedicoIngreso}"></p>
         <p style="margin: 0;" th:text="${'CMP: ' + atencion.cmpMedico + ' - FIRMA ELECTRÓNICA'}"></p>
     </div>
 

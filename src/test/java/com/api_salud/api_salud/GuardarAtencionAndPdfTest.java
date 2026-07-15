@@ -88,7 +88,7 @@ public class GuardarAtencionAndPdfTest {
     // =====================================================================
     @Test
     @Order(2)
-    @Transactional
+  //  @Transactional
     @Commit // Asegura que los updates de la ruta y firma queden persistidos
     void test2_FirmarYGenerarDocumentoPdf() {
     	Long idAtencionCompartido =200L  ;
@@ -104,7 +104,6 @@ public class GuardarAtencionAndPdfTest {
             
             // Invocamos el segundo método independiente basado en la verdad de la BD
             AtencionMedicaResponse response = atencionMedicaService.firmarYGenerarPdf(idAtencionCompartido);
-
             // Aserciones del proceso de firmado
             assertNotNull(response);
             assertTrue(response.isExito());

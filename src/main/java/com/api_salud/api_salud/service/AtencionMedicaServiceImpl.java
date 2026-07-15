@@ -2,6 +2,8 @@ package com.api_salud.api_salud.service;
 
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
+import com.api_salud.api_salud.service.storage.StorageService;
+import com.api_salud.api_salud.config.StorageConfig;
 import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,18 +23,27 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
     private final AtencionMedicaRepository atencionMedicaRepository;
     private final ObjectMapper objectMapper;
     private final PdfGeneratorService pdfGeneratorService;
-
+	private final StorageService storageService; 
+    private final StorageConfig storageConfig;    
+    
+    
     @Value("${app.storage.ruta-pdfs}")
     private String rutaBasePdfs;
 
-    public AtencionMedicaServiceImpl(AtencionMedicaRepository atencionMedicaRepository, 
-                                     ObjectMapper objectMapper, 
-                                     PdfGeneratorService pdfGeneratorService) {
-        this.atencionMedicaRepository = atencionMedicaRepository;
-        this.objectMapper = objectMapper;
-        this.pdfGeneratorService = pdfGeneratorService;
-    }
-
+    public AtencionMedicaServiceImpl(
+    		AtencionMedicaRepository atencionMedicaRepository, 
+	        ObjectMapper objectMapper, 
+	        PdfGeneratorService pdfGeneratorService,
+	        StorageService storageService,
+	        StorageConfig storageConfig)
+    { 
+		this.atencionMedicaRepository = atencionMedicaRepository;
+		this.objectMapper = objectMapper;
+		this.pdfGeneratorService = pdfGeneratorService;
+		this.storageService = storageService;        
+		this.storageConfig = storageConfig;          
+	}    
+    
     @Override
     @Transactional
     public AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request) {
@@ -45,7 +56,68 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error al guardar: " + e.getMessage(), e);
         }
     }
+    
+    @Override
+    @Transactional 
+    public AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion) {
+    	
 
+        try {
+            // 1. Obtener datos
+            String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+            AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+            
+            // 2. Generar bytes
+            byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
+
+            // 3. NUEVA INTEGRACIÓN CON STORAGE SERVICE
+            // Obtenemos la plantilla: /{empresa}/historias_{empresa}/{paciente}/atencion_{atencion}_{empresa}.pdf
+            System.out.println("ANTES PLANTILLA  " );
+            String plantilla = storageConfig.getPath().getHistorias();
+            
+            System.out.println("PLANTILLA  " +  plantilla);
+            System.out.println("DEBUG: Config objeto: " + storageConfig);
+            System.out.println("DEBUG: Path objeto: " + (storageConfig != null ? storageConfig.getPath() : "NULL_CONFIG"));
+            
+            // Construimos la ruta relativa (el StorageService ya sabe si es local o cloud)
+//            String empresa = pdfDto.getIdEntidad(); // Asegúrate de tener este campo en tu DTO
+            String hc = (pdfDto.getPaciente() != null) ? pdfDto.getPaciente().getHc() : "SIN_HC";
+            
+            
+    
+            // Corregido: usamos getIdEntidad() tal como me indicaste
+            String entidad = (pdfDto.getIdEntidad() != null) ? String.valueOf(pdfDto.getIdEntidad()) : "SIN_ENTIDAD";            
+            
+            // El buildPath reemplaza los {placeholders} definidos en tu application.properties
+            String rutaRelativa = plantilla
+                    .replace("{empresa}", entidad)
+                    .replace("{paciente}", hc)
+                    .replace("{atencion}", String.valueOf(idAtencion));
+
+            // Guardado abstracto (No importa si es D:/ o Cloud)
+            storageService.guardar(rutaRelativa, pdfBytes);
+            
+            // 4. Actualizar BD
+            atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaRelativa);
+            atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
+            
+         // CORRECCIÓN:
+            AtencionMedicaResponse response = new AtencionMedicaResponse(true, "Firmado con éxito.", idAtencion, 3, "FIRMADO_ELECTRONICO");
+            response.setRutaPdfFirmado(rutaRelativa); // Aquí asignas la ruta correctamente
+
+            return response; // <--- Devuelve el objeto que ya tiene la ruta asignada
+        } catch (Exception e) {
+            e.printStackTrace(); // Esto es vital: imprimirá la línea exacta del error en la consola
+            throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
+        }
+        
+    }
+    
+    
+
+  
+    
+    /*
     @Override
     @Transactional 
     public AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion) {
@@ -79,4 +151,5 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
         }
     }
+*/    
 }

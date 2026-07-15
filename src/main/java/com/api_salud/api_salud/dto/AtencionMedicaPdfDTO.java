@@ -17,8 +17,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AtencionMedicaPdfDTO {
 	// --- Cabecera ---
+    private String idEntidad;
     private String nombreEntidad;
-    private String nombreMedico;
+    private String nombreMedicoIngreso;
+    private Integer idMedicoIngreso;
     private String cmpMedico;
     private String nombreServicio;
     private String nombreEspecialidad;
@@ -38,17 +40,29 @@ public class AtencionMedicaPdfDTO {
     private List<AtencionMedicaExamenesResponse> examenesAuxiliares;
     private List<AtencionMedicaMedicacionResponse> medicacion;
     private List<AtencionMedicaAltaResponse> alta;
+	public String getIdEntidad() {
+		return idEntidad;
+	}
+	public void setIdEntidad(String idEntidad) {
+		this.idEntidad = idEntidad;
+	}
 	public String getNombreEntidad() {
 		return nombreEntidad;
 	}
 	public void setNombreEntidad(String nombreEntidad) {
 		this.nombreEntidad = nombreEntidad;
 	}
-	public String getNombreMedico() {
-		return nombreMedico;
+	public String getNombreMedicoIngreso() {
+		return nombreMedicoIngreso;
 	}
-	public void setNombreMedico(String nombreMedico) {
-		this.nombreMedico = nombreMedico;
+	public void setNombreMedicoIngreso(String nombreMedicoIngreso) {
+		this.nombreMedicoIngreso = nombreMedicoIngreso;
+	}
+	public Integer getIdMedicoIngreso() {
+		return idMedicoIngreso;
+	}
+	public void setIdMedicoIngreso(Integer idMedicoIngreso) {
+		this.idMedicoIngreso = idMedicoIngreso;
 	}
 	public String getCmpMedico() {
 		return cmpMedico;
@@ -61,6 +75,12 @@ public class AtencionMedicaPdfDTO {
 	}
 	public void setNombreServicio(String nombreServicio) {
 		this.nombreServicio = nombreServicio;
+	}
+	public String getNombreEspecialidad() {
+		return nombreEspecialidad;
+	}
+	public void setNombreEspecialidad(String nombreEspecialidad) {
+		this.nombreEspecialidad = nombreEspecialidad;
 	}
 	public Long getIdAtencion() {
 		return idAtencion;
@@ -134,13 +154,8 @@ public class AtencionMedicaPdfDTO {
 	public void setAlta(List<AtencionMedicaAltaResponse> alta) {
 		this.alta = alta;
 	}
-	public String getNombreEspecialidad() {
-		return nombreEspecialidad;
-	}
-	public void setNombreEspecialidad(String nombreEspecialidad) {
-		this.nombreEspecialidad = nombreEspecialidad;
-	}
-
- 
+    
+    
+	
     
 }
