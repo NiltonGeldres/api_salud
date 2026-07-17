@@ -20,6 +20,7 @@ import java.nio.file.Files;
 
 import javax.annotation.Resource;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.util.FileCopyUtils;
 import java.io.InputStreamReader;
@@ -92,10 +93,8 @@ public class GuardarAtencionAndPdfTest {
     @Commit // Asegura que los updates de la ruta y firma queden persistidos
     void test2_FirmarYGenerarDocumentoPdf() {
     	Long idAtencionCompartido =200L  ;
-    	System.out.println("ANTES JSON RECUPERADO DE BD: " );
     	String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
-    	System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
-    	
+System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
         // Validamos que el primer test haya dejado un ID listo
         assertNotNull(idAtencionCompartido, "No se puede firmar porque el ID de la atención es nulo (Falló el Test 1).");
 
@@ -111,7 +110,7 @@ public class GuardarAtencionAndPdfTest {
             
             String rutaPdf = response.getRutaPdfFirmado();
             assertNotNull(rutaPdf, "La ruta del PDF firmado no debería ser nula.");
-            System.out.println("📂 Archivo PDF generado y firmado en: " + rutaPdf);
+System.out.println("RUTA PDF NO NULA : " + rutaPdf);
 
             // Verificación física real en la unidad de almacenamiento/disco duro
             File archivoFisico = new File(rutaPdf);

@@ -32,4 +32,6 @@ public class AtencionMedicaController {
         
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    
 }    
