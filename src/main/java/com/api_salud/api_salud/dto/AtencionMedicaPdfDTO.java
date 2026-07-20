@@ -40,6 +40,10 @@ public class AtencionMedicaPdfDTO {
     private List<AtencionMedicaExamenesResponse> examenesAuxiliares;
     private List<AtencionMedicaMedicacionResponse> medicacion;
     private List<AtencionMedicaAltaResponse> alta;
+    private String hashFirma;
+    private String fechaFirma;    
+    
+    
 	public String getIdEntidad() {
 		return idEntidad;
 	}
@@ -93,6 +97,19 @@ public class AtencionMedicaPdfDTO {
 	}
 	public void setEstadoFirma(String estadoFirma) {
 		this.estadoFirma = estadoFirma;
+	}
+	
+	public String getHashFirma() {
+		return hashFirma;
+	}
+	public void setHashFirma(String hashFirma) {
+		this.hashFirma = hashFirma;
+	}
+	public String getFechaFirma() {
+		return fechaFirma;
+	}
+	public void setFechaFirma(String fechaFirma) {
+		this.fechaFirma = fechaFirma;
 	}
 	public Long getGetIdMedicoIngreso() {
 		return getIdMedicoIngreso;

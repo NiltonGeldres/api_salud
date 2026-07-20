@@ -3,6 +3,7 @@ package com.api_salud.api_salud.service;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.service.storage.StorageService;
+import com.api_salud.api_salud.utils.SecurityUtils;
 import com.api_salud.api_salud.config.StorageConfig;
 import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -25,6 +28,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
     private final PdfGeneratorService pdfGeneratorService;
 	private final StorageService storageService; 
     private final StorageConfig storageConfig;    
+    private final SecurityUtils securityUtils; 
     
     
     @Value("${app.storage.ruta-pdfs}")
@@ -35,13 +39,15 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	        ObjectMapper objectMapper, 
 	        PdfGeneratorService pdfGeneratorService,
 	        StorageService storageService,
-	        StorageConfig storageConfig)
+	        StorageConfig storageConfig,
+	        SecurityUtils securityUtils)
     { 
 		this.atencionMedicaRepository = atencionMedicaRepository;
 		this.objectMapper = objectMapper;
 		this.pdfGeneratorService = pdfGeneratorService;
 		this.storageService = storageService;        
 		this.storageConfig = storageConfig;          
+		this.securityUtils = securityUtils;          
 	}    
     
     @Override
@@ -97,6 +103,65 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
         }
         
     }
+    
+    @Override
+    @Transactional
+    public AtencionMedicaResponse firmarAtencion(Long idAtencion) {
+        try {
+            // Paso 4: Obtener el JSON Enriquecido desde la BD
+            String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+            if (jsonPayloadBD == null) {
+                throw new RuntimeException("No se encontró la atención médica con ID: " + idAtencion);
+            }
+
+            // Paso 5: Generar Hash de integridad (SHA-256)
+            String hashIntegridad = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
+
+            // Mapeamos a objeto para inyectar los datos de firma
+            AtencionMedicaPdfDTO dto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+            dto.setHashFirma(hashIntegridad);
+            dto.setEstadoFirma("FIRMADO_ELECTRONICO");
+            dto.setFechaFirma(LocalDateTime.now().toString());
+
+            // Reconvertimos a String JSON para guardar la versión final firmada
+            String jsonFirmado = objectMapper.writeValueAsString(dto);
+
+            // Paso 6A: Guardar en estructura de disco (D:\ARCHIVO_DIGITAL\...)
+            String entidad = (dto.getIdEntidad() != null) ? String.valueOf(dto.getIdEntidad()) : "SIN_ENTIDAD";
+            String hc = (dto.getPaciente() != null) ? dto.getPaciente().getHc() : "SIN_HC";
+            String plantilla = storageConfig.getPath().getHistorias(); 
+
+            String rutaRelativaJson = plantilla
+                    .replace("{empresa}", entidad)
+                    .replace("{paciente}", hc)
+                    .replace("{atencion}", String.valueOf(idAtencion))
+                    .replace(".pdf", ".json"); // Guardamos como .json
+
+            storageService.guardar(rutaRelativaJson, jsonFirmado.getBytes(StandardCharsets.UTF_8));
+
+            // Paso 6B: Actualizar estado y hash en BD
+            atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
+            atencionMedicaRepository.actualizarHashFirma(idAtencion, hashIntegridad);
+
+            // Paso 7: Responder al Frontend con la payload enriquecida + hash para que dibuje el PDF
+            AtencionMedicaResponse response = new AtencionMedicaResponse(
+                    true, 
+                    "Atención firmada digitalmente con éxito.", 
+                    idAtencion, 
+                    3, 
+                    "FIRMADO_ELECTRONICO"
+            );
+            response.setJsonEnriquecidoFirmado(jsonFirmado); // Campo nuevo en tu Response DTO
+            response.setHashIntegridad(hashIntegridad);
+
+            return response;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
+        }
+    }
+    
+    
     
 }
 

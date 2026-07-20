@@ -86,4 +86,15 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
             throw new RuntimeException("Error al actualizar el estado de la firma en la base de datos: " + e.getMessage(), e);
         }
     }
+    
+    @Override
+    public void actualizarHashFirma(Long idAtencion, String hashFirma) {
+        String sql = "UPDATE igm_atenciones_medicas.atenciones_medicas SET hash_firma_digital = ? WHERE id_atencion = ?";
+        try {
+            jdbcTemplate.update(sql, hashFirma, idAtencion);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar el hash de la firma en la base de datos: " + e.getMessage(), e);
+        }
+    }    
+    
 }

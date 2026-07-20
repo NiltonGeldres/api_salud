@@ -15,4 +15,5 @@ public interface AtencionMedicaService {
      */
     AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request);
     AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion);
+	AtencionMedicaResponse firmarAtencion(Long idAtencion);
 }

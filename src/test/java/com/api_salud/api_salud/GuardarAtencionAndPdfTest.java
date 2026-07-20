@@ -84,9 +84,13 @@ public class GuardarAtencionAndPdfTest {
         }
     }
 */
+    
+/*    
     // =====================================================================
     // TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
     // =====================================================================
+    
+    
     @Test
     @Order(2)
   //  @Transactional
@@ -94,7 +98,7 @@ public class GuardarAtencionAndPdfTest {
     void test2_FirmarYGenerarDocumentoPdf() {
     	Long idAtencionCompartido =200L  ;
     	String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
-System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
+    	System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
         // Validamos que el primer test haya dejado un ID listo
         assertNotNull(idAtencionCompartido, "No se puede firmar porque el ID de la atención es nulo (Falló el Test 1).");
 
@@ -110,7 +114,7 @@ System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
             
             String rutaPdf = response.getRutaPdfFirmado();
             assertNotNull(rutaPdf, "La ruta del PDF firmado no debería ser nula.");
-System.out.println("RUTA PDF NO NULA : " + rutaPdf);
+            System.out.println("RUTA PDF NO NULA : " + rutaPdf);
 
             // Verificación física real en la unidad de almacenamiento/disco duro
             File archivoFisico = new File(rutaPdf);
@@ -121,6 +125,45 @@ System.out.println("RUTA PDF NO NULA : " + rutaPdf);
             fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
         }
     }
+*/    
+ // =====================================================================
+    // TEST 2: FIRMAR Y GUARDAR JSON EN DISCO (PASO 3 A PASO 7)
+    // =====================================================================
+    @Test
+    @Order(2)
+    @Commit
+    void test2_FirmarYGuardarJsonEnDisco() {
+        // Validamos que el primer test haya asignado un ID válido
+//        assertNotNull(idAtencionCompartido, "No se puede firmar porque idAtencionCompartido es nulo (Falló el Test 1).");
+    	Long idAtencionCompartido =200L  ;
+        try {
+            System.out.println("====== STEP 2: FIRMAR Y GENERAR JSON EN DISCO PARA ID: " + idAtencionCompartido + " ======");
+
+            // Invocamos el servicio de firma digital / sellado
+            AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencionCompartido);
+
+            // Aserciones de la respuesta
+            assertNotNull(response);
+            assertTrue(response.isExito());
+            assertEquals("FIRMADO_ELECTRONICO", response.getEstadoFirma());
+            assertNotNull(response.getHashIntegridad(), "El hash de integridad SHA-256 no debería ser nulo.");
+            assertNotNull(response.getJsonEnriquecidoFirmado(), "El JSON enriquecido firmado devuelto al front no debe ser nulo.");
+
+            System.out.println("✔ HASH GENERADO: " + response.getHashIntegridad());
+
+            // Validación en Base de Datos: verificar que se recupera el JSON actualizado
+            String jsonEnBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
+            assertNotNull(jsonEnBD, "No se pudo recuperar el JSON desde la BD.");
+            assertTrue(jsonEnBD.contains("FIRMADO_ELECTRONICO"), "El JSON recuperado de la BD debe reflejar el estado FIRMADO_ELECTRONICO.");
+
+            System.out.println("✔ ÉXITO: Proceso de firma y validaciones completado correctamente.");
+
+        } catch (Exception e) {
+            fail("El Test 2 (Firmar JSON) falló con excepción: " + e.getMessage());
+        }
+    }
+    
+    
 }
 
 /*String jsonNativo = "{\n" +

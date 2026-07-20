@@ -13,7 +13,9 @@ public class AtencionMedicaResponse {
     private String estadoFirma;
     private String rutaPdfFirmado;    
     private OffsetDateTime tsProcesamiento;
-
+    private String jsonEnriquecidoFirmado;
+    private String hashIntegridad;
+    
     // Constructor vacío requerido para serialización JSON
     public AtencionMedicaResponse() {}
 
@@ -53,5 +55,21 @@ public class AtencionMedicaResponse {
     public void setRutaPdfFirmado(String rutaPdfFirmado) {
         this.rutaPdfFirmado = rutaPdfFirmado;
     }
+
+	public String getJsonEnriquecidoFirmado() {
+		return jsonEnriquecidoFirmado;
+	}
+
+	public void setJsonEnriquecidoFirmado(String jsonEnriquecidoFirmado) {
+		this.jsonEnriquecidoFirmado = jsonEnriquecidoFirmado;
+	}
+
+	public String getHashIntegridad() {
+		return hashIntegridad;
+	}
+
+	public void setHashIntegridad(String hashIntegridad) {
+		this.hashIntegridad = hashIntegridad;
+	}
     
 }
