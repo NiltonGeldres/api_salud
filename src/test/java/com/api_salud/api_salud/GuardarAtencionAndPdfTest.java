@@ -135,7 +135,7 @@ public class GuardarAtencionAndPdfTest {
     void test2_FirmarYGuardarJsonEnDisco() {
         // Validamos que el primer test haya asignado un ID válido
 //        assertNotNull(idAtencionCompartido, "No se puede firmar porque idAtencionCompartido es nulo (Falló el Test 1).");
-    	Long idAtencionCompartido =200L  ;
+    	Long idAtencionCompartido =204L  ;
         try {
             System.out.println("====== STEP 2: FIRMAR Y GENERAR JSON EN DISCO PARA ID: " + idAtencionCompartido + " ======");
 
