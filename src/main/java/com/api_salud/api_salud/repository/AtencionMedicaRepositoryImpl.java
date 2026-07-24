@@ -88,6 +88,17 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
     }
     
     @Override
+    public void firmarAtencion(Long idAtencion, String hashFirma, String tipoFirma) {
+        String sql = "SELECT igm_atenciones_medicas.fn_firmar_atencion(?, ?, ?)";
+        
+        try {
+            jdbcTemplate.queryForObject(sql, Void.class, idAtencion, hashFirma, tipoFirma);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al registrar la firma electrónica en la BD: " + e.getMessage(), e);
+        }
+    }
+    
+    @Override
     public void actualizarHashFirma(Long idAtencion, String hashFirma) {
         String sql = "UPDATE igm_atenciones_medicas.atenciones_medicas SET hash_firma_digital = ? WHERE id_atencion = ?";
         try {

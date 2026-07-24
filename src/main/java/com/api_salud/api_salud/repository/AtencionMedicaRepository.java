@@ -6,4 +6,5 @@ public interface AtencionMedicaRepository {
     String obtenerJsonAtencionPorId(Long idAtencion); // 🆕
     void actualizarEstadoFirma(Long idAtencion, String estadoFirma); // 🆕    
 	void actualizarHashFirma(Long idAtencion, String hashFirma);
+	void firmarAtencion(Long idAtencion, String hashFirma, String tipoFirma);
 }
