@@ -50,7 +50,7 @@ public class GuardarAtencionAndPdfTest {
     // =====================================================================
     // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
     // =====================================================================
-/*    @Test
+    @Test
     @Order(1)
     @Transactional
     @Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
@@ -83,49 +83,8 @@ public class GuardarAtencionAndPdfTest {
             fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage());
         }
     }
-*/
-    
-/*    
-    // =====================================================================
-    // TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
-    // =====================================================================
-    
-    
-    @Test
-    @Order(2)
-  //  @Transactional
-    @Commit // Asegura que los updates de la ruta y firma queden persistidos
-    void test2_FirmarYGenerarDocumentoPdf() {
-    	Long idAtencionCompartido =200L  ;
-    	String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
-    	System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
-        // Validamos que el primer test haya dejado un ID listo
-        assertNotNull(idAtencionCompartido, "No se puede firmar porque el ID de la atención es nulo (Falló el Test 1).");
 
-        try {
-            System.out.println("====== STEP 2: EJECUTANDO FIRMA Y GENERACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
-            
-            // Invocamos el segundo método independiente basado en la verdad de la BD
-            AtencionMedicaResponse response = atencionMedicaService.firmarYGenerarPdf(idAtencionCompartido);
-            // Aserciones del proceso de firmado
-            assertNotNull(response);
-            assertTrue(response.isExito());
-            assertEquals("FIRMADO_ELECTRONICO", response.getEstadoFirma());
-            
-            String rutaPdf = response.getRutaPdfFirmado();
-            assertNotNull(rutaPdf, "La ruta del PDF firmado no debería ser nula.");
-            System.out.println("RUTA PDF NO NULA : " + rutaPdf);
-
-            // Verificación física real en la unidad de almacenamiento/disco duro
-            File archivoFisico = new File(rutaPdf);
-            assertTrue(archivoFisico.exists(), "El archivo PDF no se encuentra físicamente en el disco.");
-            System.out.println("✔ ÉXITO: PDF validado en disco correctamente.");
-
-        } catch (Exception e) {
-            fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
-        }
-    }
-*/    
+    
  // =====================================================================
     // TEST 2: FIRMAR Y GUARDAR JSON EN DISCO (PASO 3 A PASO 7)
     // =====================================================================
@@ -133,33 +92,41 @@ public class GuardarAtencionAndPdfTest {
     @Order(2)
     @Commit
     void test2_FirmarYGuardarJsonEnDisco() {
-        // Validamos que el primer test haya asignado un ID válido
-//        assertNotNull(idAtencionCompartido, "No se puede firmar porque idAtencionCompartido es nulo (Falló el Test 1).");
-    	Long idAtencionCompartido =204L  ;
+        // Asignación explícita para pruebas aisladas o herencia del Test 1
+        Long idAtencionTest = (idAtencionCompartido != null) ? idAtencionCompartido : 208L;
+        assertNotNull(idAtencionTest, "No se puede firmar porque el ID de la atención es nulo.");
+
         try {
-            System.out.println("====== STEP 2: FIRMAR Y GENERAR JSON EN DISCO PARA ID: " + idAtencionCompartido + " ======");
+            System.out.println("====== STEP 2: FIRMAR Y GENERAR JSON EN DISCO PARA ID: " + idAtencionTest + " ======");
 
-            // Invocamos el servicio de firma digital / sellado
-            AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencionCompartido);
+            // 1. Invocamos el servicio de firma digital / sellado
+            AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencionTest);
 
-            // Aserciones de la respuesta
-            assertNotNull(response);
-            assertTrue(response.isExito());
-            assertEquals("FIRMADO_ELECTRONICO", response.getEstadoFirma());
+            // 2. Aserciones sobre la respuesta del DTO
+            assertNotNull(response, "La respuesta del servicio de firma no debe ser nula.");
+            assertTrue(response.isExito(), "El flag de éxito debe ser true.");
+            assertEquals("FIRMADO_ELECTRONICO", response.getEstadoFirma(), "El estado retornado debe ser FIRMADO_ELECTRONICO.");
             assertNotNull(response.getHashIntegridad(), "El hash de integridad SHA-256 no debería ser nulo.");
-            assertNotNull(response.getJsonEnriquecidoFirmado(), "El JSON enriquecido firmado devuelto al front no debe ser nulo.");
+            assertNotNull(response.getJsonEnriquecidoFirmado(), "El JSON enriquecido devuelto no debe ser nulo.");
 
             System.out.println("✔ HASH GENERADO: " + response.getHashIntegridad());
 
-            // Validación en Base de Datos: verificar que se recupera el JSON actualizado
-            String jsonEnBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
+            // 3. Validación en Base de Datos: verificar que fn_firmar_atencion actualizó el JSONB en PostgreSQL
+            String jsonEnBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionTest);
+            System.out.println("✔ JSON Obtenido: " + jsonEnBD);
+            
             assertNotNull(jsonEnBD, "No se pudo recuperar el JSON desde la BD.");
-            assertTrue(jsonEnBD.contains("FIRMADO_ELECTRONICO"), "El JSON recuperado de la BD debe reflejar el estado FIRMADO_ELECTRONICO.");
+            
+            // Verificación del estado dentro del String JSON recuperado de Neon PostgreSQL
+            assertTrue(jsonEnBD.contains("\"estadoFirma\":\"FIRMADO_ELECTRONICO\"") 
+                    || jsonEnBD.contains("\"estadoFirma\": \"FIRMADO_ELECTRONICO\"") 
+                    || jsonEnBD.contains("FIRMADO_ELECTRONICO"), 
+                    "El JSON recuperado de la BD debe reflejar el estado FIRMADO_ELECTRONICO.");
 
             System.out.println("✔ ÉXITO: Proceso de firma y validaciones completado correctamente.");
 
         } catch (Exception e) {
-            fail("El Test 2 (Firmar JSON) falló con excepción: " + e.getMessage());
+            fail("El Test 2 (Firmar JSON) falló con excepción: " + e.getMessage(), e);
         }
     }
     
@@ -234,3 +201,45 @@ String jsonNativo = "{" +
 "\"alta\": [{\"idAlta\": 0, \"descripcion\": \"Regresar en 15 días para control de laboratorio\"}] " +
 "}";
 */
+
+/*    
+// =====================================================================
+// TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
+// =====================================================================
+
+
+@Test
+@Order(2)
+//  @Transactional
+@Commit // Asegura que los updates de la ruta y firma queden persistidos
+void test2_FirmarYGenerarDocumentoPdf() {
+	Long idAtencionCompartido =200L  ;
+	String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
+	System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
+    // Validamos que el primer test haya dejado un ID listo
+    assertNotNull(idAtencionCompartido, "No se puede firmar porque el ID de la atención es nulo (Falló el Test 1).");
+
+    try {
+        System.out.println("====== STEP 2: EJECUTANDO FIRMA Y GENERACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
+        
+        // Invocamos el segundo método independiente basado en la verdad de la BD
+        AtencionMedicaResponse response = atencionMedicaService.firmarYGenerarPdf(idAtencionCompartido);
+        // Aserciones del proceso de firmado
+        assertNotNull(response);
+        assertTrue(response.isExito());
+        assertEquals("FIRMADO_ELECTRONICO", response.getEstadoFirma());
+        
+        String rutaPdf = response.getRutaPdfFirmado();
+        assertNotNull(rutaPdf, "La ruta del PDF firmado no debería ser nula.");
+        System.out.println("RUTA PDF NO NULA : " + rutaPdf);
+
+        // Verificación física real en la unidad de almacenamiento/disco duro
+        File archivoFisico = new File(rutaPdf);
+        assertTrue(archivoFisico.exists(), "El archivo PDF no se encuentra físicamente en el disco.");
+        System.out.println("✔ ÉXITO: PDF validado en disco correctamente.");
+
+    } catch (Exception e) {
+        fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
+    }
+}
+*/    

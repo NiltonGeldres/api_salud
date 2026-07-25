@@ -108,25 +108,56 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
     @Transactional
     public AtencionMedicaResponse firmarAtencion(Long idAtencion) {
         try {
-            // Paso 4: Obtener el JSON Enriquecido desde la BD
+            // 1. Obtener el JSON desde la BD
             String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
             if (jsonPayloadBD == null) {
                 throw new RuntimeException("No se encontró la atención médica con ID: " + idAtencion);
             }
 
-            // Paso 5: Generar Hash de integridad (SHA-256)
+            // 2. Parsear DTO para verificar el estado
+            AtencionMedicaPdfDTO dto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+
+            // =======================================================================
+            // 🚀 RUTA RÁPIDA: SI YA ESTÁ FIRMADO -> RETORNAR DIRECTO AL FRONTEND
+            // =======================================================================
+            if ("FIRMADO_ELECTRONICO".equalsIgnoreCase(dto.getEstadoFirma())) {
+                System.out.println("FIRMA YA REGISTRADA PARA ID " + idAtencion + ". Devolviendo información existente.");
+
+                // Recuperar el hash existente (del DTO o fallback de cálculo)
+                String hashExistente = dto.getHashFirma();
+                if (hashExistente == null || hashExistente.isEmpty()) {
+                    hashExistente = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
+                }
+
+                AtencionMedicaResponse response = new AtencionMedicaResponse(
+                        true, 
+                        "La atención médica ya se encuentra firmada electrónicamente.", 
+                        idAtencion, 
+                        3, 
+                        "FIRMADO_ELECTRONICO"
+                );
+                response.setJsonEnriquecidoFirmado(jsonPayloadBD);
+                response.setHashIntegridad(hashExistente);
+
+                return response; // Exit temprano
+            }
+
+            // =======================================================================
+            // ⚙️ RUTA COMPLETA: DOCUMENTO PENDIENTE DE FIRMA
+            // =======================================================================
+            
+            // Paso A: Generar Hash de integridad (SHA-256)
             String hashIntegridad = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
 
-            // Mapeamos a objeto para inyectar los datos de firma
-            AtencionMedicaPdfDTO dto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+            // Paso B: Inyectar datos de firma en el DTO
             dto.setHashFirma(hashIntegridad);
             dto.setEstadoFirma("FIRMADO_ELECTRONICO");
             dto.setFechaFirma(LocalDateTime.now().toString());
 
-            // Reconvertimos a String JSON para guardar la versión final firmada
+            // Paso C: Serializar JSON firmado
             String jsonFirmado = objectMapper.writeValueAsString(dto);
 
-            // Paso 6A: Guardar en estructura de disco (D:\ARCHIVO_DIGITAL\...)
+            // Paso D: Guardar en estructura de disco (.json)
             String entidad = (dto.getIdEntidad() != null) ? String.valueOf(dto.getIdEntidad()) : "SIN_ENTIDAD";
             String hc = (dto.getPaciente() != null) ? dto.getPaciente().getHc() : "SIN_HC";
             String plantilla = storageConfig.getPath().getHistorias(); 
@@ -135,15 +166,14 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                     .replace("{empresa}", entidad)
                     .replace("{paciente}", hc)
                     .replace("{atencion}", String.valueOf(idAtencion))
-                    .replace(".pdf", ".json"); // Guardamos como .json
+                    .replace(".pdf", ".json");
 
             storageService.guardar(rutaRelativaJson, jsonFirmado.getBytes(StandardCharsets.UTF_8));
 
-            // Paso 6B: Actualizar estado y hash en BD
-            atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
-            atencionMedicaRepository.actualizarHashFirma(idAtencion, hashIntegridad);
+            // Paso E: Ejecutar la función almacenada en PostgreSQL (actualiza columnas SQL + JSONB)
+            atencionMedicaRepository.firmarAtencion(idAtencion, hashIntegridad, "TOKEN");            
 
-            // Paso 7: Responder al Frontend con la payload enriquecida + hash para que dibuje el PDF
+            // Paso F: Responder al Frontend
             AtencionMedicaResponse response = new AtencionMedicaResponse(
                     true, 
                     "Atención firmada digitalmente con éxito.", 
@@ -151,7 +181,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                     3, 
                     "FIRMADO_ELECTRONICO"
             );
-            response.setJsonEnriquecidoFirmado(jsonFirmado); // Campo nuevo en tu Response DTO
+            response.setJsonEnriquecidoFirmado(jsonFirmado);
             response.setHashIntegridad(hashIntegridad);
 
             return response;
@@ -160,7 +190,6 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
         }
     }
-    
     
     
 }
