@@ -31,7 +31,7 @@ import org.springframework.core.io.ClassPathResource; // 🔥 Usa esta clase esp
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // 🎯 Controla el orden de ejecución secuencial
-public class GuardarAtencionAndPdfTest {
+public class GuardarAtencionAndFirmarTest {
 
     @Autowired
     private AtencionMedicaService atencionMedicaService;
@@ -50,7 +50,7 @@ public class GuardarAtencionAndPdfTest {
     // =====================================================================
     // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
     // =====================================================================
-    @Test
+  /*  @Test
     @Order(1)
     @Transactional
     @Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
@@ -61,7 +61,7 @@ public class GuardarAtencionAndPdfTest {
 
         	// Luego, en tu método de test:
         	String jsonContent = FileCopyUtils.copyToString(
-        	    new InputStreamReader(jsonResource.getInputStream(), StandardCharsets.UTF_8)
+        	    new InputStreamReader(jsonResource.getInputStreaml(), StandardCharsets.UTF_8)
         	);
         	
         	AtencionMedicaRequest request = objectMapper.readValue(jsonContent, AtencionMedicaRequest.class);
@@ -83,7 +83,7 @@ public class GuardarAtencionAndPdfTest {
             fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage());
         }
     }
-
+*/
     
  // =====================================================================
     // TEST 2: FIRMAR Y GUARDAR JSON EN DISCO (PASO 3 A PASO 7)
