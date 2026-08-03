@@ -1,7 +1,7 @@
 package com.api_salud.api_salud.service;
 
-
 import com.api_salud.api_salud.repository.CatalogoBienesRepository;
+import com.api_salud.api_salud.request.CatalogoBienesRequest;
 import com.api_salud.api_salud.response.CatalogoBienesResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,8 +18,17 @@ public class CatalogoBienesService {
         this.objectMapper = objectMapper;
     }
 
-    public CatalogoBienesResponse buscarBienes(Integer idEntidad, String busqueda, Integer tipoProducto, Integer limite, Integer pagina) {
-        String jsonResult = bienRepository.ejecutarFnBuscarCatalogoBienes(idEntidad, busqueda, tipoProducto, limite, pagina);
+    public CatalogoBienesResponse buscarBienes(CatalogoBienesRequest request) {
+        // 1. Ejecutar la función para obtener el String JSON
+        String jsonResult = bienRepository.ejecutarFnBuscarCatalogoBienes(
+                request.getIdEntidad(),
+                request.getTermino(),
+                request.getTipoProducto(),
+                request.getTamanoPagina(),
+                request.getPaginaActual()
+        );
+
+        // 2. Mapear el JSON al DTO de Respuesta
         try {
             return objectMapper.readValue(jsonResult, CatalogoBienesResponse.class);
         } catch (JsonProcessingException e) {

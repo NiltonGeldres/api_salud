@@ -1,8 +1,10 @@
-package com.api_salud.api_salud.dto;
+package com.api_salud.api_salud.dto; // Ajusta el paquete según corresponda
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BienDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -20,10 +22,12 @@ public class BienDTO implements Serializable {
     private BigDecimal precioVenta;
     private Integer idViaDefault;
     private Integer idUmDosisDefault;
+    private BigDecimal precioDistribucion;
 
     public BienDTO() {
     }
 
+    // Getters y Setters
     public Integer getIdProducto() {
         return idProducto;
     }
@@ -126,5 +130,13 @@ public class BienDTO implements Serializable {
 
     public void setIdUmDosisDefault(Integer idUmDosisDefault) {
         this.idUmDosisDefault = idUmDosisDefault;
+    }
+
+    public BigDecimal getPrecioDistribucion() {
+        return precioDistribucion;
+    }
+
+    public void setPrecioDistribucion(BigDecimal precioDistribucion) {
+        this.precioDistribucion = precioDistribucion;
     }
 }

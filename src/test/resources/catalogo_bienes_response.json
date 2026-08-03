@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "codigo": "00565",
+      "nombre": "AMBROXOL + LORATADINA  30 mg + 5 mg TAB",
+      "idProducto": 1789,
+      "idViaDefault": 3,
+      "presentacion": "",
+      "tipoProducto": 0,
+      "concentracion": "30 mg + 5 mg",
+      "nombreComercial": "AMBROXOL + LORATADINA  30 mg + 5 mg TAB",
+      "idUmDosisDefault": null,
+      "formaFarmaceutica": "TAB",
+      "precioDistribucion": 0,
+      "denominacionPrincipio": "AMBROXOL + LORATADINA",
+      "esProductoFarmaceutico": true
+    },
+    {
+      "codigo": "03438",
+      "nombre": "FENILPROPANOLAMINA + LORATADINA + PARACETAMOL  25 mg + 5 mg + 500 mg TAB",
+      "idProducto": 4395,
+      "idViaDefault": 3,
+      "presentacion": "",
+      "tipoProducto": 0,
+      "concentracion": "25 mg + 5 mg + 500 mg",
+      "nombreComercial": "FENILPROPANOLAMINA + LORATADINA + PARACETAMOL  25 mg + 5 mg + 500 mg TAB",
+      "idUmDosisDefault": null,
+      "formaFarmaceutica": "TAB",
+      "precioDistribucion": 0,
+      "denominacionPrincipio": "FENILPROPANOLAMINA + LORATADINA + PARACETAMOL",
+      "esProductoFarmaceutico": true
+    },
+   {
+      "codigo": "04482",
+      "nombre": "LORATADINA + PARACETAMOL + PSEUDOEFEDRINA 120 mL 2.5 mg + 325 mg + 15 mg/5 m JBE",
+      "idProducto": 5351,
+      "idViaDefault": 3,
+      "presentacion": "120 mL",
+      "tipoProducto": 0,
+      "concentracion": "2.5 mg + 325 mg + 15 mg/5 mL",
+      "nombreComercial": "LORATADINA + PARACETAMOL + PSEUDOEFEDRINA 120 mL 2.5 mg + 325 mg + 15 mg/5 m JBE",
+      "idUmDosisDefault": null,
+      "formaFarmaceutica": "JBE",
+      "precioDistribucion": 0,
+      "denominacionPrincipio": "LORATADINA + PARACETAMOL + PSEUDOEFEDRINA",
+      "esProductoFarmaceutico": true
+    }
+  ],
+  "meta": {
+    "idEntidad": 2,
+    "paginaActual": 1,
+    "tamanoPagina": 3,
+    "totalRegistros": 3,
+    "terminoBusqueda": "LORAT",
+    "tipoProductoFiltro": 0
+  },
+  "codigo": 200,
+  "estado": "EXITO"
+}
