@@ -22,10 +22,11 @@ class CatalogoBienesRepositoryTest {
     void testEjecutarFnBuscarCatalogoBienes_Exito() {
         // Arrange (Parámetros de prueba reales)
         Integer idEntidad = 2;
-        String termino = "LORA";
+        String termino = "amox";
         Integer tipoProducto = 0;
         Integer tamanoPagina = 20;
         Integer paginaActual = 1;
+        System.out.println("***** Arrange (Parámetros de prueba reales");
 
         // Act (Ejecución real contra la BD o entorno Spring)
         String jsonResult = bienRepository.ejecutarFnBuscarCatalogoBienes(
@@ -40,7 +41,7 @@ class CatalogoBienesRepositoryTest {
 
         // Assert (Validaciones sobre la cadena JSON)
         assertNotNull(jsonResult, "El resultado de la función no debe ser nulo");
-        assertTrue(jsonResult.contains("LORA"), "El JSON resultante debe contener el término buscado");
+        assertTrue(jsonResult.contains("amox"), "El JSON resultante debe contener el término buscado");
         assertTrue(jsonResult.contains("estado"), "El JSON debe incluir la estructura de respuesta (estado)");
         
         // Impresión opcional en consola para verificar la respuesta devuelta por BD

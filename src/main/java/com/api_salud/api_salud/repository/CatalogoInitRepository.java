@@ -11,29 +11,23 @@ import javax.sql.DataSource;
 import java.sql.Types;
 
 @Repository
-public class CatalogoServiciosRepository {
+public class CatalogoInitRepository {
 
     private final SimpleJdbcCall simpleJdbcCall;
 
-    public CatalogoServiciosRepository(DataSource dataSource) {
+    public CatalogoInitRepository(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         this.simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_maestros")
-                .withFunctionName("fn_buscar_catalogo_servicios");
+                .withFunctionName("fn_obtener_catalogos_init");
     }
 
-    public String ejecutarFnBuscarCatalogoServicios(Integer idEntidad, String busqueda, Integer tipoServicio, Integer limite, Integer pagina) {
+    public String ejecutarFnObtenerCatalogosInit(Integer idEntidad) {
         SqlParameterSource in = new MapSqlParameterSource()
-                .addValue("p_id_entidad", idEntidad, Types.INTEGER)
-                .addValue("p_busqueda", busqueda, Types.VARCHAR)
-                .addValue("p_tipo_servicio", tipoServicio, Types.INTEGER)
-                .addValue("p_limite", limite, Types.INTEGER)
-                .addValue("p_pagina", pagina, Types.INTEGER);
+                .addValue("p_id_entidad", idEntidad, Types.INTEGER);
 
-        // 1. Recuperar el resultado como Object (que internamente es PGobject)
         Object result = simpleJdbcCall.executeFunction(Object.class, in);
 
-        // 2. Extraer el valor en formato String si es PGobject
         if (result instanceof PGobject) {
             return ((PGobject) result).getValue();
         }
