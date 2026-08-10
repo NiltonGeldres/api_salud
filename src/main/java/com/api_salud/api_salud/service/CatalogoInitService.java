@@ -1,5 +1,6 @@
 package com.api_salud.api_salud.service;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.repository.CatalogoInitRepository;
 import com.api_salud.api_salud.response.CatalogoInitResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,7 +18,9 @@ public class CatalogoInitService {
         this.objectMapper = objectMapper;
     }
 
-    public CatalogoInitResponse obtenerCatalogosInit(Integer idEntidad) {
+    public CatalogoInitResponse obtenerCatalogosInit() {
+        Integer idEntidad = TenantContext.getEntidadId();
+        
         String jsonResult = initRepository.ejecutarFnObtenerCatalogosInit(idEntidad);
         try {
             return objectMapper.readValue(jsonResult, CatalogoInitResponse.class);

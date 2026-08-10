@@ -22,8 +22,8 @@ public class CatalogoInitController {
     }
 
     @GetMapping
-    public ResponseEntity<CatalogoInitResponse> obtenerCatalogosInit(@Valid CatalogoInitRequest request) {
-        CatalogoInitResponse response = initService.obtenerCatalogosInit(request.getIdEntidad());
+    public ResponseEntity<CatalogoInitResponse> obtenerCatalogosInit() {
+        CatalogoInitResponse response = initService.obtenerCatalogosInit();
         return ResponseEntity.ok(response);
     }
 }
