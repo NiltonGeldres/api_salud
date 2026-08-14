@@ -13,15 +13,21 @@ import java.sql.Types;
 @Repository
 public class CatalogoServiciosRepository {
 
-    private final SimpleJdbcCall simpleJdbcCall;
+	private final SimpleJdbcCall fnBuscarCatalogoServicios;
+    private final SimpleJdbcCall fnObtenerDetallePaqueteServicios;
 
     public CatalogoServiciosRepository(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        this.simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+
+        this.fnBuscarCatalogoServicios = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_maestros")
                 .withFunctionName("fn_buscar_catalogo_servicios");
-    }
 
+        this.fnObtenerDetallePaqueteServicios = new SimpleJdbcCall(jdbcTemplate)
+                .withSchemaName("igm_maestros")
+                .withFunctionName("fn_obtener_detalle_paquete_servicios");
+    }
+    
     public String ejecutarFnBuscarCatalogoServicios(Integer idEntidad, String busqueda, Integer tipoServicio, Integer limite, Integer pagina) {
         SqlParameterSource in = new MapSqlParameterSource()
                 .addValue("p_id_entidad", idEntidad, Types.INTEGER)
@@ -30,14 +36,24 @@ public class CatalogoServiciosRepository {
                 .addValue("p_limite", limite, Types.INTEGER)
                 .addValue("p_pagina", pagina, Types.INTEGER);
 
-        // 1. Recuperar el resultado como Object (que internamente es PGobject)
-        Object result = simpleJdbcCall.executeFunction(Object.class, in);
+        Object result = fnBuscarCatalogoServicios.executeFunction(Object.class, in);
+        return extraerJsonString(result);
+    }
+    
+    public String obtenerDetallePaqueteServicios(Integer idPaquete, Integer idEntidad) {
+        SqlParameterSource in = new MapSqlParameterSource()
+                .addValue("p_id_paquete", idPaquete, Types.INTEGER)
+                .addValue("p_id_entidad", idEntidad, Types.INTEGER);
 
-        // 2. Extraer el valor en formato String si es PGobject
+        Object result = fnObtenerDetallePaqueteServicios.executeFunction(Object.class, in);
+        return extraerJsonString(result);
+    }
+    
+    private String extraerJsonString(Object result) {
         if (result instanceof PGobject) {
             return ((PGobject) result).getValue();
         }
-
         return result != null ? result.toString() : null;
-    }
+    }    
+    
 }

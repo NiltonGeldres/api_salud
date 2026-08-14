@@ -1,6 +1,8 @@
 package com.api_salud.api_salud.service;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.repository.CatalogoBienesRepository;
+import com.api_salud.api_salud.request.CatalogoBienesPaqueteDetalleRequest;
 import com.api_salud.api_salud.request.CatalogoBienesRequest;
 import com.api_salud.api_salud.response.CatalogoBienesResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,4 +37,13 @@ public class CatalogoBienesService {
             throw new RuntimeException("Error al procesar JSON de catálogo de bienes", e);
         }
     }
+    
+    public String obtenerDetallePaqueteBienes(CatalogoBienesPaqueteDetalleRequest request) {
+        Integer idEntidad = TenantContext.getEntidadId();
+        return bienRepository.obtenerDetallePaqueteBienes(
+                request.getIdPaquete(),
+                idEntidad
+        );
+    }
+    
 }
