@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.request.CatalogoServiciosPaqueteDetalleRequest;
 import com.api_salud.api_salud.request.CatalogoServiciosRequest;
 import com.api_salud.api_salud.response.CatalogoServiciosResponse;
@@ -24,8 +26,9 @@ public class CatalogoServiciosController {
 
     @GetMapping("/buscar")
     public ResponseEntity<CatalogoServiciosResponse> buscarServicios(@Valid CatalogoServiciosRequest request) {
+    	Integer idEntidad = TenantContext.getEntidadId();    	
         CatalogoServiciosResponse response = serviciosService.buscarServicios(
-                request.getIdEntidad(),
+                idEntidad,
                 request.getBusqueda(),
                 request.getTipoServicio(),
                 request.getLimite(),

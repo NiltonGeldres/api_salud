@@ -14,7 +14,7 @@ public class CatalogoBienesService {
 
     private final CatalogoBienesRepository bienRepository;
     private final ObjectMapper objectMapper;
-
+    
     public CatalogoBienesService(CatalogoBienesRepository bienRepository, ObjectMapper objectMapper) {
         this.bienRepository = bienRepository;
         this.objectMapper = objectMapper;
@@ -22,8 +22,10 @@ public class CatalogoBienesService {
 
     public CatalogoBienesResponse buscarBienes(CatalogoBienesRequest request) {
         // 1. Ejecutar la función para obtener el String JSON
+    	Integer idEntidad = TenantContext.getEntidadId();
         String jsonResult = bienRepository.ejecutarFnBuscarCatalogoBienes(
-                request.getIdEntidad(),
+//                request.getIdEntidad(),
+        		idEntidad,
                 request.getTermino(),
                 request.getTipoProducto(),
                 request.getTamanoPagina(),

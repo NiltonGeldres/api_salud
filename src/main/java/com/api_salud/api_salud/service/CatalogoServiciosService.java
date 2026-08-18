@@ -20,6 +20,7 @@ public class CatalogoServiciosService {
     }
 
     public CatalogoServiciosResponse buscarServicios(Integer idEntidad, String busqueda, Integer tipoServicio, Integer limite, Integer pagina) {
+    	
         String jsonResult = serviciosRepository.ejecutarFnBuscarCatalogoServicios(idEntidad, busqueda, tipoServicio, limite, pagina);
         try {
             return objectMapper.readValue(jsonResult, CatalogoServiciosResponse.class);
