@@ -47,10 +47,49 @@ public class GuardarAtencionAndFirmarTest {
     @Autowired
     private ObjectMapper objectMapper;
     
+ // =====================================================================
+    // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
+    // =====================================================================
+    @Test
+    @Order(1)
+    @Transactional
+    @Commit // Guarda físicamente en Postgres para que el Test 2 pueda leerlo
+    void test1_GuardarAtencionMedica() {
+        try {
+            // Lectura del JSON de prueba (corregido getInputStream())
+            String jsonContent = FileCopyUtils.copyToString(
+                new InputStreamReader(jsonResource.getInputStream(), StandardCharsets.UTF_8)
+            );
+            
+            // Mapeo directo al DTO de solicitud
+            AtencionMedicaRequest request = objectMapper.readValue(jsonContent, AtencionMedicaRequest.class);
+            
+            System.out.println("====== STEP 1: EJECUTANDO PERSISTENCIA CLÍNICA ATÓMICA ======");
+            
+            // Invocación directa del servicio (sin capas HTTP/CORS intermadias)
+            AtencionMedicaResponse response = atencionMedicaService.guardarAtencionMedica(request);
+
+            // Aserciones del Guardado exitoso
+            assertNotNull(response, "La respuesta del servicio de guardado no debería ser nula.");
+            assertTrue(response.isExito(), "El indicador de éxito en la respuesta debe ser verdadero.");
+            assertNotNull(response.getIdAtencion(), "El ID de atención generado en la BD no debe ser nulo.");
+            assertEquals("PENDIENTE", response.getEstadoFirma(), "El estado inicial de la firma debe ser PENDIENTE.");
+            assertNull(response.getRutaPdfFirmado(), "La ruta del PDF debería ser nula en el guardado inicial.");
+
+            // Guardamos el ID en la variable estática para usarlo en el siguiente test
+            idAtencionCompartido = response.getIdAtencion();
+            System.out.println("✔ ÉXITO: Atención guardada correctamente en BD con ID: " + idAtencionCompartido);
+
+        } catch (Exception e) {
+            fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage(), e);
+        }
+    }
+    
+ /*   
     // =====================================================================
     // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
     // =====================================================================
-  /*  @Test
+    @Test
     @Order(1)
     @Transactional
     @Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
@@ -84,7 +123,7 @@ public class GuardarAtencionAndFirmarTest {
         }
     }
 */
-    
+ /*   
  // =====================================================================
     // TEST 2: FIRMAR Y GUARDAR JSON EN DISCO (PASO 3 A PASO 7)
     // =====================================================================
@@ -241,5 +280,6 @@ void test2_FirmarYGenerarDocumentoPdf() {
     } catch (Exception e) {
         fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
     }
-}
 */    
+}
+    

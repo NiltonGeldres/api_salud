@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/atenciones-medicas")
-@CrossOrigin(origins = "*") // Ajustar luego al dominio específico de React por seguridad CORS
+//@CrossOrigin(origins = "*") // Ajustar luego al dominio específico de React por seguridad CORS
 public class AtencionMedicaController {
 
     private final AtencionMedicaService atencionMedicaService;
