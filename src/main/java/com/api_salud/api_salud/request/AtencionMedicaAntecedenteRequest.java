@@ -1,5 +1,39 @@
 package com.api_salud.api_salud.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotBlank;
+
+public class AtencionMedicaAntecedenteRequest {
+
+    private Integer idAntecedente;
+
+    @NotBlank(message = "La descripción del antecedente es obligatoria.")
+    @JsonProperty("nombreAntecedente")
+    private String nombreAntecedente;
+
+    @JsonProperty("nombreAntecedente")
+    public void setNombreAntecedente(String nombreAntecedente) {
+        this.nombreAntecedente = nombreAntecedente;
+    }
+
+	public Integer getIdAntecedente() {
+		return idAntecedente;
+	}
+
+	public void setIdAntecedente(Integer idAntecedente) {
+		this.idAntecedente = idAntecedente;
+	}
+
+	public String getNombreAntecedente() {
+		return nombreAntecedente;
+	}
+
+}
+
+/*
+package com.api_salud.api_salud.request;
+
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -21,4 +55,4 @@ public class AtencionMedicaAntecedenteRequest {
     
     
     
-}
+}*/
