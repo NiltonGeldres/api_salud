@@ -6,6 +6,7 @@ public class PacienteCitadoDto {
 	    private String horaInicio;
 	    private String horaFin;
 	    private String nombres;
+	    private int idEspecialidad;
 	    private String especialidad;
 	    private boolean estadoCita;
 	    private String fecha;
@@ -34,6 +35,13 @@ public class PacienteCitadoDto {
 		}
 		public void setNombres(String nombres) {
 			this.nombres = nombres;
+		}
+
+		public int getIdEspecialidad() {
+			return idEspecialidad;
+		}
+		public void setIdEspecialidad(int idEspecialidad) {
+			this.idEspecialidad = idEspecialidad;
 		}
 		public String getEspecialidad() {
 			return especialidad;

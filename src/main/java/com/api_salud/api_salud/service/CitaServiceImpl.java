@@ -111,6 +111,7 @@ public class CitaServiceImpl  implements  CitaService{
             res.setHoraInicio(dto.getHoraInicio());
             res.setNombres(dto.getNombres());
             res.setEspecialidad(dto.getEspecialidad());
+            res.setIdEspecialidad(dto.getIdEspecialidad());
             res.setFecha(dto.getFecha());
             
             // Lógica de negocio para la etiqueta

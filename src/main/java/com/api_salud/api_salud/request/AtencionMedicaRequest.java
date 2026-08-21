@@ -54,6 +54,7 @@ public class AtencionMedicaRequest {
     @NotNull(message = "El idEntidad es mandatorio para el aislamiento Multi-tenant.")
     @Min(value = 1, message = "El idEntidad debe ser un identificador numérico válido.")
     private Integer idEntidad;
+    private Integer idEspecialidad;
 
     // OPCIONAL: Si no viene el objeto paciente, no bloquea la petición
     @Valid
@@ -142,6 +143,16 @@ public class AtencionMedicaRequest {
     
     public List<AtencionMedicaMedicacionRequest> getMedicacion() { return medicacion; }
     public void setMedicacion(List<AtencionMedicaMedicacionRequest> medicacion) { this.medicacion = medicacion; }
+
+	public Integer getIdEspecialidad() {
+		return idEspecialidad;
+	}
+
+	public void setIdEspecialidad(Integer idEspecialidad) {
+		this.idEspecialidad = idEspecialidad;
+	}
+
+    
 }
 
 /*

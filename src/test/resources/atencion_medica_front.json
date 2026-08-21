@@ -1,0 +1,29 @@
+{
+	"idPaciente":35,
+	"idCuentaAtencion":1,
+	"idServicio":1,
+	"idEspecialidad":2,
+	"idEstadoAtencion":3,
+	"estadoFirma":"PENDIENTE",
+	"origenRegistroUsuario":"MEDICO_WEB_APP",
+	"idMedicoIngreso":2,
+	"idEntidad":2,
+	"idUsuarioRegistro":12,
+		"alta":[
+			{"idAlta":0,"nombreAlta":"regresar  en 15 dias"}],
+		"triajes":[
+			{"idTriaje":50,"valorTriaje":"70"},
+			{"idTriaje":51,"valorTriaje":"175"}],
+		"antecedentes":[
+			{"idAntecedente":0,"nombreAntecedente":"dolor abdominal"}],
+		"sintomas":[
+			{"idSintoma":0,"nombreSintoma":"colicos diarrea"}],
+		"examenFisico":[
+			{"idExamenFisico":0,"nombreExamenFisico":"inflamacion estomacal"}],
+		"diagnosticos":[
+			{"idDiagnostico":59,"idSubclasificacion":1,"idDiagnosticoOrden":1}],
+		"examenesAuxiliares":[
+			{"idPuntoCarga":1,"idProducto":1,"cantidad":1,"idDiagnostico":1,"observacion":"Endoscopia digestiva alta"}],
+		"medicacion":[
+			{"idAlmacen":1,"idProducto":1,"cantidadDosis":1,"idUmDosis":1,"idFrecuenciaDosis":1,"cantidadPeriodo":7,"idViaAdministracion":1,"cantidadTotal":7,"indicaciones":"Esomeprazol  40 mg tab","idDiagnostico":1}]
+}

@@ -128,7 +128,10 @@ public class CitaDaoImpl implements CitaDao{
 
 	    // Ejecución
 	    Map<String, Object> out = call.execute(in);
-       
+	    
+
+	    
+	    System.out.println("CITADOS OUT " +  out);
 	    // Retornamos la lista casteada
 	    return (List<PacienteCitadoDto>) out.get("cur");
 	}

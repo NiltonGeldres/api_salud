@@ -4,6 +4,7 @@ public class PacienteCitadoResponse {
     private int idCita;       
     private String horaInicio;   
     private String nombres;      
+    private int idEspecialidad;
     private String especialidad;
     private String pagado; 
     private String atendido;
@@ -26,6 +27,13 @@ public class PacienteCitadoResponse {
 	}
 	public void setNombres(String nombres) {
 		this.nombres = nombres;
+	}
+
+	public int getIdEspecialidad() {
+		return idEspecialidad;
+	}
+	public void setIdEspecialidad(int idEspecialidad) {
+		this.idEspecialidad = idEspecialidad;
 	}
 	public String getEspecialidad() {
 		return especialidad;
