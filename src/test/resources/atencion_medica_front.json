@@ -27,3 +27,4 @@
 		"medicacion":[
 			{"idAlmacen":1,"idProducto":1,"cantidadDosis":1,"idUmDosis":1,"idFrecuenciaDosis":1,"cantidadPeriodo":7,"idViaAdministracion":1,"cantidadTotal":7,"indicaciones":"Esomeprazol  40 mg tab","idDiagnostico":1}]
 }
+

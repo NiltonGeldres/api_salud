@@ -118,12 +118,20 @@ public class CitaServiceImpl  implements  CitaService{
             String etiqueta = dto.getEstadoCita() ? "true" : "false";
             res.setAtendido(etiqueta);
             
+            res.setIdPaciente(dto.getIdPaciente());
+            res.setIdCuentaAtencion(dto.getIdCuentaAtencion());
+            res.setIdEstadoAtencion(dto.getIdEstadoAtencion());
+            res.setEstadoFirma(dto.getEstadoFirma());
+            res.setIdServicio(dto.getIdServicio());
+            res.setEstadoCita(dto.getEstadoCita());
+             
+            
             listaFinal.add(res);
         }
         
         return listaFinal;
     }
-  
+
 
 }
 

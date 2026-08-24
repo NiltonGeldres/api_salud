@@ -10,6 +10,15 @@ public class PacienteCitadoResponse {
     private String atendido;
     private String fecha;
 
+
+	private int idPaciente ;
+	private int idCuentaAtencion ;
+	private int idEstadoAtencion ;
+    private String estadoFirma;
+    private String horaFin;
+    private int idServicio;
+    private boolean estadoCita;
+    
 	public int getIdCita() {
 		return idCita;
 	}
@@ -58,6 +67,48 @@ public class PacienteCitadoResponse {
 	}
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
+	}
+	public int getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public int getIdCuentaAtencion() {
+		return idCuentaAtencion;
+	}
+	public void setIdCuentaAtencion(int idCuentaAtencion) {
+		this.idCuentaAtencion = idCuentaAtencion;
+	}
+	public int getIdEstadoAtencion() {
+		return idEstadoAtencion;
+	}
+	public void setIdEstadoAtencion(int idEstadoAtencion) {
+		this.idEstadoAtencion = idEstadoAtencion;
+	}
+	public String getEstadoFirma() {
+		return estadoFirma;
+	}
+	public void setEstadoFirma(String estadoFirma) {
+		this.estadoFirma = estadoFirma;
+	}
+	public String getHoraFin() {
+		return horaFin;
+	}
+	public void setHoraFin(String horaFin) {
+		this.horaFin = horaFin;
+	}
+	public int getIdServicio() {
+		return idServicio;
+	}
+	public void setIdServicio(int idServicio) {
+		this.idServicio = idServicio;
+	}
+	public boolean isEstadoCita() {
+		return estadoCita;
+	}
+	public void setEstadoCita(boolean estadoCita) {
+		this.estadoCita = estadoCita;
 	}
     
     

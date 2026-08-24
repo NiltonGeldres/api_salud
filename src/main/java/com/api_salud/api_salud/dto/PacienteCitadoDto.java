@@ -2,16 +2,27 @@ package com.api_salud.api_salud.dto;
 
 public class PacienteCitadoDto {
 
+		private int idPaciente ;
 		private int idCita ;
 	    private String horaInicio;
+		private int idCuentaAtencion ;
+		private int idEstadoAtencion ;
+	    private String estadoFirma;
 	    private String horaFin;
 	    private String nombres;
 	    private int idEspecialidad;
+	    private int idServicio;
 	    private String especialidad;
 	    private boolean estadoCita;
 	    private String fecha;
-
 	    
+	    
+		public int getIdPaciente() {
+			return idPaciente;
+		}
+		public void setIdPaciente(int idPaciente) {
+			this.idPaciente = idPaciente;
+		}
 		public int getIdCita() {
 			return idCita;
 		}
@@ -23,6 +34,24 @@ public class PacienteCitadoDto {
 		}
 		public void setHoraInicio(String horaInicio) {
 			this.horaInicio = horaInicio;
+		}
+		public int getIdCuentaAtencion() {
+			return idCuentaAtencion;
+		}
+		public void setIdCuentaAtencion(int idCuentaAtencion) {
+			this.idCuentaAtencion = idCuentaAtencion;
+		}
+		public int getIdEstadoAtencion() {
+			return idEstadoAtencion;
+		}
+		public void setIdEstadoAtencion(int idEstadoAtencion) {
+			this.idEstadoAtencion = idEstadoAtencion;
+		}
+		public String getEstadoFirma() {
+			return estadoFirma;
+		}
+		public void setEstadoFirma(String estadoFirma) {
+			this.estadoFirma = estadoFirma;
 		}
 		public String getHoraFin() {
 			return horaFin;
@@ -36,12 +65,17 @@ public class PacienteCitadoDto {
 		public void setNombres(String nombres) {
 			this.nombres = nombres;
 		}
-
 		public int getIdEspecialidad() {
 			return idEspecialidad;
 		}
 		public void setIdEspecialidad(int idEspecialidad) {
 			this.idEspecialidad = idEspecialidad;
+		}
+		public int getIdServicio() {
+			return idServicio;
+		}
+		public void setIdServicio(int idServicio) {
+			this.idServicio = idServicio;
 		}
 		public String getEspecialidad() {
 			return especialidad;
