@@ -1,24 +1,34 @@
 package com.api_salud.api_salud.response;
 public class PacienteCitadoResponse {
 	
+	private int idPaciente ;
+	private String nroHistoriaClinica ;
     private int idCita;       
     private String horaInicio;   
     private String nombres;      
     private int idEspecialidad;
     private String especialidad;
-    private String pagado; 
-    private String atendido;
     private String fecha;
-
-
-	private int idPaciente ;
-	private int idCuentaAtencion ;
-	private int idEstadoAtencion ;
-    private String estadoFirma;
+    
+	private String pagado; 
+    private int idCuentaAtencion ;
     private String horaFin;
     private int idServicio;
-    private boolean estadoCita;
     
+    private Integer estadoCita;
+    private Integer idAtencion;
+	public int getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public String getNroHistoriaClinica() {
+		return nroHistoriaClinica;
+	}
+	public void setNroHistoriaClinica(String nroHistoriaClinica) {
+		this.nroHistoriaClinica = nroHistoriaClinica;
+	}
 	public int getIdCita() {
 		return idCita;
 	}
@@ -37,7 +47,6 @@ public class PacienteCitadoResponse {
 	public void setNombres(String nombres) {
 		this.nombres = nombres;
 	}
-
 	public int getIdEspecialidad() {
 		return idEspecialidad;
 	}
@@ -50,47 +59,23 @@ public class PacienteCitadoResponse {
 	public void setEspecialidad(String especialidad) {
 		this.especialidad = especialidad;
 	}
-	public String getPagado() {
-		return pagado;
-	}
-	public void setPagado(String pagado) {
-		this.pagado = pagado;
-	}
-	public String getAtendido() {
-		return atendido;
-	}
-	public void setAtendido(String atendido) {
-		this.atendido = atendido;
-	}
 	public String getFecha() {
 		return fecha;
 	}
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-	public int getIdPaciente() {
-		return idPaciente;
+	public String getPagado() {
+		return pagado;
 	}
-	public void setIdPaciente(int idPaciente) {
-		this.idPaciente = idPaciente;
+	public void setPagado(String pagado) {
+		this.pagado = pagado;
 	}
 	public int getIdCuentaAtencion() {
 		return idCuentaAtencion;
 	}
 	public void setIdCuentaAtencion(int idCuentaAtencion) {
 		this.idCuentaAtencion = idCuentaAtencion;
-	}
-	public int getIdEstadoAtencion() {
-		return idEstadoAtencion;
-	}
-	public void setIdEstadoAtencion(int idEstadoAtencion) {
-		this.idEstadoAtencion = idEstadoAtencion;
-	}
-	public String getEstadoFirma() {
-		return estadoFirma;
-	}
-	public void setEstadoFirma(String estadoFirma) {
-		this.estadoFirma = estadoFirma;
 	}
 	public String getHoraFin() {
 		return horaFin;
@@ -104,17 +89,26 @@ public class PacienteCitadoResponse {
 	public void setIdServicio(int idServicio) {
 		this.idServicio = idServicio;
 	}
-	public boolean isEstadoCita() {
+	public Integer getEstadoCita() {
 		return estadoCita;
 	}
-	public void setEstadoCita(boolean estadoCita) {
+	public void setEstadoCita(Integer estadoCita) {
 		this.estadoCita = estadoCita;
 	}
-    
-    
+	public Integer getIdAtencion() {
+		return idAtencion;
+	}
+	public void setIdAtencion(Integer idAtencion) {
+		this.idAtencion = idAtencion;
+	}
 
-        
+//    private String atendido;
+//    private String estadoFirma;
+//	private int idEstadoAtencion ;
     
+    
+    
+   
     
     
 }

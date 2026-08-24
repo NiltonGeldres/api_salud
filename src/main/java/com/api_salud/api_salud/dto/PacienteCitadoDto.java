@@ -2,18 +2,18 @@ package com.api_salud.api_salud.dto;
 
 public class PacienteCitadoDto {
 
-		private int idPaciente ;
 		private int idCita ;
+		private String nroHistoriaClinica ;
+		private int idPaciente ;
 	    private String horaInicio;
 		private int idCuentaAtencion ;
-		private int idEstadoAtencion ;
-	    private String estadoFirma;
 	    private String horaFin;
 	    private String nombres;
 	    private int idEspecialidad;
 	    private int idServicio;
 	    private String especialidad;
-	    private boolean estadoCita;
+	    private Integer estadoCita;
+	    private Integer idAtencion;
 	    private String fecha;
 	    
 	    
@@ -29,6 +29,12 @@ public class PacienteCitadoDto {
 		public void setIdCita(int idCita) {
 			this.idCita = idCita;
 		}
+		public String getNroHistoriaClinica() {
+			return nroHistoriaClinica;
+		}
+		public void setNroHistoriaClinica(String nroHistoriaClinica) {
+			this.nroHistoriaClinica = nroHistoriaClinica;
+		}
 		public String getHoraInicio() {
 			return horaInicio;
 		}
@@ -40,18 +46,6 @@ public class PacienteCitadoDto {
 		}
 		public void setIdCuentaAtencion(int idCuentaAtencion) {
 			this.idCuentaAtencion = idCuentaAtencion;
-		}
-		public int getIdEstadoAtencion() {
-			return idEstadoAtencion;
-		}
-		public void setIdEstadoAtencion(int idEstadoAtencion) {
-			this.idEstadoAtencion = idEstadoAtencion;
-		}
-		public String getEstadoFirma() {
-			return estadoFirma;
-		}
-		public void setEstadoFirma(String estadoFirma) {
-			this.estadoFirma = estadoFirma;
 		}
 		public String getHoraFin() {
 			return horaFin;
@@ -83,10 +77,10 @@ public class PacienteCitadoDto {
 		public void setEspecialidad(String especialidad) {
 			this.especialidad = especialidad;
 		}
-		public boolean getEstadoCita() {
+		public Integer getEstadoCita() {
 			return estadoCita;
 		}
-		public void setEstadoCita(boolean estadoCita) {
+		public void setEstadoCita(Integer estadoCita) {
 			this.estadoCita = estadoCita;
 		}
 		public String getFecha() {
@@ -95,6 +89,13 @@ public class PacienteCitadoDto {
 		public void setFecha(String fecha) {
 			this.fecha = fecha;
 		}
+		public Integer getIdAtencion() {
+			return idAtencion;
+		}
+		public void setIdAtencion(Integer idAtencion) {
+			this.idAtencion = idAtencion;
+		}
 
 
+		
 }

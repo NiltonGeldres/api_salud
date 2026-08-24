@@ -35,8 +35,8 @@ public class CitaEntity {
 	@NotNull(message = "El dato idEstadoCita, no puede estar en blanco")
     int idEstadoCita;
 	
-	@NotNull(message = "El dato idAtencion, no puede estar en blanco")
-    int idAtencion;
+	//@NotNull(message = "El dato idAtencion, no puede estar en blanco")
+    Integer idAtencion;
 	
 	@NotNull(message = "El dato idMedico, no puede estar en blanco")
 	int idMedico;
@@ -116,11 +116,11 @@ public class CitaEntity {
 		this.idEstadoCita = idEstadoCita;
 	}
 
-	public int getIdAtencion() {
+	public Integer getIdAtencion() {
 		return idAtencion;
 	}
 
-	public void setIdAtencion(int idAtencion) {
+	public void setIdAtencion(Integer idAtencion) {
 		this.idAtencion = idAtencion;
 	}
 

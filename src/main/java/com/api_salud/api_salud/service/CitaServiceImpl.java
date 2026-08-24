@@ -105,25 +105,28 @@ public class CitaServiceImpl  implements  CitaService{
         
         for (PacienteCitadoDto dto : dtos) {
             PacienteCitadoResponse res = new PacienteCitadoResponse();
-            
+    	    
             // Unimos datos para el Response (Independencia de capas)
             res.setIdCita(dto.getIdCita());
+            res.setNroHistoriaClinica(dto.getNroHistoriaClinica());
+            res.setIdPaciente(dto.getIdPaciente());
             res.setHoraInicio(dto.getHoraInicio());
             res.setNombres(dto.getNombres());
             res.setEspecialidad(dto.getEspecialidad());
+            res.setIdServicio(dto.getIdServicio());
             res.setIdEspecialidad(dto.getIdEspecialidad());
             res.setFecha(dto.getFecha());
             
-            // Lógica de negocio para la etiqueta
-            String etiqueta = dto.getEstadoCita() ? "true" : "false";
-            res.setAtendido(etiqueta);
-            
-            res.setIdPaciente(dto.getIdPaciente());
             res.setIdCuentaAtencion(dto.getIdCuentaAtencion());
-            res.setIdEstadoAtencion(dto.getIdEstadoAtencion());
-            res.setEstadoFirma(dto.getEstadoFirma());
-            res.setIdServicio(dto.getIdServicio());
             res.setEstadoCita(dto.getEstadoCita());
+            res.setIdAtencion(dto.getIdAtencion());
+            
+            // Lógica de negocio para la etiqueta
+//          String etiqueta = (dto.getEstadoCita( )== 1) ? "false" : "true";
+//          res.setIdEstadoAtencion(dto.getIdEstadoAtencion());
+//          res.setEstadoFirma(dto.getEstadoFirma());
+//        String etiqueta = dto.getEstadoCita() ? "true" : "false";
+//        res.setAtendido(etiqueta);
              
             
             listaFinal.add(res);

@@ -244,7 +244,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			c.setIdCita(0);
 		    c.setIdPaciente(request.getIdPaciente());
 		    c.setIdEstadoCita(1);
-		    c.setIdAtencion(0);
+		    c.setIdAtencion(null);
 		    c.setIdServicio(request.getIdServicio());
 		    c.setIdProgramacion(request.getIdProgramacion());
 		    c.setFechaSolicitud(request.getFechaSolicitud());
