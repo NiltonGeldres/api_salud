@@ -190,7 +190,18 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
         }
     }
-    
+
+    @Override
+    @Transactional(readOnly = true)
+    public String obtenerJsonAtencion(Long idAtencion) {
+        String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+        
+        if (jsonAtencion == null || jsonAtencion.trim().isEmpty() || "{}".equals(jsonAtencion)) {
+            throw new RuntimeException("No se encontraron datos registrados para la atención con ID: " + idAtencion);
+        }
+        
+        return jsonAtencion;
+    }    
     
 }
 

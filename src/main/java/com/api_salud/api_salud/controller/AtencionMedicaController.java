@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/atenciones-medicas")
@@ -33,5 +35,28 @@ public class AtencionMedicaController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
+    @PostMapping("/{idAtencion}/firmar")
+    public ResponseEntity<AtencionMedicaResponse> firmarAtencion(
+            @PathVariable Long idAtencion) {
+        AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencion);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{idAtencion}/firmar-pdf")
+    public ResponseEntity<AtencionMedicaResponse> firmarYGenerarPdf(
+            @PathVariable Long idAtencion) {
+        AtencionMedicaResponse response = atencionMedicaService.firmarYGenerarPdf(idAtencion);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint para consultar y llevar los datos de la atención hacia afuera (sistemas externos/frontend).
+     * Devuelve el JSON plano generado por PostgreSQL.
+     */
+    @GetMapping(value = "/detalle/{idAtencion}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> obtenerAtencionPorId(@PathVariable Long idAtencion) {
+        String jsonAtencion = atencionMedicaService.obtenerJsonAtencion(idAtencion);
+        return ResponseEntity.ok(jsonAtencion);
+    }   
     
 }    
