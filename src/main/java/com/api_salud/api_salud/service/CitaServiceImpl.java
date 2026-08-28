@@ -47,7 +47,14 @@ public class CitaServiceImpl  implements  CitaService{
 	@Autowired
 	private CitaDao citaDao;
 
-
+	@Override
+	public boolean vincularAtencion(int idCita, Long idAtencion) {
+	    if (idCita <= 0 || idAtencion == null) {
+	        return false;
+	    }
+	    return citaDao.vincularAtencion(idCita, idAtencion);
+	}
+	
 	@Override
 	public List<PacienteCitadoResponse> citaPacienteListarPendientes(CitaPacientePendientesRequest request) {
 	    // Extraemos los datos del Request para el DAO

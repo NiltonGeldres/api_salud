@@ -18,6 +18,7 @@ public interface CitaService {
 	public int crearCita(CitaEntity c);	
 	public  CitaResponse leerCita(int idCita);	
 	public int  leerXIdProgramacionMedica(int  idProgramacionMedica);
+	boolean vincularAtencion(int idCita, Long idAtencion);
 
 }
 

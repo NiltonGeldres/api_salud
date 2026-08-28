@@ -82,6 +82,17 @@ public class CitaDaoImpl implements CitaDao{
 	MedicoDao medicoDao;
 	
 	@Override
+	public boolean vincularAtencion(int idCita, Long idAtencion) {
+	    String sql = "SELECT igm_citas.fn_citas_vincular_atencion(?, ?)";
+	    
+	    // Convertimos el idAtencion a Integer si la función lo recibe como INTEGER
+	    Integer idAtencionInt = (idAtencion != null) ? idAtencion.intValue() : null;
+
+	    Boolean resultado = jdbcTemplate.queryForObject(sql, Boolean.class, idCita, idAtencionInt);
+	    return Boolean.TRUE.equals(resultado);
+	}	
+	
+	@Override
 	public List<PacienteCitadoDto> citaPacienteListarPendientes(int idPaciente, String fecha) {
 	    // Configuramos la llamada al procedimiento de PostgreSQL
 	    SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)

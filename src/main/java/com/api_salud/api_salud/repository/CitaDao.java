@@ -17,6 +17,7 @@ public interface CitaDao {
 	public List<String> crearCuposProgramadasDiaTodas(String fecha, String horaInicio,String horaFin, int tiempoPromedioAtencion) ;
 	public List<String> cuposNoDisponibleDia(int idMedico, String fecha, int idEspecialidad);
 	public int leerXIdProgramacionMedica(int  idProgramacionMedica) ;
+	boolean vincularAtencion(int idCita, Long idAtencion);
 	
 	
 }

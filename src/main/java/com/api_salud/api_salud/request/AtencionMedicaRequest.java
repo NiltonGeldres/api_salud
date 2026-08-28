@@ -18,6 +18,10 @@ public class AtencionMedicaRequest {
 
     private Long idAtencion;
 
+    @NotNull(message = "El idCita es obligatorio.")
+    @Min(value = 1, message = "El idCita debe ser un identificador numérico válido.")
+    private Integer idCita;
+    
     @NotNull(message = "El idPaciente es obligatorio.")
     @Min(value = 1, message = "El idPaciente debe ser un identificador numérico válido.")
     private Integer idPaciente;
@@ -88,7 +92,21 @@ public class AtencionMedicaRequest {
     // --- GETTERS Y SETTERS ---
     public Long getIdAtencion() { return idAtencion; }
     
-    public void setIdAtencion(Long idAtencion) { this.idAtencion = idAtencion; }
+    
+    
+    public Integer getIdCita() {
+		return idCita;
+	}
+
+
+
+	public void setIdCita(Integer idCita) {
+		this.idCita = idCita;
+	}
+
+
+
+	public void setIdAtencion(Long idAtencion) { this.idAtencion = idAtencion; }
     
     public Integer getIdPaciente() { return idPaciente; }
     public void setIdPaciente(Integer idPaciente) { this.idPaciente = idPaciente; }

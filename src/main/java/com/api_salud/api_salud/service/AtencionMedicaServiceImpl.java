@@ -29,7 +29,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	private final StorageService storageService; 
     private final StorageConfig storageConfig;    
     private final SecurityUtils securityUtils; 
-    
+    private final CitaService citaService; // <--- INYECCIÓN
     
     @Value("${app.storage.ruta-pdfs}")
     private String rutaBasePdfs;
@@ -40,16 +40,18 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	        PdfGeneratorService pdfGeneratorService,
 	        StorageService storageService,
 	        StorageConfig storageConfig,
-	        SecurityUtils securityUtils)
+	        SecurityUtils securityUtils,
+	        CitaService citaService   )
     { 
 		this.atencionMedicaRepository = atencionMedicaRepository;
 		this.objectMapper = objectMapper;
 		this.pdfGeneratorService = pdfGeneratorService;
 		this.storageService = storageService;        
 		this.storageConfig = storageConfig;          
-		this.securityUtils = securityUtils;          
+		this.securityUtils = securityUtils;     
+		this.citaService = citaService;		
 	}    
-    
+/*    
     @Override
     @Transactional
     public AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request) {
@@ -62,6 +64,31 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error al guardar: " + e.getMessage(), e);
         }
     }
+ */   
+    @Override
+    @Transactional
+    public AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request) {
+        try {
+            request.setEstadoFirma("PENDIENTE");
+            String jsonPayload = objectMapper.writeValueAsString(request);
+            
+            // 1. Guardar la atención en PostgreSQL
+            Long idAtencionGenerado = atencionMedicaRepository.guardarAtencionMedicaCompleta(jsonPayload);
+            
+            // 2. Vincular el ID de atención generado con la Cita
+            if (request.getIdCita() != null && request.getIdCita() > 0) {
+                boolean vinculado = citaService.vincularAtencion(request.getIdCita(), idAtencionGenerado);
+                if (!vinculado) {
+                    System.err.println("Advertencia: No se pudo asociar la atención " + idAtencionGenerado + " a la cita " + request.getIdCita());
+                }
+            }
+
+            return new AtencionMedicaResponse(true, "Atención registrada.", idAtencionGenerado, request.getIdEstadoAtencion(), "PENDIENTE");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar: " + e.getMessage(), e);
+        }
+    }
+    
     
     @Override
     @Transactional 
