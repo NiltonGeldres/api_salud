@@ -20,77 +20,72 @@
         .info-bar { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 10px; margin-bottom: 1px; display: table; width: 100%; }
         .info-bar span { display: table-cell; }
 
-        /* Estilo para el nuevo título del documento */
-        .doc-title { text-align: center; font-size: 16px; font-weight: bold; color: #2c3e50; margin: 15px 0; text-transform: uppercase; }
+        .doc-title { text-align: center; font-size: 14px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; text-transform: uppercase; }
         
         .section { margin-bottom: 20px; }
         .section-title { background-color: #1B50EE; color: #ffffff; padding: 5px 10px; font-weight: bold; border-radius: 3px; margin-bottom: 10px; text-transform: uppercase; }
         
-        /* Estilos optimizados para Triaje */
-        .triaje-row { display: flex; justify-content: space-around; background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 4px; padding: 10px; margin-bottom: 15px; }
-        .triaje-item { text-align: center; padding: 0 10px; }
-        .triaje-label { font-size: 9px; font-weight: 700; color: #555; text-transform: uppercase; margin-bottom: 3px; }
-        .triaje-value { font-size: 13px; font-weight: 800; color: #000; }
-
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         th { background-color: #f2f2f2; border: 1px solid #ddd; padding: 8px; text-align: left; font-weight: bold; }
         td { border: 1px solid #ddd; padding: 8px; }
         
         .firma-container { margin-top: 20px; text-align: right; page-break-inside: avoid; }
         
-#header { 
-    position: running(header); 
-    width: 100%; 
-    border-bottom: 2px solid #2c3e50; 
-    padding-bottom: 5px;
-    margin-bottom: 10px; /* Separación clara del contenido */
-}
+        #header { 
+            position: running(header); 
+            width: 100%; 
+            border-bottom: 2px solid #2c3e50; 
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
 
-/* Tabla de Triaje Compacta */
-.tabla-triaje-horizontal {
-    width: 100%;
-    border-collapse: collapse;
-    background: #f8f9fa;
-    border: 1px solid #e1e4e8;
-    margin-bottom: 10px; /* Menos espacio abajo */
-}
+        /* Tabla de Triaje Compacta */
+        .tabla-triaje-horizontal {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            margin-bottom: 10px;
+        }
 
-.celda-triaje {
-    width: 33.33%;
-    text-align: center;
-    padding: 5px; /* Reducción de padding para bajar el alto */
-    border-right: 1px solid #e1e4e8;
-}
+        .celda-triaje {
+            width: 33.33%;
+            text-align: center;
+            padding: 5px;
+            border-right: 1px solid #e1e4e8;
+        }
 
-.triaje-label {
-    font-size: 11px; /* Todo a 11px como pediste */
-    font-weight: 700;
-    color: #555;
-    text-transform: capitalize;
-    margin-bottom: 0px;
-}
+        .triaje-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            text-transform: capitalize;
+            margin-bottom: 0px;
+        }
 
-.triaje-value {
-    font-size: 11px; /* Todo a 11px como pediste */
-    font-weight: 800;
-    color: #000;
-}
+        .triaje-value {
+            font-size: 11px;
+            font-weight: 800;
+            color: #000;
+        }
 
-.doc-title { 
-    text-align: center; 
-    font-size: 14px; 
-    font-weight: bold; 
-    color: #2c3e50; 
-    margin-bottom: 5px;
-    text-transform: uppercase; 
-}      
+        /* Estilo para sello de borrador */
+        .sello-borrador {
+            display: inline-block;
+            border: 2px dashed #a00;
+            padding: 8px 15px;
+            color: #a00;
+            text-align: center;
+            background-color: #fff5f5;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
 
 	<div class="header-content" id="header">
-	    <h2 th:text="${atencion.nombreEntidad}">Nombre de la Clínica</h2>
-	    <div >
+	    <h2 th:text="${atencion.nombreEntidad != null ? atencion.nombreEntidad : 'Atención Médica'}">Nombre de la Clínica</h2>
+	    <div>
 		    <div class="doc-title">ATENCIÓN DE CONSULTA EXTERNA</div>
 	        <p><strong>Especialidad:</strong> <span th:text="${atencion.nombreEspecialidad}"></span> | 
 	           <strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span> |
@@ -99,39 +94,45 @@
 	</div>
 
     <div id="footer">
-        Documento generado automáticamente por sistema HealthTech | ID Atencion: <span th:text="${atencion.idAtencion}"></span>
+        Documento generado automáticamente por sistema HealthTech | ID Atención: <span th:text="${atencion.idAtencion}"></span>
     </div>
 
-    <div class="info-bar">
+    <div class="info-bar" th:if="${atencion.paciente != null}">
         <span><strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span></span>
         <span><strong>N° Historia Clínica:</strong> <span th:text="${atencion.paciente.hc}"></span></span>
     </div>
 
-
     <!-- Sección Triaje Mejorada -->
-<div class="triaje-container">
-    <table class="tabla-triaje-horizontal">
-        <tr>
-            <!-- Si tienes 3 triajes, esto creará 3 columnas perfectas -->
-            <td th:each="triaje : ${atencion.triajes}" class="celda-triaje">
-                <div class="triaje-label" th:text="${triaje.nombreTriaje}"></div>
-                <div class="triaje-value" th:text="${triaje.valorTriaje}"></div>
-            </td>
-        </tr>
-    </table>
-</div>
+    <div class="triaje-container" th:if="${atencion.triajes != null and !#lists.isEmpty(atencion.triajes)}">
+        <table class="tabla-triaje-horizontal">
+            <tr>
+                <td th:each="triaje : ${atencion.triajes}" class="celda-triaje">
+                    <div class="triaje-label" th:text="${triaje.nombreTriaje}"></div>
+                    <div class="triaje-value" th:text="${triaje.valorTriaje}"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div class="section">
         <div class="section-title">Evaluación Clínica</div>
         <table>
-            <tr><th style="width: 20%;">Antecedentes</th><td th:text="${#strings.listJoin(atencion.antecedentes.![nombreAntecedente], ', ')}"></td></tr>
-            <tr><th>Síntomas</th><td th:text="${#strings.listJoin(atencion.sintomas.![nombreSintoma], ', ')}"></td></tr>
-            <tr><th>Examen Físico</th><td th:text="${#strings.listJoin(atencion.examenFisico.![nombreExamenFisico], ', ')}"></td></tr>
+            <tr>
+                <th style="width: 20%;">Antecedentes</th>
+                <td th:text="${atencion.antecedentes != null ? #strings.listJoin(atencion.antecedentes.![nombreAntecedente], ', ') : '-'}"></td>
+            </tr>
+            <tr>
+                <th>Síntomas</th>
+                <td th:text="${atencion.sintomas != null ? #strings.listJoin(atencion.sintomas.![nombreSintoma], ', ') : '-'}"></td>
+            </tr>
+            <tr>
+                <th>Examen Físico</th>
+                <td th:text="${atencion.examenFisico != null ? #strings.listJoin(atencion.examenFisico.![nombreExamenFisico], ', ') : '-'}"></td>
+            </tr>
         </table>
     </div>
 
-    <!-- Resto del contenido original se mantiene igual... -->
-    <div class="section">
+    <div class="section" th:if="${atencion.diagnosticos != null and !#lists.isEmpty(atencion.diagnosticos)}">
         <div class="section-title">Diagnósticos</div>
         <table>
             <thead><tr><th>Diagnóstico</th><th>Tipo</th></tr></thead>
@@ -146,8 +147,9 @@
 
     <div class="section">
         <div class="section-title">Plan de Trabajo y Medicación</div>
+        
         <p><strong>Exámenes Auxiliares:</strong></p>
-        <table>
+        <table th:if="${atencion.examenesAuxiliares != null and !#lists.isEmpty(atencion.examenesAuxiliares)}">
             <thead><tr><th>Procedimiento</th><th>Diagnóstico Asociado</th><th>Obs.</th></tr></thead>
             <tbody>
                 <tr th:each="ex : ${atencion.examenesAuxiliares}">
@@ -157,9 +159,10 @@
                 </tr>
             </tbody>
         </table>
+        <p th:if="${atencion.examenesAuxiliares == null or #lists.isEmpty(atencion.examenesAuxiliares)}">No registra exámenes auxiliares.</p>
         
         <p><strong>Medicamentos indicados:</strong></p>
-        <table>
+        <table th:if="${atencion.medicacion != null and !#lists.isEmpty(atencion.medicacion)}">
             <thead><tr><th>Medicamento</th><th>Vía</th><th>Dosis/Frecuencia</th><th>Diagnóstico</th></tr></thead>
             <tbody>
                 <tr th:each="m : ${atencion.medicacion}">
@@ -170,21 +173,52 @@
                 </tr>
             </tbody>
         </table>
+        <p th:if="${atencion.medicacion == null or #lists.isEmpty(atencion.medicacion)}">No registra medicación.</p>
     </div>
 
-    <div class="section">
+    <div class="section" th:if="${atencion.alta != null and !#lists.isEmpty(atencion.alta)}">
         <div class="section-title">Indicaciones de Alta</div>
         <ul>
             <li th:each="al : ${atencion.alta}" th:text="${al.nombreAlta}"></li>
         </ul>
     </div>
 
-    <div class="firma-container">
-        <img th:src="${firmaBase64}" style="width: 140px; height: auto;" />
-        <div style="border-top: 1px solid #000; width: 200px; margin-left: auto;"></div>
-        <p style="font-weight: bold; margin: 2px 0;" th:text="${'Medico: ' + atencion.nombreMedicoIngreso}"></p>
-        <p style="margin: 0;" th:text="${'CMP: ' + atencion.cmpMedico + ' - FIRMA ELECTRÓNICA'}"></p>
-    </div>
+    <!-- SECCIÓN DE FIRMA DINÁMICA -->
+	<!-- BLOQUE DE FIRMA DIGITAL -->
+	<div style="margin-top: 30px; text-align: right; float: right; width: 280px;">
+	
+	    <!-- ESTADO 1: BORRADOR (PASO 2) -->
+	    <div th:if="${atencion.estadoFirma != 'FIRMADO_ELECTRONICO'}">
+	        <div style="border: 1px dashed #777; background-color: #f8f9fa; padding: 10px; text-align: center; border-radius: 4px;">
+	            <span style="font-size: 10px; font-weight: bold; color: #c9302c; display: block;">
+	                DOCUMENTO BORRADOR
+	            </span>
+	            <span style="font-size: 8px; color: #666; display: block; margin-top: 2px;">
+	                Pendiente de Firma Digital
+	            </span>
+	        </div>
+	        <div style="border-top: 1px solid #333; margin-top: 8px;"></div>
+	        <p style="font-size: 10px; font-weight: bold; margin: 2px 0;" th:text="${'Médico: ' + atencion.nombreMedicoIngreso}"></p>
+	        <p style="font-size: 9px; margin: 0; color: #555;" th:text="${'CMP: ' + atencion.cmpMedico}"></p>
+	    </div>
+	
+	    <!-- ESTADO 2: FIRMADO DIGITALMENTE (PASO 3) -->
+	    <div th:if="${atencion.estadoFirma == 'FIRMADO_ELECTRONICO'}">
+	        <div style="border: 1px solid #0d6efd; background-color: #f0f7ff; padding: 8px; text-align: center; border-radius: 4px;">
+	            <span style="font-size: 9px; font-weight: bold; color: #0d6efd; display: block;">
+	                FIRMADO DIGITALMENTE
+	            </span>
+	            <span style="font-size: 8px; color: #333; display: block; margin-top: 2px;" 
+	                  th:text="${'Fecha: ' + atencion.fechaFirma}"></span>
+	        </div>
+	        <div style="border-top: 1px solid #000; margin-top: 6px;"></div>
+	        <p style="font-size: 10px; font-weight: bold; margin: 2px 0;" th:text="${'Médico: ' + atencion.nombreMedicoIngreso}"></p>
+	        <p style="font-size: 9px; margin: 0;" th:text="${'CMP: ' + atencion.cmpMedico}"></p>
+	        <p style="font-size: 7px; margin: 2px 0 0 0; color: #555; font-family: monospace; word-break: break-all;" 
+	           th:text="${'HASH SHA-256: ' + atencion.hashFirma}"></p>
+	    </div>
+	
+	</div>
 
 </body>
 </html>

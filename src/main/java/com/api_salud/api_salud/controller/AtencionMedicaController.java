@@ -42,10 +42,10 @@ public class AtencionMedicaController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{idAtencion}/firmar-pdf")
+    @PostMapping("/{idAtencion}/preparar-pdf")
     public ResponseEntity<AtencionMedicaResponse> firmarYGenerarPdf(
             @PathVariable Long idAtencion) {
-        AtencionMedicaResponse response = atencionMedicaService.firmarYGenerarPdf(idAtencion);
+        AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencion);
         return ResponseEntity.ok(response);
     }
 

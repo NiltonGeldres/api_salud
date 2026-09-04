@@ -50,7 +50,7 @@ public class GuardarAtencionAndFirmarTest {
  // =====================================================================
     // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
     // =====================================================================
-    @Test
+/*    @Test
     @Order(1)
     @Transactional
     @Commit // Guarda físicamente en Postgres para que el Test 2 pueda leerlo
@@ -83,56 +83,18 @@ public class GuardarAtencionAndFirmarTest {
         } catch (Exception e) {
             fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage(), e);
         }
-    }
+    }*/
     
- /*   
+     
     // =====================================================================
-    // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
-    // =====================================================================
-    @Test
-    @Order(1)
-    @Transactional
-    @Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
-    void test1_GuardarAtencionMedica() {
-        try {
-        	
-
-
-        	// Luego, en tu método de test:
-        	String jsonContent = FileCopyUtils.copyToString(
-        	    new InputStreamReader(jsonResource.getInputStreaml(), StandardCharsets.UTF_8)
-        	);
-        	
-        	AtencionMedicaRequest request = objectMapper.readValue(jsonContent, AtencionMedicaRequest.class);
-            System.out.println("====== STEP 1: EJECUTANDO PERSISTENCIA CLÍNICA ATÓMICA ======");
-            AtencionMedicaResponse response = atencionMedicaService.guardarAtencionMedica(request);
-
-            // Aserciones del Guardado exitoso
-            assertNotNull(response, "La respuesta del servicio de guardado no debería ser nula.");
-            assertTrue(response.isExito());
-            assertNotNull(response.getIdAtencion(), "El ID generado en la BD es nulo.");
-            assertEquals("PENDIENTE", response.getEstadoFirma(), "El estado inicial de la firma debe ser PENDIENTE.");
-            assertNull(response.getRutaPdfFirmado(), "La ruta del PDF debería ser nula en el guardado inicial.");
-
-            // Guardamos el ID en la variable estática para usarlo en el siguiente test
-            idAtencionCompartido = response.getIdAtencion();
-            System.out.println("✔ ÉXITO: Atención guardada correctamente en BD con ID: " + idAtencionCompartido);
-
-        } catch (Exception e) {
-            fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage());
-        }
-    }
-*/
- /*   
- // =====================================================================
     // TEST 2: FIRMAR Y GUARDAR JSON EN DISCO (PASO 3 A PASO 7)
     // =====================================================================
-    @Test
+/*    @Test
     @Order(2)
     @Commit
     void test2_FirmarYGuardarJsonEnDisco() {
         // Asignación explícita para pruebas aisladas o herencia del Test 1
-        Long idAtencionTest = (idAtencionCompartido != null) ? idAtencionCompartido : 208L;
+        Long idAtencionTest = (idAtencionCompartido != null) ? idAtencionCompartido : 281L;
         assertNotNull(idAtencionTest, "No se puede firmar porque el ID de la atención es nulo.");
 
         try {
@@ -169,8 +131,47 @@ public class GuardarAtencionAndFirmarTest {
         }
     }
     
+*/    
+
     
+	// =====================================================================
+	// TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
+	// =====================================================================
+	
+	
+    @Test
+    @Order(2)
+    @Commit
+    void test2_FirmarYGenerarDocumentoPdf() {
+        Long idAtencionCompartido = 281L;
+        String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
+        System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
+
+        assertNotNull(idAtencionCompartido, "El ID de la atención no debe ser nulo.");
+
+        try {
+            System.out.println("====== STEP 2: EJECUTANDO PREPARACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
+            
+            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencionCompartido);
+            
+            assertNotNull(response);
+            assertTrue(response.isExito());
+            assertEquals("PENDIENTE_FIRMA", response.getEstadoFirma());
+            
+            // Validar que se generó el Hash de Integridad y la ruta asignada
+            assertNotNull(response.getHashIntegridad(), "El Hash SHA-256 no debe ser nulo.");
+            assertNotNull(response.getRutaPdfFirmado(), "La ruta del PDF asignada no debe ser nula.");
+            
+            System.out.println("✔ HASH GENERADO: " + response.getHashIntegridad());
+            System.out.println("✔ RUTA ASIGNADA: " + response.getRutaPdfFirmado());
+
+        } catch (Exception e) {
+            fail("El Test 2 falló por una excepción: " + e.getMessage());
+        }
+    }
+
 }
+    
 
 /*String jsonNativo = "{\n" +
 "  \"idPaciente\": 34,\n" +
@@ -241,6 +242,49 @@ String jsonNativo = "{" +
 "}";
 */
 
+
+
+/*   
+// =====================================================================
+// TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
+// =====================================================================
+@Test
+@Order(1)
+@Transactional
+@Commit // 🔥 Guarda físicamente en Postgres para que el Test 2 pueda leerlo
+void test1_GuardarAtencionMedica() {
+    try {
+    	
+
+
+    	// Luego, en tu método de test:
+    	String jsonContent = FileCopyUtils.copyToString(
+    	    new InputStreamReader(jsonResource.getInputStreaml(), StandardCharsets.UTF_8)
+    	);
+    	
+    	AtencionMedicaRequest request = objectMapper.readValue(jsonContent, AtencionMedicaRequest.class);
+        System.out.println("====== STEP 1: EJECUTANDO PERSISTENCIA CLÍNICA ATÓMICA ======");
+        AtencionMedicaResponse response = atencionMedicaService.guardarAtencionMedica(request);
+
+        // Aserciones del Guardado exitoso
+        assertNotNull(response, "La respuesta del servicio de guardado no debería ser nula.");
+        assertTrue(response.isExito());
+        assertNotNull(response.getIdAtencion(), "El ID generado en la BD es nulo.");
+        assertEquals("PENDIENTE", response.getEstadoFirma(), "El estado inicial de la firma debe ser PENDIENTE.");
+        assertNull(response.getRutaPdfFirmado(), "La ruta del PDF debería ser nula en el guardado inicial.");
+
+        // Guardamos el ID en la variable estática para usarlo en el siguiente test
+        idAtencionCompartido = response.getIdAtencion();
+        System.out.println("✔ ÉXITO: Atención guardada correctamente en BD con ID: " + idAtencionCompartido);
+
+    } catch (Exception e) {
+        fail("El Test 1 (Guardar) falló por una excepción: " + e.getMessage());
+    }
+}
+*/
+
+    
+
 /*    
 // =====================================================================
 // TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
@@ -281,5 +325,3 @@ void test2_FirmarYGenerarDocumentoPdf() {
         fail("El Test 2 (Firma/PDF) falló por una excepción: " + e.getMessage());
     }
 */    
-}
-    
