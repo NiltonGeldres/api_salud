@@ -20,7 +20,22 @@
 	<description>api_salud project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
+<aws.sdk.version>2.20.26</aws.sdk.version>		
 	</properties>
+	
+<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${aws.sdk.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -105,6 +120,19 @@
 			    <artifactId>flying-saucer-pdf-openpdf</artifactId>
 			    <version>9.1.22</version>
 			</dependency>
+
+<!-- AWS S3 SDK v2 compatible con Cloudflare R2 -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+		</dependency>
+
+		<!-- Cliente HTTP URLConnection compatible con Java 8 (evita errores con Netty en Java 8) -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>url-connection-client</artifactId>
+		</dependency>
+		
 		  
 	</dependencies>
 

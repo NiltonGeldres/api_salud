@@ -13,8 +13,22 @@ public interface AtencionMedicaService {
      * @param request Payload estructurado con la cabecera y el detalle de la consulta médica.
      * @return AtencionMedicaResponse Metadatos de éxito y el ID definitivo de la atención.
      */
+	// Crear un borrador nuevo
+    AtencionMedicaResponse guardarBorrador(AtencionMedicaRequest request);
+
+    // Actualizar borrador existente
+    AtencionMedicaResponse actualizarBorrador(AtencionMedicaRequest request);
+
+    // Guardar completo / Finalizar
     AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request);
+    
 	AtencionMedicaResponse firmarAtencion(Long idAtencion);
 	String obtenerJsonAtencion(Long idAtencion);
-	AtencionMedicaResponse prepararPdf(Long idAtencion);
+//	AtencionMedicaResponse prepararPdf(Long idAtencion);
+
+	/**
+	 * PASO 2: Generación del borrador PDF y congelamiento de Hash SHA-256
+	 * Estado en BD: PENDIENTE_FIRMA
+	 */
+	AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request);
 }

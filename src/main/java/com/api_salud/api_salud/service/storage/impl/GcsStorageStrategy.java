@@ -18,4 +18,12 @@ public class GcsStorageStrategy implements StorageStrategy {
     public void save(String path, byte[] content) {
         // Aquí irá la lógica de GCS más adelante
     }
+    
+    @Override
+    public String getUrl(String path) {
+        // En GCS se retornará la Signed URL o URL pública del Bucket
+        String objectName = path.startsWith("/") ? path.substring(1) : path;
+//        return "https://storage.googleapis.com/" + config.getGcs().getBucketName() + "/" + objectName;
+        return "";
+    }    
 }

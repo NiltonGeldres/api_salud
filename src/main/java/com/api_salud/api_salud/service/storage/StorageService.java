@@ -1,9 +1,9 @@
 package com.api_salud.api_salud.service.storage;
 
 import org.springframework.stereotype.Service;
-import com.api_salud.api_salud.service.storage.impl.GcsStorageStrategy;
 import com.api_salud.api_salud.config.StorageConfig;
-import com.api_salud.api_salud.service.storage.impl.LocalStorageStrategy; // <--- ESTA ES LA QUE FALTA
+import com.api_salud.api_salud.service.storage.impl.LocalStorageStrategy;
+import com.api_salud.api_salud.service.storage.impl.R2StorageStrategy;
 
 @Service
 public class StorageService {
@@ -13,17 +13,24 @@ public class StorageService {
 
     public StorageService(StorageConfig config) {
         this.config = config;
-        // Decisión en tiempo de ejecución
-        if ("CLOUD".equals(config.getProvider())) {
-            this.strategy = new GcsStorageStrategy(config);
+        
+        String provider = config.getProvider();
+        System.out.println("=== ESTRATEGIA DE ALMACENAMIENTO SELECCIONADA: " + provider + " ===");
+
+        if ("CLOUD".equalsIgnoreCase(provider) || "R2".equalsIgnoreCase(provider)) {
+            System.out.println("=== USANDO R2 STORAGE STRATEGY ===");
+            this.strategy = new R2StorageStrategy(config);
         } else {
+            System.out.println("=== USANDO LOCAL STORAGE STRATEGY ===");
             this.strategy = new LocalStorageStrategy(config);
         }
     }
 
     public void guardar(String rutaRelativa, byte[] content) {
-        // La ruta relativa (ej: /EMP01/historias_EMP01/...) 
-        // se maneja igual para ambos, la estrategia decide cómo escribirla
         strategy.save(rutaRelativa, content);
+    }
+
+    public String obtenerUrlPublica(String rutaRelativa) {
+        return strategy.getUrl(rutaRelativa);
     }
 }

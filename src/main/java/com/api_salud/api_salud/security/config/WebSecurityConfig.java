@@ -68,11 +68,15 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
         .csrf().disable() // (2)
+        .headers().frameOptions().disable()   
+        .and()        
         .authorizeRequests()
         .antMatchers("/auth").permitAll()
         .antMatchers("/signin").permitAll()
         .antMatchers("/entidad_por_nombre").permitAll()
         .antMatchers("/usuarioDatosGlobales").permitAll()
+        .antMatchers("/archivos-locales/**").permitAll()
+        
         .antMatchers("/admin").hasAuthority("Administrador")
 //        .antMatchers("/adicionales").hasAuthority("Administrador")
         .anyRequest().authenticated()

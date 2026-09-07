@@ -1,5 +1,6 @@
 package com.api_salud.api_salud.request;
 
+import com.api_salud.api_salud.request.validation.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,78 +17,99 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AtencionMedicaRequest {
 
-    private Long idAtencion;
+	private Long idAtencion;
 
-    @NotNull(message = "El idCita es obligatorio.")
-    @Min(value = 1, message = "El idCita debe ser un identificador numérico válido.")
+    // =========================================================================
+    // 1. DATOS DE CABECERA Y FILIACIÓN (OBLIGATORIOS SIEMPRE: Borrador y Completo)
+    // =========================================================================
+
+  //  @NotNull(message = "Los datos de filiación del paciente (HC y Nombre) son obligatorios.", 
+     //        groups = ValidationGroups.BorradorGroup.class)
+  //  @Valid
+    private AtencionMedicaPacienteRequest paciente; // 🟢 OBLIGATORIO DESDE EL INICIO
+
+    @NotNull(message = "El idCita es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idCita debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idCita;
     
-    @NotNull(message = "El idPaciente es obligatorio.")
-    @Min(value = 1, message = "El idPaciente debe ser un identificador numérico válido.")
+    @NotNull(message = "El idPaciente es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idPaciente debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idPaciente;
 
-    @NotNull(message = "El idCuentaAtencion es obligatorio.")
-    @Min(value = 1, message = "El idCuentaAtencion debe ser un identificador numérico válido.")
+    @NotNull(message = "El idCuentaAtencion es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idCuentaAtencion debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idCuentaAtencion;
 
-    @NotNull(message = "El idServicio es obligatorio.")
-    @Min(value = 1, message = "El idServicio debe ser un identificador numérico válido.")
+    @NotNull(message = "El idServicio es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idServicio debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idServicio;
 
-    @NotNull(message = "El idMedicoIngreso es obligatorio.")
-    @Min(value = 1, message = "El idMedicoIngreso debe ser un identificador numérico válido.")
+    @NotNull(message = "El idMedicoIngreso es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idMedicoIngreso debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idMedicoIngreso;
 
-    @NotNull(message = "El idEstadoAtencion es obligatorio.")
-    @Min(value = 1, message = "El idEstadoAtencion debe ser un identificador numérico válido.")
+    @NotNull(message = "El idEstadoAtencion es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idEstadoAtencion debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idEstadoAtencion;
 
-    @NotNull(message = "El idUsuarioRegistro es obligatorio.")
-    @Min(value = 1, message = "El idUsuarioRegistro debe ser un identificador numérico válido.")
+    @NotNull(message = "El idUsuarioRegistro es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idUsuarioRegistro debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idUsuarioRegistro;
 
-    @NotBlank(message = "El origen del registro no puede estar vacío.")
-    @Size(max = 50, message = "El origen del registro no puede exceder los 50 caracteres.")
+    @NotBlank(message = "El origen del registro es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
+    @Size(max = 50, message = "El origen no puede exceder 50 caracteres.", groups = ValidationGroups.BorradorGroup.class)
     private String origenRegistroUsuario;
 
-    @NotBlank(message = "El estado de la firma es obligatorio.")
+    @NotBlank(message = "El estado de la firma es obligatorio.", groups = ValidationGroups.BorradorGroup.class)
     @Pattern(regexp = "^(BORRADOR|PENDIENTE|FIRMADO_ELECTRONICO)$", 
-             message = "El estado de la firma no corresponde a los valores permitidos.")
+             message = "Estado de firma no permitido.", groups = ValidationGroups.BorradorGroup.class)
     private String estadoFirma;
 
-    @NotNull(message = "El idEntidad es mandatorio para el aislamiento Multi-tenant.")
-    @Min(value = 1, message = "El idEntidad debe ser un identificador numérico válido.")
+    @NotNull(message = "El idEntidad es mandatorio para aislamiento Multi-tenant.", groups = ValidationGroups.BorradorGroup.class)
+    @Min(value = 1, message = "El idEntidad debe ser válido.", groups = ValidationGroups.BorradorGroup.class)
     private Integer idEntidad;
+
     private Integer idEspecialidad;
 
-    // OPCIONAL: Si no viene el objeto paciente, no bloquea la petición
-    @Valid
-    private AtencionMedicaPacienteRequest paciente; 
+    // =========================================================================
+    // 2. SECCIONES CLÍNICAS OBLIGATORIAS EN ATENCIÓN COMPLETA (CompletoGroup)
+    // =========================================================================
 
+    @NotEmpty(message = "Los datos de triaje / signos vitales son obligatorios para cerrar la atención.", 
+              groups = ValidationGroups.CompletoGroup.class)
     @Valid
-    private List<AtencionMedicaAltaRequest> alta;
-    
-    @Valid
-    private List<AtencionMedicaTriajeRequest> triajes; // Mapeado en plural para hacer match con el JSON
+    private List<AtencionMedicaTriajeRequest> triajes; // 🟡 REQUERIDO SOLO EN ATENCIÓN COMPLETA
 
+    @NotEmpty(message = "Los antecedentes son obligatorios.", groups = ValidationGroups.CompletoGroup.class)
     @Valid
     private List<AtencionMedicaAntecedenteRequest> antecedentes;
 
+    @NotEmpty(message = "Los síntomas son obligatorios.", groups = ValidationGroups.CompletoGroup.class)
     @Valid
     private List<AtencionMedicaSintomaRequest> sintomas;
 
+    @NotEmpty(message = "El examen físico es obligatorio.", groups = ValidationGroups.CompletoGroup.class)
     @Valid
     private List<AtencionMedicaExamenFisicoRequest> examenFisico;
 
-    @NotEmpty(message = "La atención debe registrar obligatoriamente al menos un diagnóstico.")
+    @NotEmpty(message = "Debe registrar obligatoriamente al menos un diagnóstico.", groups = ValidationGroups.CompletoGroup.class)
     @Valid
     private List<AtencionMedicaDiagnosticoRequest> diagnosticos;
 
+    @NotEmpty(message = "El registro de alta/salida es obligatorio.", groups = ValidationGroups.CompletoGroup.class)
     @Valid
-    private List<AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares;
+    private List<AtencionMedicaAltaRequest> alta;
+
+    // =========================================================================
+    // 3. SECCIONES CLÍNICAS OPCIONALES (Pueden quedar vacías en el PDF)
+    // =========================================================================
+
+    @Valid
+    private List<AtencionMedicaExamenAuxiliarRequest> examenesAuxiliares; 
 
     @Valid
     private List<AtencionMedicaMedicacionRequest> medicacion;
+    
 
     // --- GETTERS Y SETTERS ---
     public Long getIdAtencion() { return idAtencion; }

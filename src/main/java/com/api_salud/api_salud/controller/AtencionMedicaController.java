@@ -1,10 +1,12 @@
 package com.api_salud.api_salud.controller;
 
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
+import com.api_salud.api_salud.request.validation.ValidationGroups;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.service.AtencionMedicaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +25,48 @@ public class AtencionMedicaController {
         this.atencionMedicaService = atencionMedicaService;
     }
 
+    /**
+     * 1. CREAR BORRADOR (POST)
+     * Permisivo: Solo valida IDs de estructura y Tenant (BorradorGroup).
+     */
+    @PostMapping("/guardar-borrador")
+    public ResponseEntity<AtencionMedicaResponse> crearAtencionBorrador(
+            @Validated(ValidationGroups.BorradorGroup.class) @RequestBody AtencionMedicaRequest request) {
+        
+        AtencionMedicaResponse response = atencionMedicaService.guardarBorrador(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * 2. ACTUALIZAR BORRADOR (PUT)
+     * Permisivo: Solo valida IDs de estructura y Tenant (BorradorGroup).
+     */
+    @PutMapping("/actualizar-borrador/{idAtencion}")
+    public ResponseEntity<AtencionMedicaResponse> actualizarAtencionBorrador(
+            @PathVariable Long idAtencion,
+            @Validated(ValidationGroups.BorradorGroup.class) @RequestBody AtencionMedicaRequest request) {
+        
+        request.setIdAtencion(idAtencion);
+        AtencionMedicaResponse response = atencionMedicaService.actualizarBorrador(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 3. GENERAR PDF BORRADOR / VALIDAR (POST)
+     * Estricto: Valida tanto el BorradorGroup como las colecciones obligatorias (CompletoGroup).
+     */
+    @PostMapping("/preparar-pdf")
+    public ResponseEntity<AtencionMedicaResponse> prepararPdfBorrador(
+            @Validated(ValidationGroups.CompletoGroup.class) @RequestBody AtencionMedicaRequest request) {
+        
+        AtencionMedicaResponse response = atencionMedicaService.prepararPdf(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    /**
+     * 3. GUARDAR VERSION PROBADA ANTES DE FIRMA Y DE PDF / VALIDAR (POST)
+     * Estricto: Valida tanto el BorradorGroup como las colecciones obligatorias (CompletoGroup).
+     */    
     @PostMapping("/guardar")
     public ResponseEntity<AtencionMedicaResponse> guardarAtencionCompleta(
             @Valid @RequestBody AtencionMedicaRequest request) {
@@ -41,14 +85,14 @@ public class AtencionMedicaController {
         AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencion);
         return ResponseEntity.ok(response);
     }
-
+/*
     @PostMapping("/{idAtencion}/preparar-pdf")
     public ResponseEntity<AtencionMedicaResponse> firmarYGenerarPdf(
             @PathVariable Long idAtencion) {
         AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencion);
         return ResponseEntity.ok(response);
     }
-
+*/
     /**
      * Endpoint para consultar y llevar los datos de la atención hacia afuera (sistemas externos/frontend).
      * Devuelve el JSON plano generado por PostgreSQL.

@@ -2,6 +2,7 @@ package com.api_salud.api_salud.security.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -13,6 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
         .addMapping("/**")
        .allowedOrigins( 
     		             "http://localhost:3000",
+    		             "http://localhost:8080", // 🟢 AGREGADO    		             
     		             "http://192.168.0.200:3000",
     		             "http://192.168.0.6:3000",
     		             "http://190.117.218.137:3000",
@@ -24,6 +26,9 @@ public class CorsConfig implements WebMvcConfigurer {
         .allowCredentials(true);
     
   }
+  
+
+  
   
 }
 

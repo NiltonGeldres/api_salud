@@ -39,6 +39,9 @@ public class GuardarAtencionAndFirmarTest {
     @Autowired
     private AtencionMedicaRepository atencionMedicaRepository;
 
+    @Autowired
+    private AtencionMedicaRequest atencionMedicaRequest;
+    
     // Variable estática para compartir el ID generado entre el Test 1 y el Test 2
     private static Long idAtencionCompartido;
     
@@ -148,12 +151,13 @@ public class GuardarAtencionAndFirmarTest {
         System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
 
         assertNotNull(idAtencionCompartido, "El ID de la atención no debe ser nulo.");
-
+        
         try {
             System.out.println("====== STEP 2: EJECUTANDO PREPARACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
             
-            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencionCompartido);
-            
+//            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencionCompartido);
+            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(atencionMedicaRequest);
+                        
             assertNotNull(response);
             assertTrue(response.isExito());
             assertEquals("PENDIENTE_FIRMA", response.getEstadoFirma());

@@ -16,11 +16,29 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
     private final SimpleJdbcCall jdbcCallGuardar;
     private final SimpleJdbcCall jdbcCallFirmar; // <-- Nuevo SimpleJdbcCall para la firma
     private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcCall jdbcCallGuardarBorrador;
+    private final SimpleJdbcCall jdbcCallActualizarBorrador;
+    private final SimpleJdbcCall jdbcCallGuardarCompleta;
 
+    
     // Configuración e inyección del DataSource nativo
     public AtencionMedicaRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        
+     // 1. SimpleJdbcCall para CREAR borrador
+        this.jdbcCallGuardarBorrador = new SimpleJdbcCall(dataSource)
+                .withSchemaName("igm_atenciones_medicas") 
+                .withFunctionName("fn_guardar_atencion_medica_borrador");
+
+        // 2. SimpleJdbcCall para ACTUALIZAR borrador
+        this.jdbcCallActualizarBorrador = new SimpleJdbcCall(dataSource)
+                .withSchemaName("igm_atenciones_medicas") 
+                .withFunctionName("fn_actualizar_atencion_medica_borrador");
+
+        // 3. SimpleJdbcCall para guardar atención completa (cierre/firma)
+        this.jdbcCallGuardarCompleta = new SimpleJdbcCall(dataSource)
+                .withSchemaName("igm_atenciones_medicas") 
+                .withFunctionName("fn_guardar_atencion_medica_completa");
+                
         // 1. SimpleJdbcCall para guardar atención completa
         this.jdbcCallGuardar = new SimpleJdbcCall(dataSource)
                 .withSchemaName("igm_atenciones_medicas") 
@@ -30,10 +48,59 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
         this.jdbcCallFirmar = new SimpleJdbcCall(dataSource)
                 .withSchemaName("igm_atenciones_medicas")
                 .withFunctionName("fn_firmar_atencion");
+        
+    }
+
+    @Override
+    public Long guardarAtencionMedicaBorrador(String jsonPayload) {
+        System.out.println("JSON CREAR BORRADOR: " + jsonPayload);        
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("p_payload", jsonPayload, Types.OTHER);      
+
+        Map<String, Object> result = jdbcCallGuardarBorrador.execute(parameterSource);
+        Object returnValue = result.get("returnvalue");
+
+        if (returnValue == null) {
+            returnValue = result.get("id_atencion"); 
+            if (returnValue == null) {
+                throw new RuntimeException("La base de datos no retornó un ID válido al guardar borrador.");
+            }
+        }
+
+        return ((Number) returnValue).longValue();
+    }
+
+    @Override
+    public void actualizarAtencionMedicaBorrador(Long idAtencion, String jsonPayload) {
+        System.out.println("JSON ACTUALIZAR BORRADOR [ID=" + idAtencion + "]: " + jsonPayload);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("p_id_atencion", idAtencion, Types.BIGINT);
+        parameterSource.addValue("p_payload", jsonPayload, Types.OTHER);
+
+        jdbcCallActualizarBorrador.execute(parameterSource);
     }
 
     @Override
     public Long guardarAtencionMedicaCompleta(String jsonPayload) {
+        System.out.println("JSON ATENCION COMPLETA: " + jsonPayload);        
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("p_payload", jsonPayload, Types.OTHER);      
+
+        Map<String, Object> result = jdbcCallGuardarCompleta.execute(parameterSource);
+        Object returnValue = result.get("returnvalue");
+
+        if (returnValue == null) {
+            returnValue = result.get("id_atencion"); 
+            if (returnValue == null) {
+                throw new RuntimeException("La base de datos no retornó ningún ID para la atención médica.");
+            }
+        }
+
+        return ((Number) returnValue).longValue();
+    }   
+    
+/*    @Override
+    public Long guardarAtencionMedicaCompleta1(String jsonPayload) {
         System.out.println("JSON ENVIADO   " + jsonPayload);        
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("p_payload", jsonPayload, Types.OTHER);      
@@ -49,7 +116,7 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
         }
 
         return ((Number) returnValue).longValue();
-    }
+    }*/
 
     // =======================================================================
     // 🎯 1. LEER EL JSON DESDE LA TABLA
