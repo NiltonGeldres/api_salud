@@ -10,21 +10,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.nio.file.Files;
 
-import javax.annotation.Resource;
-
-import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
-import org.springframework.util.FileCopyUtils;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 import org.springframework.core.io.ClassPathResource; // 🔥 Usa esta clase específica
 
