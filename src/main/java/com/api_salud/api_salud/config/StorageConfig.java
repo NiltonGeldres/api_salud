@@ -34,8 +34,13 @@ public class StorageConfig {
 
     public static class PathConfig {
         private String historias;
+        private String borradores; // <-- Se agrega la propiedad
+
         public String getHistorias() { return historias; }
         public void setHistorias(String historias) { this.historias = historias; }
+
+        public String getBorradores() { return borradores; } // <-- Getter
+        public void setBorradores(String borradores) { this.borradores = borradores; } // <-- Setter
     }
 
     public static class R2Config {
@@ -60,6 +65,8 @@ public class StorageConfig {
         public String getPublicUrlBase() { return publicUrlBase; }
         public void setPublicUrlBase(String publicUrlBase) { this.publicUrlBase = publicUrlBase; }
     }
+    
+    
 
 }
 

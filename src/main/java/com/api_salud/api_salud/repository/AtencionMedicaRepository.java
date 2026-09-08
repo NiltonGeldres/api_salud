@@ -9,4 +9,5 @@ public interface AtencionMedicaRepository {
 	void firmarAtencion(Long idAtencion, String hashFirma, String tipoFirma);
 	void actualizarAtencionMedicaBorrador(Long idAtencion, String jsonPayload);
 	Long guardarAtencionMedicaBorrador(String jsonPayload);
+	String listarAtencionesPendientesFirma(Integer idEntidad, Integer idMedico);
 }

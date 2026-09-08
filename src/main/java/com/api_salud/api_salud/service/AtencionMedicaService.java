@@ -31,4 +31,6 @@ public interface AtencionMedicaService {
 	 * Estado en BD: PENDIENTE_FIRMA
 	 */
 	AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request);
+
+	String listarAtencionesPendientesFirma( Integer idMedico);
 }

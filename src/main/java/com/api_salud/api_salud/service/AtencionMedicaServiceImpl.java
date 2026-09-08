@@ -5,6 +5,7 @@ import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.service.storage.StorageService;
 import com.api_salud.api_salud.utils.SecurityUtils;
 import com.api_salud.api_salud.config.StorageConfig;
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,7 +100,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                 throw new IllegalArgumentException("Se requiere un idAtencion válido para actualizar el borrador.");
             }
 
-            request.setEstadoFirma("BORRADOR");
+            request.setEstadoFirma("BORRADOR ACTUALIZADO");
             String jsonPayload = objectMapper.writeValueAsString(request);
 
             // Actualización parcial o total del borrador en BD
@@ -110,7 +111,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                 "Borrador actualizado correctamente.", 
                 request.getIdAtencion(), 
                 request.getIdEstadoAtencion(), 
-                "BORRADOR"
+                "BORRADOR ACTUALIZADO"
             );
 
         } catch (Exception e) {
@@ -207,7 +208,8 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
 
             // 7. Construir la ruta relativa dinámica
-            String plantilla = storageConfig.getPath().getHistorias();
+            String plantilla = storageConfig.getPath().getBorradores();            
+            //String plantilla = storageConfig.getPath().getHistorias();
             String hc = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null) 
                     ? pdfDto.getPaciente().getHc() : "SIN_HC";
             String entidad = (pdfDto.getIdEntidad() != null) 
@@ -237,7 +239,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                     "PENDIENTE_FIRMA"
             );
             response.setRutaPdfFirmado(rutaRelativa);
-            response.setRutaPdfFirmado(urlVisualizacion);
+//            response.setRutaPdfFirmado(urlVisualizacion);
             response.setHashIntegridad(hashIntegridad);
             
             return response;
@@ -408,108 +410,30 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
         return jsonAtencion;
     }    
     
-}
+ // =======================================================================
+    // 🎯 LISTAR ATENCIONES PENDIENTES DE FIRMA
+    // =======================================================================
+    @Override
+    @Transactional(readOnly = true)
+    public String listarAtencionesPendientesFirma(Integer idMedico) {
+    	Integer idEntidad = TenantContext.getEntidadId(); 
 
-/*
-@Override
-@Transactional 
-public AtencionMedicaResponse firmarYGenerarPdf(Long idAtencion) {
-    try {
-        String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
-        if (jsonPayloadBD == null) throw new IllegalArgumentException("No se encontró la atención.");
-
-        // El DTO ahora contiene toda la información necesaria que viene del JSON
-        AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+        if (idEntidad == null) {
+            throw new IllegalStateException("No se pudo identificar el Tenant/Entidad en el contexto de la solicitud.");
+        }
         
-        // Generación delegada al servicio de PDF
-        byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
-
-        // Almacenamiento dinámico
-        String hc = (pdfDto.getPaciente() != null) ? pdfDto.getPaciente().getHc() : "SIN_HC";
-        String carpeta = this.rutaBasePdfs + "pacientes/" + hc + "/";
-        new File(carpeta).mkdirs();
-
-        String nombreArchivo = "ATENCION_" + idAtencion + ".pdf";
-        String rutaCompleta = carpeta + nombreArchivo;
+        String jsonResultado = atencionMedicaRepository.listarAtencionesPendientesFirma(idEntidad, idMedico);
         
-        Files.write(Paths.get(rutaCompleta), pdfBytes);
+        if (jsonResultado == null || jsonResultado.trim().isEmpty() || "{}".equals(jsonResultado)) {
+            throw new RuntimeException("No se encontraron atenciones para firmar: ");
+        }
         
-        atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaCompleta);
-        atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
-
-        AtencionMedicaResponse response = new AtencionMedicaResponse(true, "Firmado con éxito.", idAtencion, 3, "FIRMADO_ELECTRONICO");
-        response.setRutaPdfFirmado(rutaCompleta);
-        return response;
-    } catch (Exception e) {
-        throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
-    }
-}
-*/ 
-
-/*    
-@Override
-@Transactional 
-public AtencionMedicaResponse prepararPdf(Long idAtencion) {
-	
-
-    try {
-        // 1. Obtener datos
-        String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
-        AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
-        // 2. Generar bytes
-        byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
-        // 3. NUEVA INTEGRACIÓN CON STORAGE SERVICE
-        // Obtenemos la plantilla: /{empresa}/historias_{empresa}/{paciente}/atencion_{atencion}_{empresa}.pdf
-        String plantilla = storageConfig.getPath().getHistorias();
-        // Construimos la ruta relativa (el StorageService ya sabe si es local o cloud)
-        String hc = (pdfDto.getPaciente() != null) ? pdfDto.getPaciente().getHc() : "SIN_HC";
-        String entidad = (pdfDto.getIdEntidad() != null) ? String.valueOf(pdfDto.getIdEntidad()) : "SIN_ENTIDAD";            
-        
-        // El buildPath reemplaza los {placeholders} definidos en tu application.properties
-        String rutaRelativa = plantilla
-                .replace("{empresa}", entidad)
-                .replace("{paciente}", hc)
-                .replace("{atencion}", String.valueOf(idAtencion));
-
-        // Guardado abstracto (No importa si es D:/ o Cloud)
-        storageService.guardar(rutaRelativa, pdfBytes);
-        
-        // 4. Actualizar BD
-        atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaRelativa);
-        atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "FIRMADO_ELECTRONICO");
-       
-        AtencionMedicaResponse response = new AtencionMedicaResponse(true, "Firmado con éxito.", idAtencion, 3, "FIRMADO_ELECTRONICO");
-        response.setRutaPdfFirmado(rutaRelativa); // Aquí asignas la ruta correctamente
-        return response; // <--- Devuelve el objeto que ya tiene la ruta asignada
-    } catch (Exception e) {
-        e.printStackTrace(); // Esto es vital: imprimirá la línea exacta del error en la consola
-        throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
-    }
+        // Garantizamos retorno de arreglo JSON válido si la BD devuelve null
+        return jsonResultado;
+    }    
+  
+    
+    
     
 }
-*/   
 
-/*    @Override
-@Transactional
-public AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request) {
-    try {
-        request.setEstadoFirma("PENDIENTE");
-        String jsonPayload = objectMapper.writeValueAsString(request);
-        
-        // 1. Guardar la atención en PostgreSQL
-        Long idAtencionGenerado = atencionMedicaRepository.guardarAtencionMedicaCompleta(jsonPayload);
-        
-        // 2. Vincular el ID de atención generado con la Cita
-        if (request.getIdCita() != null && request.getIdCita() > 0) {
-            boolean vinculado = citaService.vincularAtencion(request.getIdCita(), idAtencionGenerado);
-            if (!vinculado) {
-                System.err.println("Advertencia: No se pudo asociar la atención " + idAtencionGenerado + " a la cita " + request.getIdCita());
-            }
-        }
-
-        return new AtencionMedicaResponse(true, "Atención registrada.", idAtencionGenerado, request.getIdEstadoAtencion(), "PENDIENTE");
-    } catch (Exception e) {
-        throw new RuntimeException("Error al guardar: " + e.getMessage(), e);
-    }
-}
-*/

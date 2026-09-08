@@ -71,6 +71,8 @@ public class AtencionMedicaRequest {
 
     private Integer idEspecialidad;
 
+    private String rutaPdfFirmado;
+    
     // =========================================================================
     // 2. SECCIONES CLÍNICAS OBLIGATORIAS EN ATENCIÓN COMPLETA (CompletoGroup)
     // =========================================================================
@@ -160,7 +162,10 @@ public class AtencionMedicaRequest {
     public AtencionMedicaPacienteRequest getPaciente() { return paciente; }
     public void setPaciente(AtencionMedicaPacienteRequest paciente) { this.paciente = paciente; }
     
-    public List<AtencionMedicaAltaRequest> getAlta() { return alta; }
+    public String getRutaPdfFirmado() {	return rutaPdfFirmado;}
+	public void setRutaPdfFirmado(String rutaPdfFirmado) {this.rutaPdfFirmado = rutaPdfFirmado;}
+
+	public List<AtencionMedicaAltaRequest> getAlta() { return alta; }
     public void setAlta(List<AtencionMedicaAltaRequest> alta) { this.alta = alta; }
     
     public List<AtencionMedicaTriajeRequest> getTriajes() { return triajes; }

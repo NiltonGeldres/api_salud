@@ -103,4 +103,19 @@ public class AtencionMedicaController {
         return ResponseEntity.ok(jsonAtencion);
     }   
     
+ // =======================================================================
+    // 🎯 GET: LISTAR ATENCIONES PENDIENTES DE FIRMA (PDF BORRADOR)
+    // =======================================================================
+    @GetMapping("/pendientes-firma")
+    public ResponseEntity<String> listarAtencionesPendientesFirma(
+            @RequestParam("idMedico") Integer idMedico) {
+
+        String jsonResponse = atencionMedicaService.listarAtencionesPendientesFirma(idMedico);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonResponse);
+    }
+    
+    
 }    
