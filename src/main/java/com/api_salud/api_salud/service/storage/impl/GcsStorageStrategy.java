@@ -25,5 +25,11 @@ public class GcsStorageStrategy implements StorageStrategy {
         String objectName = path.startsWith("/") ? path.substring(1) : path;
 //        return "https://storage.googleapis.com/" + config.getGcs().getBucketName() + "/" + objectName;
         return "";
-    }    
+    }
+
+	@Override
+	public String generarPresignedUrl(String rutaRelativa) {
+		// TODO Auto-generated method stub
+		return null;
+	}    
 }

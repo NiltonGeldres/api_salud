@@ -35,6 +35,12 @@ public class LocalStorageStrategy implements StorageStrategy {
     public String getUrl(String path) {
         return path;
     }
+
+	@Override
+	public String generarPresignedUrl(String rutaRelativa) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

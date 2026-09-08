@@ -12,6 +12,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -409,7 +413,9 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
         
         return jsonAtencion;
     }    
+
     
+/*    
  // =======================================================================
     // 🎯 LISTAR ATENCIONES PENDIENTES DE FIRMA
     // =======================================================================
@@ -432,8 +438,58 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
         return jsonResultado;
     }    
   
-    
-    
+  */  
+ // =======================================================================
+ // 🎯 LISTAR ATENCIONES PENDIENTES DE FIRMA
+ // =======================================================================
+ @Override
+ @Transactional(readOnly = true)
+ public String listarAtencionesPendientesFirma(Integer idMedico) {
+     Integer idEntidad = TenantContext.getEntidadId(); 
+
+     if (idEntidad == null) {
+         throw new IllegalStateException("No se pudo identificar el Tenant/Entidad en el contexto de la solicitud.");
+     }
+     
+     String jsonResultado = atencionMedicaRepository.listarAtencionesPendientesFirma(idEntidad, idMedico);
+     
+     if (jsonResultado == null || jsonResultado.trim().isEmpty() || "{}".equals(jsonResultado) || "[]".equals(jsonResultado)) {
+         throw new RuntimeException("No se encontraron atenciones para firmar.");
+     }
+     
+     try {
+         // 1. Convertir el String JSON devuelto por PostgreSQL en un árbol de nodos Jackson
+         JsonNode rootNode = objectMapper.readTree(jsonResultado);
+
+         if (rootNode.isArray()) {
+             ArrayNode arrayNode = (ArrayNode) rootNode;
+
+             // 2. Recorrer cada atención médica en el arreglo
+             for (JsonNode node : arrayNode) {
+                 ObjectNode atencionNode = (ObjectNode) node;
+
+                 // 3. Extraer la ruta relativa guardada en BD (ej: "/2/borradores/21447464/atencion_284_borrador.pdf")
+                 if (atencionNode.has("rutaPdfFirmado") && !atencionNode.get("rutaPdfFirmado").isNull()) {
+                     String rutaRelativa = atencionNode.get("rutaPdfFirmado").asText();
+
+                     // 4. Generar la Presigned URL (15 min) mediante tu storageService
+                     String urlPreFirmada = storageService.generarPresignedUrl(rutaRelativa);
+
+                     // 5. Sobrescribir el campo en el JSON que viajará al cliente
+                     atencionNode.put("rutaPdfFirmado", urlPreFirmada);
+                 }
+             }
+             
+             // 6. Retornar el JSON transformado con las URLs temporales firmadas
+             return objectMapper.writeValueAsString(arrayNode);
+         }
+
+         return jsonResultado;
+
+     } catch (Exception e) {
+         throw new RuntimeException("Error al procesar y firmar las URLs de los documentos PDF", e);
+     }
+ }
     
 }
 

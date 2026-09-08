@@ -33,4 +33,9 @@ public class StorageService {
     public String obtenerUrlPublica(String rutaRelativa) {
         return strategy.getUrl(rutaRelativa);
     }
+    
+
+    public String generarPresignedUrl(String rutaRelativa) {
+        return strategy.generarPresignedUrl(rutaRelativa);
+    }
 }
