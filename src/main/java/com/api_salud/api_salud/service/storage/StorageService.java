@@ -13,7 +13,7 @@ public class StorageService {
 
     public StorageService(StorageConfig config) {
         this.config = config;
-        
+
         String provider = config.getProvider();
         System.out.println("=== ESTRATEGIA DE ALMACENAMIENTO SELECCIONADA: " + provider + " ===");
 
@@ -26,6 +26,25 @@ public class StorageService {
         }
     }
 
+    /**
+     * Construye dinámicamente la ruta en el bucket reemplazando variables.
+     * @param idEntidad ID de la empresa/entidad ({empresa})
+     * @param idPaciente ID del paciente ({paciente})
+     * @param idAtencion ID de la atención médica ({atencion})
+     * @param tipoDocumento Tipo: historia, receta, ordenes, indicaciones ({tipo})
+     * @param esFirmado true para archivo final firmado, false para borrador
+     */
+    public String construirRutaRelativa(Integer idEntidad, String hcPaciente, Long idAtencion, String tipoDoc, boolean esFirmado){    
+        String plantilla = esFirmado ? config.getPath().getFirmado() : config.getPath().getBorrador();
+    	String estado = esFirmado ? "firmado" : "borrador";
+        return plantilla
+                .replace("{empresa}", String.valueOf(idEntidad))
+                .replace("{paciente}", (hcPaciente != null && !hcPaciente.trim().isEmpty()) ? hcPaciente : "SIN_HC")
+                .replace("{atencion}", String.valueOf(idAtencion))
+                .replace("{tipo}", tipoDoc)
+                .replace("{estado}", estado);
+    }
+
     public void guardar(String rutaRelativa, byte[] content) {
         strategy.save(rutaRelativa, content);
     }
@@ -33,9 +52,12 @@ public class StorageService {
     public String obtenerUrlPublica(String rutaRelativa) {
         return strategy.getUrl(rutaRelativa);
     }
-    
 
     public String generarPresignedUrl(String rutaRelativa) {
         return strategy.generarPresignedUrl(rutaRelativa);
+    }
+
+    public String generarPresignedUrlSubida(String rutaRelativa) {
+        return strategy.generarPresignedUrlSubida(rutaRelativa);
     }
 }

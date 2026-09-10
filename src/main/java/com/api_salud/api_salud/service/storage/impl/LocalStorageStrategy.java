@@ -33,51 +33,17 @@ public class LocalStorageStrategy implements StorageStrategy {
 
     @Override
     public String getUrl(String path) {
-        return path;
-    }
-
-	@Override
-	public String generarPresignedUrl(String rutaRelativa) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
-
-/*
-package com.api_salud.api_salud.service.storage.impl;
-
-import com.api_salud.api_salud.config.StorageConfig;
-import com.api_salud.api_salud.service.storage.StorageStrategy;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-public class LocalStorageStrategy implements StorageStrategy {
-    private final StorageConfig config;
-
-    public LocalStorageStrategy(StorageConfig config) {
-        this.config = config;
+        String objectName = path.startsWith("/") ? path.substring(1) : path;
+        return "/archivos-locales/" + objectName;
     }
 
     @Override
-    public void save(String path, byte[] content) {
-        try {
-            // Unimos la raíz (D:/...) con la ruta relativa
-            String fullPath = config.getLocal().getRootPath() + path;
-            File file = new File(fullPath);
-            file.getParentFile().mkdirs(); // Crea carpetas si no existen
-            Files.write(Paths.get(fullPath), content);
-        } catch (Exception e) {
-            throw new RuntimeException("Error guardando archivo localmente", e);
-        }
+    public String generarPresignedUrl(String path) {
+        return getUrl(path);
     }
-    
+
     @Override
-    public String getUrl(String path) {
-        // Garantiza que la ruta comience con '/'
-        String pathLimpio = path.startsWith("/") ? path : "/" + path;
-        // Retorna la URL servida por WebMvcConfigurer para el iframe en React
-        return "http://localhost:8080/archivos-locales" + pathLimpio;
-    }    
+    public String generarPresignedUrlSubida(String path) {
+        return getUrl(path);
+    }
 }
-*/

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Receta e Indicaciones Médicas</title>
+    <style type="text/css">
+        body { font-family: 'Helvetica', sans-serif; font-size: 12px; color: #333; line-height: 1.5; }
+        
+        .container { 
+            width: 100%; 
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            box-sizing: border-box;
+        }
+        
+        /* Header del Documento */
+        .header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+        .title { font-size: 16px; font-weight: bold; text-transform: uppercase; margin: 0; }
+        
+        /* Corrección de Flexbox a Display Table */
+        .info-paciente { 
+            display: table; 
+            width: 100%; 
+            margin-bottom: 10px; 
+            background: #f9f9f9; 
+            padding: 10px; 
+            box-sizing: border-box;
+        }
+        .info-paciente-col-left { display: table-cell; text-align: left; }
+        .info-paciente-col-right { display: table-cell; text-align: right; }
+        
+        /* Tablas */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background-color: #eee; text-align: left; padding: 8px; border-bottom: 1px solid #ccc; }
+        td { padding: 8px; border-bottom: 1px solid #eee; }
+        
+        /* Elementos especiales */
+        .indicacion-especial { 
+            background: #fff3cd; 
+            border: 1px solid #ffeeba; 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-top: 10px; 
+            font-weight: bold; 
+        }
+        
+        /* Corrección de margen y flotado para la Firma */
+        .firma-area { 
+            margin-top: 40px; 
+            text-align: center; 
+            width: 200px; 
+            float: right; 
+        }
+        .firma-linea { border-top: 1px solid #000; margin-top: 50px; padding-top: 5px; }
+        
+        /* Limpiador de flotado para evitar superposiciones */
+        .clear { clear: both; }
+    </style>
+</head>
+<body>
+
+<!-- Ejemplo: RECETA MÉDICA -->
+<div class="container">
+    <div class="header">
+        <p class="title">Receta Médica (Farmacia)</p>
+        <small>Fecha: 14/07/2026</small>
+    </div>
+    
+    <div class="info-paciente">
+        <div class="info-paciente-col-left">
+            <strong>Paciente:</strong> CAYO BOHORQUEZ MARIACONCEPCION
+        </div>
+        <div class="info-paciente-col-right">
+            <strong>H.C.:</strong> 34
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Medicamento / Presentación</th>
+                <th style="text-align: right;">Cant.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Atorvastatina 20mg</td>
+                <td style="text-align: right;">21 u.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="firma-area">
+        <div class="firma-linea">Firma y Sello Médico</div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<!-- Ejemplo: INDICACIONES -->
+<div class="container">
+    <div class="header">
+        <p class="title">Indicaciones de Uso</p>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Medicamento</th>
+                <th>Vía</th>
+                <th>Dosis</th>
+                <th>Frecuencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Atorvastatina 20mg</td>
+                <td>Oral</td>
+                <td>1</td>
+                <td>Cada 3 hrs</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="indicacion-especial">
+        Indicación Especial: Descanso médico absoluto.
+    </div>
+</div>
+
+</body>
+</html>

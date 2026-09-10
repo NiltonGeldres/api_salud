@@ -1,8 +1,17 @@
 package com.api_salud.api_salud.response;
 
 public class AtencionMedicaPacienteResponse {
+	private Integer idPaciente;
 	private String hc;
     private String name;
+    
+    
+	public Integer getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(Integer idPaciente) {
+		this.idPaciente = idPaciente;
+	}
 	public String getHc() {
 		return hc;
 	}

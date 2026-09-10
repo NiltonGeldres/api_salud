@@ -1,8 +1,12 @@
 package com.api_salud.api_salud.repository;
 
+import java.util.List;
+
+import com.api_salud.api_salud.dto.DocumentoAdjuntoDTO;
+
 public interface AtencionMedicaRepository {
     Long guardarAtencionMedicaCompleta(String jsonPayload);
-    void actualizarRutaPdf(Long idAtencion, String rutaPdf);
+   // void actualizarRutaPdf(Long idAtencion, String rutaPdf);
     String obtenerJsonAtencionPorId(Long idAtencion); // 🆕
     void actualizarEstadoFirma(Long idAtencion, String estadoFirma); // 🆕    
 	void actualizarHashFirma(Long idAtencion, String hashFirma);
@@ -10,4 +14,5 @@ public interface AtencionMedicaRepository {
 	void actualizarAtencionMedicaBorrador(Long idAtencion, String jsonPayload);
 	Long guardarAtencionMedicaBorrador(String jsonPayload);
 	String listarAtencionesPendientesFirma(Integer idEntidad, Integer idMedico);
+	void actualizarRutasPdf(Long idAtencion, List<DocumentoAdjuntoDTO> documentos);
 }

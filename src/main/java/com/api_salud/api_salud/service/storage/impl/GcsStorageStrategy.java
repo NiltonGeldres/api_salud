@@ -31,5 +31,11 @@ public class GcsStorageStrategy implements StorageStrategy {
 	public String generarPresignedUrl(String rutaRelativa) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String generarPresignedUrlSubida(String rutaRelativa) {
+		// TODO Auto-generated method stub
+		return null;
 	}    
 }

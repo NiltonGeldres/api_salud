@@ -17,7 +17,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AtencionMedicaPdfDTO {
 	// --- Cabecera ---
-    private String idEntidad;
+    private Integer idPaciente;
+    private Integer idEntidad;
     private String nombreEntidad;
     private String nombreMedicoIngreso;
     private Integer idMedicoIngreso;
@@ -44,10 +45,16 @@ public class AtencionMedicaPdfDTO {
     private String fechaFirma;    
     
     
-	public String getIdEntidad() {
+	public Integer getIdPaciente() {
+		return idPaciente;
+	}
+	public void setIdPaciente(Integer idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public Integer getIdEntidad() {
 		return idEntidad;
 	}
-	public void setIdEntidad(String idEntidad) {
+	public void setIdEntidad(Integer idEntidad) {
 		this.idEntidad = idEntidad;
 	}
 	public String getNombreEntidad() {
