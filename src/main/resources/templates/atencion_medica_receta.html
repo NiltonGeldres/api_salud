@@ -1,132 +1,166 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Receta e Indicaciones Médicas</title>
+    <title>Receta Médica</title>
     <style type="text/css">
-        body { font-family: 'Helvetica', sans-serif; font-size: 12px; color: #333; line-height: 1.5; }
-        
-        .container { 
-            width: 100%; 
-            border: 1px solid #ddd; 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-            box-sizing: border-box;
-        }
-        
-        /* Header del Documento */
-        .header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .title { font-size: 16px; font-weight: bold; text-transform: uppercase; margin: 0; }
-        
-        /* Corrección de Flexbox a Display Table */
-        .info-paciente { 
-            display: table; 
-            width: 100%; 
-            margin-bottom: 10px; 
-            background: #f9f9f9; 
-            padding: 10px; 
-            box-sizing: border-box;
-        }
-        .info-paciente-col-left { display: table-cell; text-align: left; }
-        .info-paciente-col-right { display: table-cell; text-align: right; }
-        
-        /* Tablas */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background-color: #eee; text-align: left; padding: 8px; border-bottom: 1px solid #ccc; }
-        td { padding: 8px; border-bottom: 1px solid #eee; }
-        
-        /* Elementos especiales */
-        .indicacion-especial { 
-            background: #fff3cd; 
-            border: 1px solid #ffeeba; 
-            padding: 10px; 
-            border-radius: 4px; 
-            margin-top: 10px; 
-            font-weight: bold; 
-        }
-        
-        /* Corrección de margen y flotado para la Firma */
-        .firma-area { 
-            margin-top: 40px; 
-            text-align: center; 
-            width: 200px; 
-            float: right; 
-        }
-        .firma-linea { border-top: 1px solid #000; margin-top: 50px; padding-top: 5px; }
-        
-        /* Limpiador de flotado para evitar superposiciones */
-        .clear { clear: both; }
+        @page { size: A4; margin: 1.2cm 1.5cm 1.2cm 1.5cm; }
+        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; font-size: 11px; color: #0f172a; margin: 0; padding: 0; }
+        .wrapper { width: 100%; max-width: 480px; margin: 0 auto; }
+        .card-box { border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; background-color: #ffffff; }
+        .table-row { display: table; width: 100%; margin-bottom: 8px; }
+        .table-cell { display: table-cell; vertical-align: top; }
+        .header-left-area { width: 68%; padding-right: 8px; }
+        .header-refirma-reserved { width: 32%; vertical-align: top; }
+        .refirma-box-placeholder { width: 155px; height: 52px; border: 1px dashed #cbd5e1; border-radius: 6px; background-color: #f8fafc; text-align: center; float: right; }
+        .logo-box { width: 38%; text-align: center; vertical-align: middle; padding: 4px; }
+        .logo-box svg { width: 55px; height: 55px; fill: #1e40af; }
+        .info-header-box { width: 60%; padding-left: 2%; }
+        .info-item { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; margin-bottom: 4px; font-size: 10.5px; }
+        .clinic-location { text-align: center; font-size: 11px; color: #475569; margin: 2px 0 2px 0; font-weight: 600; }
+        .document-title { text-align: center; font-size: 16px; font-weight: 800; color: #0f172a; margin: 0 0 8px 0; text-transform: uppercase; }
+        .section-subtitle { font-weight: 800; font-size: 11.5px; color: #1e40af; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; text-transform: uppercase; }
+        table.data-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 10.5px; }
+        table.data-table th { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 6px; text-align: left; font-weight: 700; color: #334155; }
+        table.data-table td { border: 1px solid #e2e8f0; padding: 4px 6px; color: #0f172a; }
+        .doc-cell { width: 55%; font-size: 10.5px; line-height: 1.35; vertical-align: middle; }
+        .firma-cell { width: 45%; text-align: center; vertical-align: middle; }
+        .status-box { padding: 6px; border-radius: 6px; text-align: center; }
+        .status-borrador { border: 1px dashed #ef4444; background-color: #fef2f2; color: #991b1b; }
+        .status-firmado { border: 1px solid #2563eb; background-color: #eff6ff; color: #1e40af; }
+        .digemid-cell { width: 65%; font-size: 9.5px; line-height: 1.3; padding-right: 8px; }
+        .qr-cell { width: 35%; background-color: #1e40af; color: #ffffff; border-radius: 10px; padding: 6px 4px; text-align: center; vertical-align: middle; }
+        .qr-header { font-size: 8.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 2px; }
+        .qr-footer { font-size: 8px; font-weight: 600; margin-top: 2px; }
     </style>
 </head>
 <body>
 
-<!-- Ejemplo: RECETA MÉDICA -->
-<div class="container">
-    <div class="header">
-        <p class="title">Receta Médica (Farmacia)</p>
-        <small>Fecha: 14/07/2026</small>
-    </div>
-    
-    <div class="info-paciente">
-        <div class="info-paciente-col-left">
-            <strong>Paciente:</strong> CAYO BOHORQUEZ MARIACONCEPCION
+    <div class="wrapper">
+
+        <div class="table-row">
+            <div class="table-cell header-left-area">
+                <div class="table-row" style="margin-bottom: 0;">
+                    <div class="table-cell card-box logo-box">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M 20 10 H 55 C 70 10, 80 20, 80 35 C 80 48, 70 55, 58 57 L 80 90 H 60 L 42 60 H 38 V 90 H 20 V 10 Z M 38 26 V 44 H 52 C 60 44, 64 40, 64 35 C 64 30, 60 26, 52 26 H 38 Z" />
+                            <path d="M 30 30 H 42 V 38 H 50 V 50 H 42 V 58 H 30 V 50 H 22 V 38 H 30 Z" fill="#ffffff" />
+                            <path d="M 33 33 H 39 V 41 H 47 V 47 H 39 V 55 H 33 V 47 H 25 V 41 H 33 Z" fill="#1e40af" />
+                        </svg>
+                    </div>
+
+                    <div class="table-cell info-header-box">
+                        <div class="info-item">
+                            <strong>Fecha:</strong> 
+                            <span style="float: right;" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div class="info-item" style="margin-bottom: 0;" th:if="${atencion.paciente != null}">
+                            <strong>N° Historia:</strong> 
+                            <span style="float: right;" th:text="${atencion.paciente.hc}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-cell header-refirma-reserved">
+                <div class="refirma-box-placeholder">
+                    <span th:if="${atencion.estadoFirma != 'FIRMADO_ELECTRONICO'}" style="display:block; font-size:8px; color:#94a3b8; padding-top:18px; font-weight:600;">REFIRMA PDF</span>
+                </div>
+            </div>
         </div>
-        <div class="info-paciente-col-right">
-            <strong>H.C.:</strong> 34
+
+        <div class="clinic-location" th:text="${atencion.nombreEntidad != null ? atencion.nombreEntidad : 'Atención Médica'}"></div>
+        <h1 class="document-title">RECETA MÉDICA</h1>
+
+        <div class="card-box">
+            <div th:if="${atencion.paciente != null}">
+                <strong>Paciente:</strong> <span th:text="${atencion.paciente.name}"></span>
+            </div>
+            <div>
+                <strong>Especialidad:</strong> <span th:text="${atencion.nombreEspecialidad}"></span> | 
+                <strong>Servicio:</strong> <span th:text="${atencion.nombreServicio}"></span>
+            </div>
         </div>
-    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Medicamento / Presentación</th>
-                <th style="text-align: right;">Cant.</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Atorvastatina 20mg</td>
-                <td style="text-align: right;">21 u.</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="card-box" th:if="${atencion.diagnosticos != null and !#lists.isEmpty(atencion.diagnosticos)}">
+            <div class="section-subtitle">Diagnósticos Asociados</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Diagnóstico</th>
+                        <th style="width: 35%;">Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${atencion.diagnosticos}">
+                        <td th:text="${d.descripcion}"></td>
+                        <td th:text="${d.nombreSubclasificacion}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="firma-area">
-        <div class="firma-linea">Firma y Sello Médico</div>
-    </div>
-    <div class="clear"></div>
-</div>
+        <div class="card-box">
+            <div class="section-subtitle">Medicamentos Indicados</div>
+            <table class="data-table" th:if="${atencion.medicacion != null and !#lists.isEmpty(atencion.medicacion)}">
+                <thead>
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Vía</th>
+                        <th>Dosis/Frecuencia</th>
+                        <th>Dx</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${atencion.medicacion}">
+                        <td th:text="${m.nombreProducto}"></td>
+                        <td th:text="${m.nombreViaAdministracion}"></td>
+                        <td th:text="${m.cantidadDosis + ' ' + m.nombreFrecuenciaDosis + ' x ' + m.cantidadPeriodo + ' días'}"></td>
+                        <td th:text="${m.descripcionDiagnostico}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <span th:if="${atencion.medicacion == null or #lists.isEmpty(atencion.medicacion)}">No registra medicamentos en esta prescripción.</span>
+        </div>
 
-<!-- Ejemplo: INDICACIONES -->
-<div class="container">
-    <div class="header">
-        <p class="title">Indicaciones de Uso</p>
+        <div class="card-box">
+            <div class="table-row" style="margin-bottom: 0;">
+                <div class="table-cell doc-cell">
+                    <strong>Prescriptor:</strong><br />
+                    <span th:text="${atencion.nombreMedicoIngreso}"></span><br />
+                    <strong>CMP:</strong> <span th:text="${atencion.cmpMedico}"></span>
+                </div>
+
+                <div class="table-cell firma-cell">
+                    <div th:if="${atencion.estadoFirma != 'FIRMADO_ELECTRONICO'}" class="status-box status-borrador">
+                        <strong style="font-size: 9.5px; display: block;">DOCUMENTO BORRADOR</strong>
+                        <span style="font-size: 8px;">Pendiente de Firma Digital</span>
+                    </div>
+
+                    <div th:if="${atencion.estadoFirma == 'FIRMADO_ELECTRONICO'}" class="status-box status-firmado">
+                        <strong style="font-size: 9px; display: block;">FIRMADO DIGITALMENTE</strong>
+                        <span style="font-size: 8px; display: block;" th:text="${'Fecha: ' + atencion.fechaFirma}"></span>
+                        <span style="font-size: 6.5px; font-family: monospace; word-break: break-all; display: block; margin-top: 2px;" th:text="${'HASH: ' + atencion.hashFirma}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-row">
+            <div class="table-cell card-box digemid-cell">
+                <strong>Receta Médica Electrónica</strong><br />
+                Documento de prescripción oficial. ID Atención: <span th:text="${atencion.idAtencion}"></span>
+            </div>
+
+            <div class="table-cell qr-cell">
+                <div class="qr-header">VALIDAR<br />RECETA</div>
+                <img th:src="@{'https://api.qrserver.com/v1/create-qr-code/?size=120x120&amp;data=' + ${atencion.idAtencion}}" 
+                     width="55" height="55" style="background: #ffffff; padding: 2px; border-radius: 4px;" alt="QR" />
+                <div class="qr-footer">Escanear QR</div>
+            </div>
+        </div>
+
     </div>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Medicamento</th>
-                <th>Vía</th>
-                <th>Dosis</th>
-                <th>Frecuencia</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Atorvastatina 20mg</td>
-                <td>Oral</td>
-                <td>1</td>
-                <td>Cada 3 hrs</td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <div class="indicacion-especial">
-        Indicación Especial: Descanso médico absoluto.
-    </div>
-</div>
 
 </body>
 </html>
