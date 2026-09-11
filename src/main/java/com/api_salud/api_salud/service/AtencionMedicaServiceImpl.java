@@ -209,6 +209,11 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	        AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
 	        pdfDto.setHashFirma(hashIntegridad);
 	        pdfDto.setEstadoFirma("PENDIENTE_FIRMA");
+	        
+	     // ===> RESOLUCIÓN DE LA URL DEL LOGO <===
+	        if (pdfDto.getLogoTenantUrl() != null && !pdfDto.getLogoTenantUrl().isEmpty()) {
+	            pdfDto.setLogoTenantUrl(storageService.resolverUrlPublicaLogo(pdfDto.getLogoTenantUrl()));
+	        }	        
 	
 	        Integer idEntidad = pdfDto.getIdEntidad() != null ? pdfDto.getIdEntidad() : 0;
 	        String hcPaciente = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null)

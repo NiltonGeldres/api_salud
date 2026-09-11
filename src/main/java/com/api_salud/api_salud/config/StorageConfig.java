@@ -11,7 +11,7 @@ public class StorageConfig {
     private LocalConfig local;
     private PathConfig path;
     private R2Config r2;
-
+    
     public String getProvider() { return provider; }
     public void setProvider(String provider) { this.provider = provider; }
 
@@ -33,12 +33,17 @@ public class StorageConfig {
     public static class PathConfig {
         private String borrador;
         private String firmado;
+        private String logo; 
 
         public String getBorrador() { return borrador; }
         public void setBorrador(String borrador) { this.borrador = borrador; }
 
         public String getFirmado() { return firmado; }
         public void setFirmado(String firmado) { this.firmado = firmado; }
+        
+        public String getLogo() { return logo; }
+        public void setLogo(String logo) { this.logo = logo; }
+        
     }
 
     public static class R2Config {

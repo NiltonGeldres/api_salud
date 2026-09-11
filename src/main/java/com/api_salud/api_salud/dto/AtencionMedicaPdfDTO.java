@@ -28,6 +28,8 @@ public class AtencionMedicaPdfDTO {
     private Long idAtencion;
     private String estadoFirma;
     private Long getIdMedicoIngreso;
+    private String logoTenantUrl; // "https://pub-0208fdf795d64ad8b75e03578f532fc5.r2.dev/0/logo_miclinica_pdf.png"
+    private String logoBase64;    //    
     
     // --- Datos de Paciente (Nuevo objeto response) ---
     private AtencionMedicaPacienteResponse paciente;
@@ -177,6 +179,18 @@ public class AtencionMedicaPdfDTO {
 	}
 	public void setAlta(List<AtencionMedicaAltaResponse> alta) {
 		this.alta = alta;
+	}
+	public String getLogoTenantUrl() {
+		return logoTenantUrl;
+	}
+	public void setLogoTenantUrl(String logoTenantUrl) {
+		this.logoTenantUrl = logoTenantUrl;
+	}
+	public String getLogoBase64() {
+		return logoBase64;
+	}
+	public void setLogoBase64(String logoBase64) {
+		this.logoBase64 = logoBase64;
 	}
     
     

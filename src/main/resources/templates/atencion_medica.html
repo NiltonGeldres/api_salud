@@ -6,7 +6,7 @@
     <style type="text/css">
         @page {
             size: A4;
-            margin: 1.2cm 1.2cm 1.2cm 1.2cm;
+            margin: 1.2cm;
         }
 
         body {
@@ -19,6 +19,10 @@
             width: 100%;
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         .card-box {
             border: 1.5px solid #cbd5e1;
             border-radius: 8px;
@@ -26,7 +30,6 @@
             margin-bottom: 8px;
             background-color: #ffffff;
             width: 100%;
-            box-sizing: border-box;
         }
 
         .table-row {
@@ -41,41 +44,29 @@
             vertical-align: top;
         }
 
-        .header-left-area {
-            width: 70%;
-            padding-right: 12px;
+        /* Encabezado: Logo Izquierda (30%), Centro Info (40%), Firma Derecha (30%) */
+        .header-logo-area {
+            width: 30%;
+            vertical-align: middle;
+            text-align: left;
         }
 
-        .header-refirma-reserved {
+        .header-center-area {
+            width: 40%;
+            padding: 0 8px;
+            vertical-align: middle;
+        }
+
+        .header-firma-reserved {
             width: 30%;
+            height: 60px;
             vertical-align: top;
         }
 
-        .refirma-box-placeholder {
-            width: 100%;
-            height: 52px;
-            border: 1px dashed #cbd5e1;
-            border-radius: 6px;
-            background-color: #f8fafc;
-            text-align: center;
-        }
-
-        .logo-box {
-            width: 25%;
-            text-align: center;
-            vertical-align: middle;
-            padding: 4px;
-        }
-
-        .logo-box svg {
-            width: 50px;
-            height: 50px;
-            fill: #1e40af;
-        }
-
-        .info-header-box {
-            width: 75%;
-            padding-left: 12px;
+        .logo-img {
+            max-width: 100%;
+            max-height: 55px;
+            object-fit: contain;
         }
 
         .info-item {
@@ -83,7 +74,7 @@
             border-radius: 6px;
             padding: 4px 8px;
             margin-bottom: 4px;
-            font-size: 10.5px;
+            font-size: 10px;
         }
 
         .clinic-location {
@@ -96,21 +87,43 @@
 
         .document-title {
             text-align: center;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             color: #0f172a;
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             text-transform: uppercase;
         }
 
         .section-subtitle {
             font-weight: 800;
-            font-size: 11.5px;
+            font-size: 11px;
             color: #1e40af;
             margin-bottom: 6px;
             border-bottom: 1px solid #e2e8f0;
             padding-bottom: 2px;
             text-transform: uppercase;
+        }
+
+        /* Triaje Compacto */
+        .triaje-container {
+            width: 100%;
+        }
+
+        .triaje-item {
+            display: inline-block;
+            margin-right: 16px;
+            margin-bottom: 4px;
+            font-size: 10.5px;
+        }
+
+        .triaje-label {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .triaje-value {
+            color: #0f172a;
+            font-weight: 600;
         }
 
         .clinical-field {
@@ -136,30 +149,6 @@
         table.data-table td {
             border: 1px solid #e2e8f0;
             padding: 5px 8px;
-            color: #0f172a;
-        }
-
-        .tabla-triaje {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .celda-triaje {
-            text-align: center;
-            padding: 6px;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-        }
-
-        .triaje-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: #475569;
-        }
-
-        .triaje-value {
-            font-size: 12px;
-            font-weight: 800;
             color: #0f172a;
         }
 
@@ -233,39 +222,32 @@
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- HEADER: LOGO (IZQ) | INFO (CENTRO) | RESERVA FIRMA DIGITAL DERECHA -->
     <div class="table-row">
-        <div class="table-cell header-left-area">
-            <div class="table-row" style="margin-bottom: 0;">
-                <div class="table-cell card-box logo-box">
-                    <svg viewBox="0 0 100 100">
-                        <path d="M 20 10 H 55 C 70 10, 80 20, 80 35 C 80 48, 70 55, 58 57 L 80 90 H 60 L 42 60 H 38 V 90 H 20 V 10 Z M 38 26 V 44 H 52 C 60 44, 64 40, 64 35 C 64 30, 60 26, 52 26 H 38 Z" />
-                        <path d="M 30 30 H 42 V 38 H 50 V 50 H 42 V 58 H 30 V 50 H 22 V 38 H 30 Z" fill="#ffffff" />
-                        <path d="M 33 33 H 39 V 41 H 47 V 47 H 39 V 55 H 33 V 47 H 25 V 41 H 33 Z" fill="#1e40af" />
-                    </svg>
-                </div>
+        <div class="table-cell header-logo-area">
+            <img th:if="${atencion.logoTenantUrl != null}" 
+                 th:src="${atencion.logoTenantUrl}" 
+                 class="logo-img" 
+                 alt="Logo Entidad" />
+        </div>
 
-                <div class="table-cell info-header-box">
-                    <div class="info-item">
-                        <strong>Fecha:</strong> 
-                        <span style="float: right;" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
-                    </div>
-                    <div class="info-item" style="margin-bottom: 0;" th:if="${atencion.paciente != null}">
-                        <strong>N° Historia:</strong> 
-                        <span style="float: right;" th:text="${atencion.paciente.hc}"></span>
-                    </div>
-                </div>
+        <div class="table-cell header-center-area">
+            <div class="info-item">
+                <strong>Fecha:</strong> 
+                <span style="float: right;" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
+            </div>
+            <div class="info-item" style="margin-bottom: 0;" th:if="${atencion.paciente != null}">
+                <strong>N° Historia:</strong> 
+                <span style="float: right;" th:text="${atencion.paciente.hc}"></span>
             </div>
         </div>
 
-        <div class="table-cell header-refirma-reserved">
-            <div class="refirma-box-placeholder">
-                <span th:if="${atencion.estadoFirma != 'FIRMADO_ELECTRONICO'}" style="display:block; font-size:8px; color:#94a3b8; padding-top:18px; font-weight:600;">REFIRMA PDF</span>
-            </div>
+        <div class="table-cell header-firma-reserved">
+            <!-- Espacio reservado para estampado/firma digital visual a la derecha (PDF-A) -->
         </div>
     </div>
 
-    <div class="clinic-location" th:text="${atencion.nombreEntidad != null ? atencion.nombreEntidad : 'Atención Médica'}"></div>
+    <div class="clinic-location" th:text="${atencion.nombreEntidad}"></div>
     <h1 class="document-title">ATENCIÓN DE CONSULTA EXTERNA</h1>
 
     <!-- FILIACIÓN Y SERVICIO -->
@@ -279,17 +261,15 @@
         </div>
     </div>
 
-    <!-- TRIAJE -->
+    <!-- TRIAJE COMPACTO -->
     <div class="card-box" th:if="${atencion.triajes != null and !#lists.isEmpty(atencion.triajes)}">
         <div class="section-subtitle">Triaje</div>
-        <table class="tabla-triaje">
-            <tr>
-                <td th:each="triaje : ${atencion.triajes}" class="celda-triaje">
-                    <div class="triaje-label" th:text="${triaje.nombreTriaje}"></div>
-                    <div class="triaje-value" th:text="${triaje.valorTriaje}"></div>
-                </td>
-            </tr>
-        </table>
+        <div class="triaje-container">
+            <div class="triaje-item" th:each="triaje : ${atencion.triajes}">
+                <span class="triaje-label" th:text="${triaje.nombreTriaje + ': '}"></span>
+                <span class="triaje-value" th:text="${triaje.valorTriaje}"></span>
+            </div>
+        </div>
     </div>
 
     <!-- EVALUACIÓN CLÍNICA -->
@@ -297,19 +277,19 @@
         <div class="section-subtitle">Evaluación Clínica</div>
         <div class="clinical-field">
             <strong>Antecedentes:</strong> 
-            <span th:text="${atencion.antecedentes != null ? #strings.listJoin(atencion.antecedentes.![nombreAntecedente], ', ') : '-'}"></span>
+            <span th:text="${atencion.antecedentes != null and !#lists.isEmpty(atencion.antecedentes) ? #strings.listJoin(atencion.antecedentes.![nombreAntecedente], ', ') : '-'}"></span>
         </div>
         <div class="clinical-field">
             <strong>Síntomas:</strong> 
-            <span th:text="${atencion.sintomas != null ? #strings.listJoin(atencion.sintomas.![nombreSintoma], ', ') : '-'}"></span>
+            <span th:text="${atencion.sintomas != null and !#lists.isEmpty(atencion.sintomas) ? #strings.listJoin(atencion.sintomas.![nombreSintoma], ', ') : '-'}"></span>
         </div>
         <div class="clinical-field">
             <strong>Examen Físico:</strong> 
-            <span th:text="${atencion.examenFisico != null ? #strings.listJoin(atencion.examenFisico.![nombreExamenFisico], ', ') : '-'}"></span>
+            <span th:text="${atencion.examenFisico != null and !#lists.isEmpty(atencion.examenFisico) ? #strings.listJoin(atencion.examenFisico.![nombreExamenFisico], ', ') : '-'}"></span>
         </div>
     </div>
 
-    <!-- DIAGNÓSTICOS -->
+    <!-- DIAGNÓSTICOS (CIE-10) -->
     <div class="card-box" th:if="${atencion.diagnosticos != null and !#lists.isEmpty(atencion.diagnosticos)}">
         <div class="section-subtitle">Diagnósticos</div>
         <table class="data-table">
@@ -385,7 +365,7 @@
         </ul>
     </div>
 
-    <!-- FIRMA -->
+    <!-- FIRMA Y PROFESIONAL TRATANTE -->
     <div class="card-box">
         <div class="table-row" style="margin-bottom: 0;">
             <div class="table-cell doc-cell">
@@ -395,21 +375,22 @@
             </div>
 
             <div class="table-cell firma-cell">
-                <div th:if="${atencion.estadoFirma != 'FIRMADO_ELECTRONICO'}" class="status-box status-borrador">
-                    <strong style="font-size: 9.5px; display: block;">DOCUMENTO BORRADOR</strong>
-                    <span style="font-size: 8px;">Pendiente de Firma Digital</span>
-                </div>
 
-                <div th:if="${atencion.estadoFirma == 'FIRMADO_ELECTRONICO'}" class="status-box status-firmado">
+                <div  class="status-box status-firmado">
                     <strong style="font-size: 9px; display: block;">FIRMADO DIGITALMENTE</strong>
-                    <span style="font-size: 8px; display: block;" th:text="${'Fecha: ' + atencion.fechaFirma}"></span>
-                    <span style="font-size: 6.5px; font-family: monospace; word-break: break-all; display: block; margin-top: 2px;" th:text="${'HASH: ' + atencion.hashFirma}"></span>
+                    <span th:if="${atencion.fechaFirma != null}" 
+                          style="font-size: 8px; display: block;" 
+                          th:text="${'Fecha: ' + atencion.fechaFirma}"></span>
+                    <span th:if="${atencion.hashFirma != null}" 
+                          style="font-size: 6.5px; font-family: monospace; word-break: break-all; display: block; margin-top: 2px;" 
+                          th:text="${'HASH: ' + atencion.hashFirma}"></span>
+
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER Y CÓDIGO QR -->
     <div class="table-row">
         <div class="table-cell card-box digemid-cell">
             <strong>Registro Clínico Electrónico</strong><br />

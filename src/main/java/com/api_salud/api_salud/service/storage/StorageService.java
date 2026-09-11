@@ -29,20 +29,45 @@ public class StorageService {
     /**
      * Construye dinámicamente la ruta en el bucket reemplazando variables.
      * @param idEntidad ID de la empresa/entidad ({empresa})
-     * @param idPaciente ID del paciente ({paciente})
+     * @param hcPaciente Historia Clínica del paciente ({paciente})
      * @param idAtencion ID de la atención médica ({atencion})
-     * @param tipoDocumento Tipo: historia, receta, ordenes, indicaciones ({tipo})
+     * @param tipoDoc Tipo: historia, receta, ordenes, indicaciones ({tipo})
      * @param esFirmado true para archivo final firmado, false para borrador
      */
-    public String construirRutaRelativa(Integer idEntidad, String hcPaciente, Long idAtencion, String tipoDoc, boolean esFirmado){    
+    public String construirRutaRelativa(Integer idEntidad, String hcPaciente, Long idAtencion, String tipoDoc, boolean esFirmado) {    
         String plantilla = esFirmado ? config.getPath().getFirmado() : config.getPath().getBorrador();
-    	String estado = esFirmado ? "firmado" : "borrador";
+        String estado = esFirmado ? "firmado" : "borrador";
         return plantilla
-                .replace("{empresa}", String.valueOf(idEntidad))
+                .replace("{empresa}", String.valueOf(idEntidad != null ? idEntidad : 0))
                 .replace("{paciente}", (hcPaciente != null && !hcPaciente.trim().isEmpty()) ? hcPaciente : "SIN_HC")
                 .replace("{atencion}", String.valueOf(idAtencion))
                 .replace("{tipo}", tipoDoc)
                 .replace("{estado}", estado);
+    }
+
+    /**
+     * Construye dinámicamente la ruta plantilla para almacenar o consultar el logo de una entidad.
+     */
+    public String construirRutaLogo(Integer idEntidad) {
+        String plantilla = config.getPath().getLogo();
+        return plantilla.replace("{empresa}", String.valueOf(idEntidad != null ? idEntidad : 0));
+    }
+
+    /**
+     * Convierte una ruta relativa o clave de logo en su URL pública accesible para el PDF/Frontend.
+     */
+    public String resolverUrlPublicaLogo(String rutaRelativaLogo) {
+        if (rutaRelativaLogo == null || rutaRelativaLogo.trim().isEmpty()) {
+            return null;
+        }
+
+        // Si la ruta ya viene como URL absoluta (http/https), la devuelve intacta
+        if (rutaRelativaLogo.startsWith("http://") || rutaRelativaLogo.startsWith("https://")) {
+            return rutaRelativaLogo;
+        }
+
+        // Delega la construcción de la URL completa a la estrategia activa (R2 o Local)
+        return obtenerUrlPublica(rutaRelativaLogo);
     }
 
     public void guardar(String rutaRelativa, byte[] content) {
