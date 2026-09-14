@@ -1,5 +1,6 @@
 package com.api_salud.api_salud;
 
+import com.api_salud.api_salud.controller.AtencionMedicaController;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
@@ -17,7 +18,9 @@ import org.springframework.test.annotation.Commit;
 //import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.springframework.core.io.ClassPathResource; // 🔥 Usa esta clase específica
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity; // 🔥 Usa esta clase específica
 
 
 @SpringBootTest
@@ -30,16 +33,98 @@ public class GuardarAtencionAndFirmarTest {
     @Autowired
     private AtencionMedicaRepository atencionMedicaRepository;
 
-    @Autowired
     private AtencionMedicaRequest atencionMedicaRequest;
     
     // Variable estática para compartir el ID generado entre el Test 1 y el Test 2
     private static Long idAtencionCompartido;
     
-    private final ClassPathResource jsonResource = new ClassPathResource("atencion_medica_test.json");
+//    private final ClassPathResource jsonResource = new ClassPathResource("atencion_medica_preparar_pdf.json");
     
+ // Archivo JSON ubicado en src/test/resources/atencion_medica_test.json
+    private final ClassPathResource jsonResource = new ClassPathResource("atencion_medica_preparar_pdf.json");    
+//    private final ClassPathResource jsonResource = new ClassPathResource("atencion_medica_test.json");    
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private AtencionMedicaController atencionMedicaController; // Inyección directa del Controller
+
+    
+    
+    @Test
+    @Order(2)
+    void test2_FirmarYGenerarDocumentoPdfDirectoController() {
+        System.out.println("====== INICIANDO PRUEBA DIRECTA AL CONTROLLER ======");
+
+        try {
+            // 1. Cargar y deserializar el JSON directamente desde src/test/resources
+            AtencionMedicaRequest request = objectMapper.readValue(
+                    jsonResource.getInputStream(), 
+                    AtencionMedicaRequest.class
+            );
+            assertNotNull(request, "El Request cargado desde el archivo JSON no debe ser nulo.");
+
+            // 2. Invocación directa al método del Controller
+            ResponseEntity<AtencionMedicaResponse> responseEntity = atencionMedicaController.prepararPdfBorrador(request);
+
+            // 3. Validar el Status HTTP y la Respuesta
+            assertNotNull(responseEntity, "La respuesta ResponseEntity no debe ser nula.");
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode(), "El código de respuesta debe ser 200 OK.");
+
+            AtencionMedicaResponse response = responseEntity.getBody();
+            assertNotNull(response, "El cuerpo de la respuesta AtencionMedicaResponse no debe ser nulo.");
+            assertTrue(response.isExito(), "El flag 'exito' debe ser true.");
+
+            System.out.println("✔ CONTROLLER EJECUTADO CON ÉXITO");
+            System.out.println("✔ ESTADO DE FIRMA: " + response.getEstadoFirma());
+            System.out.println("✔ HASH INTEGRIDAD: " + response.getHashIntegridad());
+            System.out.println("✔ RUTA PDF GENERADO: " + response.getRutaPdfFirmado());
+
+        } catch (Exception e) {
+            fail("La ejecución del Controller falló con la excepción: " + e.getMessage());
+        }
+    }
+}    
+
+    
+	// =====================================================================
+	// TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
+	// =====================================================================
+	
+
+/*    
+    @Test
+    @Order(2)
+    @Commit
+    void test2_FirmarYGenerarDocumentoPdf() {
+        Long idAtencionCompartido = 281L;
+        String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
+        System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
+
+        assertNotNull(idAtencionCompartido, "El ID de la atención no debe ser nulo.");
+        
+        try {
+            System.out.println("====== STEP 2: EJECUTANDO PREPARACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
+            
+//            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencionCompartido);
+            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(atencionMedicaRequest);
+                        
+            assertNotNull(response);
+            assertTrue(response.isExito());
+            assertEquals("PENDIENTE_FIRMA", response.getEstadoFirma());
+            
+            // Validar que se generó el Hash de Integridad y la ruta asignada
+            assertNotNull(response.getHashIntegridad(), "El Hash SHA-256 no debe ser nulo.");
+            assertNotNull(response.getRutaPdfFirmado(), "La ruta del PDF asignada no debe ser nula.");
+            
+            System.out.println("✔ HASH GENERADO: " + response.getHashIntegridad());
+            System.out.println("✔ RUTA ASIGNADA: " + response.getRutaPdfFirmado());
+
+        } catch (Exception e) {
+            fail("El Test 2 falló por una excepción: " + e.getMessage());
+        }
+    }
+  */  
     
  // =====================================================================
     // TEST 1: GUARDAR ATENCIÓN MÉDICA (PERSISTENCIA ATÓMICA)
@@ -128,44 +213,9 @@ public class GuardarAtencionAndFirmarTest {
 */    
 
     
-	// =====================================================================
-	// TEST 2: FIRMAR DOCUMENTO Y GENERAR ARCHIVO PDF FISICO
-	// =====================================================================
-	
-	
-    @Test
-    @Order(2)
-    @Commit
-    void test2_FirmarYGenerarDocumentoPdf() {
-        Long idAtencionCompartido = 281L;
-        String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencionCompartido);
-        System.out.println("JSON RECUPERADO DE BD: " + jsonAtencion);
 
-        assertNotNull(idAtencionCompartido, "El ID de la atención no debe ser nulo.");
-        
-        try {
-            System.out.println("====== STEP 2: EJECUTANDO PREPARACIÓN DE PDF PARA ID: " + idAtencionCompartido + " ======");
-            
-//            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencionCompartido);
-            AtencionMedicaResponse response = atencionMedicaService.prepararPdf(atencionMedicaRequest);
-                        
-            assertNotNull(response);
-            assertTrue(response.isExito());
-            assertEquals("PENDIENTE_FIRMA", response.getEstadoFirma());
-            
-            // Validar que se generó el Hash de Integridad y la ruta asignada
-            assertNotNull(response.getHashIntegridad(), "El Hash SHA-256 no debe ser nulo.");
-            assertNotNull(response.getRutaPdfFirmado(), "La ruta del PDF asignada no debe ser nula.");
-            
-            System.out.println("✔ HASH GENERADO: " + response.getHashIntegridad());
-            System.out.println("✔ RUTA ASIGNADA: " + response.getRutaPdfFirmado());
 
-        } catch (Exception e) {
-            fail("El Test 2 falló por una excepción: " + e.getMessage());
-        }
-    }
-
-}
+//}
     
 
 /*String jsonNativo = "{\n" +

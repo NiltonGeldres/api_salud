@@ -4,11 +4,13 @@ import com.api_salud.api_salud.config.StorageConfig;
 import com.api_salud.api_salud.service.storage.StorageStrategy;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -61,6 +63,25 @@ public class R2StorageStrategy implements StorageStrategy {
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(content));
     }
 
+ // ===> MÉTODO IMPLEMENTADO <===
+    @Override
+    public byte[] read(String path) {
+        if (path == null || path.trim().isEmpty()) {
+            return new byte[0];
+        }
+
+        String objectName = path.startsWith("/") ? path.substring(1) : path;
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(config.getR2().getBucketName())
+                .key(objectName)
+                .build();
+
+        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(getObjectRequest);
+        return objectBytes.asByteArray();
+    }
+    
+    
     @Override
     public String getUrl(String path) {
         String objectName = path.startsWith("/") ? path.substring(1) : path;
@@ -113,4 +134,6 @@ public class R2StorageStrategy implements StorageStrategy {
 
         return s3Presigner.presignPutObject(presignRequest).url().toString();
     }
+
+
 }

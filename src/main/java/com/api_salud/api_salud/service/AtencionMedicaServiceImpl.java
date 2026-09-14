@@ -211,10 +211,18 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	        pdfDto.setEstadoFirma("PENDIENTE_FIRMA");
 	        
 	     // ===> RESOLUCIÓN DE LA URL DEL LOGO <===
-	        if (pdfDto.getLogoTenantUrl() != null && !pdfDto.getLogoTenantUrl().isEmpty()) {
-	            pdfDto.setLogoTenantUrl(storageService.resolverUrlPublicaLogo(pdfDto.getLogoTenantUrl()));
-	        }	        
+	     //   if (pdfDto.getLogoTenantUrl() != null && !pdfDto.getLogoTenantUrl().isEmpty()) {
+	      //      pdfDto.setLogoTenantUrl(storageService.resolverUrlPublicaLogo(pdfDto.getLogoTenantUrl()));
+	      //  }	        
 	
+	        if (pdfDto.getLogoTenantUrl() != null && !pdfDto.getLogoTenantUrl().isEmpty()) {
+	            // En lugar de resolver la URL pública HTTPS de Cloudflare (que da 403 / Error 1010),
+	            // convertimos la ruta a un Data URI Base64 optimizado en memoria.
+	            String logoBase64 = storageService.obtenerLogoComoBase64(pdfDto.getLogoTenantUrl());
+	            pdfDto.setLogoTenantUrl(logoBase64);
+	        }
+	        
+	        
 	        Integer idEntidad = pdfDto.getIdEntidad() != null ? pdfDto.getIdEntidad() : 0;
 	        String hcPaciente = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null)
 	                ? pdfDto.getPaciente().getHc() 

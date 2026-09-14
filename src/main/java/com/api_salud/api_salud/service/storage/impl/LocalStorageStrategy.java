@@ -46,4 +46,10 @@ public class LocalStorageStrategy implements StorageStrategy {
     public String generarPresignedUrlSubida(String path) {
         return getUrl(path);
     }
+
+	@Override
+	public byte[] read(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

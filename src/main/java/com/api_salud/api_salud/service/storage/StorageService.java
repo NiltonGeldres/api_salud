@@ -1,9 +1,16 @@
 package com.api_salud.api_salud.service.storage;
 
+import java.util.Base64;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.api_salud.api_salud.config.StorageConfig;
 import com.api_salud.api_salud.service.storage.impl.LocalStorageStrategy;
 import com.api_salud.api_salud.service.storage.impl.R2StorageStrategy;
+
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @Service
 public class StorageService {
@@ -26,6 +33,40 @@ public class StorageService {
         }
     }
 
+    
+    @Cacheable(value = "logosBase64", key = "#rutaRelativa")
+    public String obtenerLogoComoBase64(String rutaRelativa) {
+    	System.out.println("metoso obtenerLogoComoBase64 argumaneto rutaRelativa= " +rutaRelativa);
+        if (rutaRelativa == null || rutaRelativa.trim().isEmpty()) {
+            return "";
+        }
+
+        // 👈 VALIDACIÓN: Si ya es un Base64 (data:image/...) o una URL HTTP/HTTPS, se devuelve directo.
+        if (rutaRelativa.startsWith("data:") || rutaRelativa.startsWith("http://") || rutaRelativa.startsWith("https://")) {
+            return rutaRelativa;
+        }
+
+        try {
+            // Lee los bytes usando la estrategia activa (R2 o Local)
+            byte[] bytes = strategy.read(rutaRelativa);
+
+            if (bytes == null || bytes.length == 0) {
+                return "";
+            }
+
+            // Convertir a Base64
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+
+            // Devuelve el Data URI listo para Thymeleaf / Flying Saucer
+        	System.out.println("RETURN metoso obtenerLogoComoBase64 argumaneto rutaRelativa= " +"data:image/png;base64," + base64);
+            return "data:image/png;base64," + base64;
+
+        } catch (Exception e) {
+            System.err.println("Error al obtener logo en Base64: " + e.getMessage());
+            return ""; // Evita romper la generación del PDF si ocurre un error
+        }
+    }
+    
     /**
      * Construye dinámicamente la ruta en el bucket reemplazando variables.
      * @param idEntidad ID de la empresa/entidad ({empresa})

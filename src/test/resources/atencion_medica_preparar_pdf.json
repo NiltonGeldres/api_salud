@@ -11,12 +11,11 @@
 	"idMedicoIngreso":2,
 	"idEntidad":2,
 	"idUsuarioRegistro":109,
-	"triajes":[{"idTriaje":50,"valorTriaje":"67"},{"idTriaje":51,"valorTriaje":"168"}	],
+	"triajes":[{"idTriaje":50,"valorTriaje":"67"},{"idTriaje":51,"valorTriaje":"168"}],
 	"antecedentes":[{"idAntecedente":0,"nombreAntecedente":"Artrosis"}],
 	"sintomas":[{"idSintoma":0,"nombreSintoma":"Dolor en las mano y huesos"}],
 	"examenFisico":[{"idExamenFisico":0,"nombreExamenFisico":"Inflamacion de los dedos"}],
 	"alta":[{"idAlta":0,"nombreAlta":"Regresar en 30 dias"}],
 	"diagnosticos":[{"idDiagnostico":5357,"idDiagnosticoOrden":1,"idSubclasificacion":1}],
 	"examenesAuxiliares":[{"idPuntoCarga":1,"idProducto":2916,"cantidad":1,"observacion":"Examen radiologico,dos  manos","idDiagnostico":5357},{"idPuntoCarga":1,"idProducto":50201,"cantidad":1,"observacion":"Densitometria osea","idDiagnostico":5357}],
-	"medicacion":[{"idAlmacen":1,"idProducto":3818,"cantidadDosis":1,"idUmDosis":1,"idFrecuenciaDosis":1,"cantidadPeriodo":7,"idViaAdministracion":1,"cantidadTotal":7,"idDiagnostico":5357,"indicaciones":"Diclofenaco  100 mg tab"}]
-}
+	"medicacion":[{"idAlmacen":1,"idProducto":3818,"cantidadDosis":1,"idUmDosis":1,"idFrecuenciaDosis":1,"cantidadPeriodo":7,"idViaAdministracion":1,"cantidadTotal":7,"idDiagnostico":5357,"indicaciones":"Diclofenaco  100 mg tab"}]}
