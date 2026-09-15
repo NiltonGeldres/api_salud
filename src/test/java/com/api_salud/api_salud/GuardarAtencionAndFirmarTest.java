@@ -78,7 +78,7 @@ public class GuardarAtencionAndFirmarTest {
             System.out.println("✔ CONTROLLER EJECUTADO CON ÉXITO");
             System.out.println("✔ ESTADO DE FIRMA: " + response.getEstadoFirma());
             System.out.println("✔ HASH INTEGRIDAD: " + response.getHashIntegridad());
-            System.out.println("✔ RUTA PDF GENERADO: " + response.getRutaPdfFirmado());
+          //  System.out.println("✔ RUTA PDF GENERADO: " + response.getRutaPdfFirmado());
 
         } catch (Exception e) {
             fail("La ejecución del Controller falló con la excepción: " + e.getMessage());

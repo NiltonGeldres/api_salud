@@ -158,18 +158,141 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error al guardar atención completa: " + e.getMessage(), e);
         }
     }    
-    
-  
+   
 
-    /**
-     * PASO 2: Generación del borrador PDF y congelamiento de Hash SHA-256
-     * Estado en BD: PENDIENTE_FIRMA
-     */
-    
     /**
      * PASO 2: Persistencia / Actualización + Generación del borrador PDF y congelamiento de Hash SHA-256
      * Estado en BD: PENDIENTE_FIRMA
      */
+	@Override
+	@Transactional
+	public AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request) {
+	    try {
+	        Long idAtencion = request.getIdAtencion();
+	
+	        // 1. Establecer estado de firma y serializar el DTO a String JSON
+	        request.setEstadoFirma("PENDIENTE_FIRMA");
+	        String jsonPayload = objectMapper.writeValueAsString(request);
+	
+	        // 2. Persistir en BD (Sobrescribe/Crea la atención en estado Borrador)
+	        if (idAtencion == null || idAtencion <= 0L) {
+	            idAtencion = atencionMedicaRepository.guardarAtencionMedicaBorrador(jsonPayload);
+	            request.setIdAtencion(idAtencion);
+	
+	            if (request.getIdCita() != null && request.getIdCita() > 0) {
+	                boolean vinculado = citaService.vincularAtencion(request.getIdCita(), idAtencion);
+	                if (!vinculado) {
+	                    System.err.println("Advertencia: No se pudo asociar la atención " + idAtencion + " a la cita " + request.getIdCita());
+	                }
+	            }
+	        } else {
+	            atencionMedicaRepository.actualizarAtencionMedicaBorrador(idAtencion, jsonPayload);
+	        }
+	
+	        // ----------------------------------------------------------------------------------
+	        // REFACTOR: Preparación y generación de PDFs (Utilizando el DTO en memoria)
+	        // ----------------------------------------------------------------------------------
+	        AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayload, AtencionMedicaPdfDTO.class);
+	        pdfDto.setIdAtencion(idAtencion);
+	        pdfDto.setEstadoFirma("PENDIENTE_FIRMA");
+	
+	        if (pdfDto.getLogoTenantUrl() != null && !pdfDto.getLogoTenantUrl().isEmpty()) {
+	            String logoBase64 = storageService.obtenerLogoComoBase64(pdfDto.getLogoTenantUrl());
+	            pdfDto.setLogoTenantUrl(logoBase64);
+	        }
+	
+	        Integer idEntidad = pdfDto.getIdEntidad() != null ? pdfDto.getIdEntidad() : 0;
+	        String hcPaciente = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null)
+	                ? pdfDto.getPaciente().getHc() 
+	                : "SIN_HC";
+	
+	        // Recolectar condicionalmente los PDFs a generar
+	        Map<String, byte[]> documentos = new LinkedHashMap<>();
+	        documentos.put("historia", pdfGeneratorService.generarPdfHistoriaClinica(pdfDto));
+	
+	        if (pdfDto.getMedicacion() != null && !pdfDto.getMedicacion().isEmpty()) {
+	            documentos.put("receta", pdfGeneratorService.generarPdfReceta(pdfDto));
+	        }
+	        if (pdfDto.getExamenesAuxiliares() != null && !pdfDto.getExamenesAuxiliares().isEmpty()) {
+	            documentos.put("orden", pdfGeneratorService.generarPdfOrdenes(pdfDto));
+	        }
+	        if (pdfDto.getAlta() != null && !pdfDto.getAlta().isEmpty()) {
+	            documentos.put("indicaciones", pdfGeneratorService.generarPdfIndicaciones(pdfDto));
+	        }
+	
+	        // Subir a Storage (R2) y construir la lista de adjuntos
+	        List<DocumentoAdjuntoDTO> listaDocumentosBD = new ArrayList<>();
+	        List<DocumentoAdjuntoDTO> listaDocumentosResponse = new ArrayList<>();
+	
+	        for (Map.Entry<String, byte[]> entry : documentos.entrySet()) {
+	            String tipoDoc = entry.getKey();
+	            byte[] pdfBytes = entry.getValue();
+	
+	            String rutaBorrador = storageService.construirRutaRelativa(idEntidad, hcPaciente, idAtencion, tipoDoc, false);
+	            String rutaFirmado  = storageService.construirRutaRelativa(idEntidad, hcPaciente, idAtencion, tipoDoc, true);
+	
+	            // Guardar borrador en Cloudflare R2
+	            storageService.guardar(rutaBorrador, pdfBytes);
+	
+	            // Generar Presigned URLs
+	            String urlLectura = storageService.generarPresignedUrl(rutaBorrador);
+	            String urlSubida  = storageService.generarPresignedUrlSubida(rutaFirmado);
+	
+	            DocumentoAdjuntoDTO docDTO = new DocumentoAdjuntoDTO(tipoDoc, rutaBorrador, rutaFirmado, urlLectura, urlSubida);
+	            listaDocumentosBD.add(docDTO);
+	            listaDocumentosResponse.add(docDTO);
+	        }
+	
+	        // 3. PERSISTIR LAS RUTAS EN BD (Esto actualiza la columna o el JSON en PostgreSQL)
+	        atencionMedicaRepository.actualizarRutasPdf(idAtencion, listaDocumentosBD);
+	        atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "PENDIENTE_FIRMA");
+	
+	        // ----------------------------------------------------------------------------------
+	        // REFACTOR: Ahora sí obtenemos el JSON DEFINITIVO (con rutas incorporadas)
+	        // ----------------------------------------------------------------------------------
+	        String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+	        System.out.println("=== JSON PAYLOAD BD (ID: " + idAtencion + ") ===");
+            System.out.println(objectMapper.readTree(jsonPayloadBD).toPrettyString());
+	        
+	        
+	        if (jsonPayloadBD == null || jsonPayloadBD.trim().isEmpty()) {
+	            throw new RuntimeException("No se encontraron datos persistidos para la atención con ID: " + idAtencion);
+	        }
+	
+	        // 4. Generar y congelar Hash SHA-256 sobre el JSON 100% COMPLETO
+	        String hashIntegridad = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
+	        atencionMedicaRepository.actualizarHashFirma(idAtencion, hashIntegridad);
+	
+	        // 5. Instanciar respuesta con el estado congelado e inmutable
+	        AtencionMedicaResponse response = new AtencionMedicaResponse(
+	                true,
+	                "Se generaron " + documentos.size() + " documento(s) borrador correctamente.",
+	                idAtencion,
+	                2, // Estado: Borrador / Pendiente Firma
+	                "PENDIENTE_FIRMA"
+	        );
+	
+	        if (pdfDto.getPaciente() != null) {
+	            response.setIdPaciente(pdfDto.getPaciente().getIdPaciente());
+	        }
+	        
+	        // Asignar los documentos adjuntos con el helper
+	        for (DocumentoAdjuntoDTO doc : listaDocumentosResponse) {
+	            response.agregarDocumento(doc);
+	        }
+	
+	        response.setHashIntegridad(hashIntegridad);
+	        response.setJsonEnriquecidoFirmado(jsonPayloadBD); // Contiene datos clínicos + rutas PDF
+	
+	        return response;
+	
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error al guardar y preparar los PDFs borradores: " + e.getMessage(), e);
+	    }
+	} 
+    
+/*    
 	@Override
 	@Transactional
 	public AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request) {
@@ -297,96 +420,6 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	        throw new RuntimeException("Error al guardar y preparar los PDFs borradores: " + e.getMessage(), e);
 	    }
 	}
-    
-    
-  /*  @Override
-    @Transactional
-    public AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request) {
-        try {
-            Long idAtencion = request.getIdAtencion();
-
-            // 1. Establecer estado de firma y serializar el DTO a String JSON
-            request.setEstadoFirma("PENDIENTE_FIRMA");
-            String jsonPayload = objectMapper.writeValueAsString(request);
-
-            // 2. Persistir en Base de Datos según la presencia de idAtencion
-            if (idAtencion == null || idAtencion <= 0L) {
-                // Nuevo borrador -> Ejecuta fn_guardar_atencion_medica_borrador(jsonPayload)
-                idAtencion = atencionMedicaRepository.guardarAtencionMedicaBorrador(jsonPayload);
-                request.setIdAtencion(idAtencion);
-
-                // Si viene de una cita, realizar la vinculación
-                if (request.getIdCita() != null && request.getIdCita() > 0) {
-                    boolean vinculado = citaService.vincularAtencion(request.getIdCita(), idAtencion);
-                    if (!vinculado) {
-                        System.err.println("Advertencia: No se pudo asociar la atención " + idAtencion + " a la cita " + request.getIdCita());
-                    }
-                }
-            } else {
-                // Borrador existente -> Ejecuta fn_actualizar_atencion_medica_borrador(idAtencion, jsonPayload)
-                atencionMedicaRepository.actualizarAtencionMedicaBorrador(idAtencion, jsonPayload);
-            }
-
-            // 3. Obtener el JSON enriquecido y consolidado directamente desde PostgreSQL
-            String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
-            if (jsonPayloadBD == null || jsonPayloadBD.trim().isEmpty()) {
-                throw new RuntimeException("No se encontraron datos persistidos para la atención con ID: " + idAtencion);
-            }
-
-            // 4. Generar y congelar Hash SHA-256 de integridad sobre el JSON consolidado
-            String hashIntegridad = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
-            atencionMedicaRepository.actualizarHashFirma(idAtencion, hashIntegridad);
-
-            // 5. Mapear a DTO de PDF e inyectar Hash temporal para el renderizado del documento
-            AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
-            pdfDto.setHashFirma(hashIntegridad);
-            pdfDto.setEstadoFirma("PENDIENTE_FIRMA");
-
-            // 6. Generar bytes del PDF borrador
-            byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
-
-            // 7. Construir la ruta relativa dinámica
-            String plantilla = storageConfig.getPath().getBorradores();            
-            //String plantilla = storageConfig.getPath().getHistorias();
-            String hc = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null) 
-                    ? pdfDto.getPaciente().getHc() : "SIN_HC";
-            String entidad = (pdfDto.getIdEntidad() != null) 
-                    ? String.valueOf(pdfDto.getIdEntidad()) : "SIN_ENTIDAD";            
-            
-            String rutaRelativa = plantilla
-                    .replace("{empresa}", entidad)
-                    .replace("{paciente}", hc)
-                    .replace("{atencion}", String.valueOf(idAtencion));
-
-            // 8. Guardar borrador PDF en Storage (Local o Cloud)
-            storageService.guardar(rutaRelativa, pdfBytes);
-            
-            // 9. Actualizar estado y ruta en PostgreSQL
-            atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaRelativa);
-            atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "PENDIENTE_FIRMA");
-
-            // 10. Construir respuesta para React obteniendo la URL dinámica según la estrategia (LOCAL o CLOUD)
-            String urlVisualizacion = storageService.obtenerUrlPublica(rutaRelativa);
-            
-            // 11. Construir respuesta para React
-            AtencionMedicaResponse response = new AtencionMedicaResponse(
-                    true, 
-                    "PDF borrador generado exitosamente. Pendiente de firma digital.", 
-                    idAtencion, 
-                    2, // ID Estado Pendiente de Firma
-                    "PENDIENTE_FIRMA"
-            );
-            response.setRutaPdfFirmado(rutaRelativa);
-//            response.setRutaPdfFirmado(urlVisualizacion);
-            response.setHashIntegridad(hashIntegridad);
-            
-            return response;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al guardar y preparar el PDF borrador: " + e.getMessage(), e);
-        }
-    }
 */    
 
     @Override
@@ -484,7 +517,15 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
         if (jsonAtencion == null || jsonAtencion.trim().isEmpty() || "{}".equals(jsonAtencion)) {
             throw new RuntimeException("No se encontraron datos registrados para la atención con ID: " + idAtencion);
         }
-        
+
+        System.out.println("=== JSON PAYLOAD BD (ID: " + idAtencion + ") ===");
+        System.out.println("=== JSON PAYLOAD BD (ID: " + idAtencion + ") ===");
+        try {
+            System.out.println(objectMapper.readTree(jsonAtencion).toPrettyString());
+        } catch (Exception e) {
+            // Si el formateo falla por algún carácter especial, imprime la cadena directa sin romper la petición
+            System.out.println(jsonAtencion);
+        }        
         return jsonAtencion;
     }    
 
@@ -631,3 +672,94 @@ public AtencionMedicaResponse prepararPdf(Long idAtencion) {
    }    
  
  */  
+
+
+/*  @Override
+@Transactional
+public AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request) {
+    try {
+        Long idAtencion = request.getIdAtencion();
+
+        // 1. Establecer estado de firma y serializar el DTO a String JSON
+        request.setEstadoFirma("PENDIENTE_FIRMA");
+        String jsonPayload = objectMapper.writeValueAsString(request);
+
+        // 2. Persistir en Base de Datos según la presencia de idAtencion
+        if (idAtencion == null || idAtencion <= 0L) {
+            // Nuevo borrador -> Ejecuta fn_guardar_atencion_medica_borrador(jsonPayload)
+            idAtencion = atencionMedicaRepository.guardarAtencionMedicaBorrador(jsonPayload);
+            request.setIdAtencion(idAtencion);
+
+            // Si viene de una cita, realizar la vinculación
+            if (request.getIdCita() != null && request.getIdCita() > 0) {
+                boolean vinculado = citaService.vincularAtencion(request.getIdCita(), idAtencion);
+                if (!vinculado) {
+                    System.err.println("Advertencia: No se pudo asociar la atención " + idAtencion + " a la cita " + request.getIdCita());
+                }
+            }
+        } else {
+            // Borrador existente -> Ejecuta fn_actualizar_atencion_medica_borrador(idAtencion, jsonPayload)
+            atencionMedicaRepository.actualizarAtencionMedicaBorrador(idAtencion, jsonPayload);
+        }
+
+        // 3. Obtener el JSON enriquecido y consolidado directamente desde PostgreSQL
+        String jsonPayloadBD = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
+        if (jsonPayloadBD == null || jsonPayloadBD.trim().isEmpty()) {
+            throw new RuntimeException("No se encontraron datos persistidos para la atención con ID: " + idAtencion);
+        }
+
+        // 4. Generar y congelar Hash SHA-256 de integridad sobre el JSON consolidado
+        String hashIntegridad = securityUtils.generarHashIntegridad(jsonPayloadBD, idAtencion);
+        atencionMedicaRepository.actualizarHashFirma(idAtencion, hashIntegridad);
+
+        // 5. Mapear a DTO de PDF e inyectar Hash temporal para el renderizado del documento
+        AtencionMedicaPdfDTO pdfDto = objectMapper.readValue(jsonPayloadBD, AtencionMedicaPdfDTO.class);
+        pdfDto.setHashFirma(hashIntegridad);
+        pdfDto.setEstadoFirma("PENDIENTE_FIRMA");
+
+        // 6. Generar bytes del PDF borrador
+        byte[] pdfBytes = pdfGeneratorService.generarPdfHistoriaClinica(pdfDto);
+
+        // 7. Construir la ruta relativa dinámica
+        String plantilla = storageConfig.getPath().getBorradores();            
+        //String plantilla = storageConfig.getPath().getHistorias();
+        String hc = (pdfDto.getPaciente() != null && pdfDto.getPaciente().getHc() != null) 
+                ? pdfDto.getPaciente().getHc() : "SIN_HC";
+        String entidad = (pdfDto.getIdEntidad() != null) 
+                ? String.valueOf(pdfDto.getIdEntidad()) : "SIN_ENTIDAD";            
+        
+        String rutaRelativa = plantilla
+                .replace("{empresa}", entidad)
+                .replace("{paciente}", hc)
+                .replace("{atencion}", String.valueOf(idAtencion));
+
+        // 8. Guardar borrador PDF en Storage (Local o Cloud)
+        storageService.guardar(rutaRelativa, pdfBytes);
+        
+        // 9. Actualizar estado y ruta en PostgreSQL
+        atencionMedicaRepository.actualizarRutaPdf(idAtencion, rutaRelativa);
+        atencionMedicaRepository.actualizarEstadoFirma(idAtencion, "PENDIENTE_FIRMA");
+
+        // 10. Construir respuesta para React obteniendo la URL dinámica según la estrategia (LOCAL o CLOUD)
+        String urlVisualizacion = storageService.obtenerUrlPublica(rutaRelativa);
+        
+        // 11. Construir respuesta para React
+        AtencionMedicaResponse response = new AtencionMedicaResponse(
+                true, 
+                "PDF borrador generado exitosamente. Pendiente de firma digital.", 
+                idAtencion, 
+                2, // ID Estado Pendiente de Firma
+                "PENDIENTE_FIRMA"
+        );
+        response.setRutaPdfFirmado(rutaRelativa);
+//        response.setRutaPdfFirmado(urlVisualizacion);
+        response.setHashIntegridad(hashIntegridad);
+        
+        return response;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al guardar y preparar el PDF borrador: " + e.getMessage(), e);
+    }
+}
+*/    
