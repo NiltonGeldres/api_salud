@@ -4,6 +4,8 @@ import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.request.validation.ValidationGroups;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.service.AtencionMedicaService;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -55,12 +57,20 @@ public class AtencionMedicaController {
      * 3. GENERAR PDF BORRADOR / VALIDAR (POST)
      * Estricto: Valida tanto el BorradorGroup como las colecciones obligatorias (CompletoGroup).
      */
-    @PostMapping("/preparar-pdf")
+   /* @PostMapping("/preparar-pdf")
     public ResponseEntity<AtencionMedicaResponse> prepararPdfBorrador(
             @Validated(ValidationGroups.CompletoGroup.class) @RequestBody AtencionMedicaRequest request) {
         
         AtencionMedicaResponse response = atencionMedicaService.prepararPdf(request);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    */
+    @PostMapping("/preparar-pdf")
+    public ResponseEntity<ObjectNode> prepararPdfBorrador(
+            @Validated(ValidationGroups.CompletoGroup.class) @RequestBody AtencionMedicaRequest request) {
+        
+        ObjectNode response = atencionMedicaService.prepararPdf(request);
+        return ResponseEntity.ok(response);
     }
     
     /**
@@ -93,15 +103,29 @@ public class AtencionMedicaController {
         return ResponseEntity.ok(response);
     }
 */
+    
+    
     /**
      * Endpoint para consultar y llevar los datos de la atención hacia afuera (sistemas externos/frontend).
      * Devuelve el JSON plano generado por PostgreSQL.
      */
+    /**
+     * Endpoint para consultar y llevar los datos de la atención hacia afuera (sistemas externos/frontend).
+     * Devuelve el JSON enriquecido con Presigned URLs dinámicas.
+     */
+    @GetMapping(value = "/detalle/{idAtencion}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ObjectNode> obtenerAtencionPorId(@PathVariable Long idAtencion) {
+        ObjectNode jsonAtencion = atencionMedicaService.obtenerJsonAtencion(idAtencion);
+        return ResponseEntity.ok(jsonAtencion);
+    }    
+    
+/*    
     @GetMapping(value = "/detalle/{idAtencion}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> obtenerAtencionPorId(@PathVariable Long idAtencion) {
         String jsonAtencion = atencionMedicaService.obtenerJsonAtencion(idAtencion);
         return ResponseEntity.ok(jsonAtencion);
     }   
+ */   
     
  // =======================================================================
     // 🎯 GET: LISTAR ATENCIONES PENDIENTES DE FIRMA (PDF BORRADOR)

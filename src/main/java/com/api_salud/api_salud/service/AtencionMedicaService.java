@@ -2,6 +2,7 @@ package com.api_salud.api_salud.service;
 
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface AtencionMedicaService {
 
@@ -23,14 +24,16 @@ public interface AtencionMedicaService {
     AtencionMedicaResponse guardarAtencionMedica(AtencionMedicaRequest request);
     
 	AtencionMedicaResponse firmarAtencion(Long idAtencion);
-	String obtenerJsonAtencion(Long idAtencion);
+	//String obtenerJsonAtencion(Long idAtencion);
+	ObjectNode obtenerJsonAtencion(Long idAtencion);	
 //	AtencionMedicaResponse prepararPdf(Long idAtencion);
 
 	/**
 	 * PASO 2: Generación del borrador PDF y congelamiento de Hash SHA-256
 	 * Estado en BD: PENDIENTE_FIRMA
 	 */
-	AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request);
-
+	//AtencionMedicaResponse prepararPdf(AtencionMedicaRequest request);
+	ObjectNode prepararPdf(AtencionMedicaRequest request);
+	
 	String listarAtencionesPendientesFirma( Integer idMedico);
 }

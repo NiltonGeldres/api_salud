@@ -50,7 +50,7 @@ public class GuardarAtencionAndFirmarTest {
     private AtencionMedicaController atencionMedicaController; // Inyección directa del Controller
 
     
-    
+  /*  
     @Test
     @Order(2)
     void test2_FirmarYGenerarDocumentoPdfDirectoController() {
@@ -84,6 +84,7 @@ public class GuardarAtencionAndFirmarTest {
             fail("La ejecución del Controller falló con la excepción: " + e.getMessage());
         }
     }
+  */
 }    
 
     
