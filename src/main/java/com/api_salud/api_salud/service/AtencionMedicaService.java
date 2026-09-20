@@ -1,5 +1,6 @@
 package com.api_salud.api_salud.service;
 
+import com.api_salud.api_salud.request.AtencionMedicaConfirmarFirmaRequest;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,4 +37,6 @@ public interface AtencionMedicaService {
 	ObjectNode prepararPdf(AtencionMedicaRequest request);
 	
 	String listarAtencionesPendientesFirma( Integer idMedico);
+	
+	public ObjectNode confirmarFirmaYObtenerJson(AtencionMedicaConfirmarFirmaRequest dto) ;	
 }

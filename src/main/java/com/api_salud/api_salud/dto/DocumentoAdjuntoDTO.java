@@ -12,6 +12,7 @@ public class DocumentoAdjuntoDTO {
     private String urlLecturaBorrador; // Presigned GET para descarga/visores
     private String urlSubidaFirmado;   // Presigned PUT para cargar el PDF firmado
     private String urlLecturaFirmado;
+    private String urlLectura;
     
     // Constructor vacío requerido por Jackson
     public DocumentoAdjuntoDTO() {}
@@ -74,6 +75,15 @@ public class DocumentoAdjuntoDTO {
 	public void setUrlLecturaFirmado(String urlLecturaFirmado) {
 		this.urlLecturaFirmado = urlLecturaFirmado;
 	}
-    
+
+	public String getUrlLectura() {
+		return urlLectura;
+	}
+
+	public void setUrlLectura(String urlLectura) {
+		this.urlLectura = urlLectura;
+	}
+
+	
 }
 

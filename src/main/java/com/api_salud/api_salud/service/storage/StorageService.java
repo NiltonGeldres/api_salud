@@ -34,6 +34,7 @@ public class StorageService {
     }
 
     
+    
     @Cacheable(value = "logosBase64", key = "#rutaRelativa")
     public String obtenerLogoComoBase64(String rutaRelativa) {
     	System.out.println("metoso obtenerLogoComoBase64 argumaneto rutaRelativa= " +rutaRelativa);
@@ -118,12 +119,22 @@ public class StorageService {
     public String obtenerUrlPublica(String rutaRelativa) {
         return strategy.getUrl(rutaRelativa);
     }
-
+    
+    public String generarPresignedGetUrl(String rutaRelativa) {
+        if (rutaRelativa == null || rutaRelativa.trim().isEmpty()) {
+            return null;
+        }
+        return strategy.generarPresignedUrl(rutaRelativa);
+    }
+    
     public String generarPresignedUrl(String rutaRelativa) {
         return strategy.generarPresignedUrl(rutaRelativa);
     }
 
     public String generarPresignedUrlSubida(String rutaRelativa) {
+    	if (rutaRelativa == null || rutaRelativa.trim().isEmpty()) {
+            return null;
+        }    	
         return strategy.generarPresignedUrlSubida(rutaRelativa);
     }
 }

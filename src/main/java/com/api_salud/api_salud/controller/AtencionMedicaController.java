@@ -1,11 +1,13 @@
 package com.api_salud.api_salud.controller;
 
+import com.api_salud.api_salud.request.AtencionMedicaConfirmarFirmaRequest;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.request.validation.ValidationGroups;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.service.AtencionMedicaService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 //@CrossOrigin(origins = "*") // Ajustar luego al dominio específico de React por seguridad CORS
 public class AtencionMedicaController {
 
+    @Autowired
     private final AtencionMedicaService atencionMedicaService;
 
     // Inyección por constructor (Buena práctica, facilita pruebas unitarias)
@@ -27,6 +30,14 @@ public class AtencionMedicaController {
         this.atencionMedicaService = atencionMedicaService;
     }
 
+
+    @PostMapping(value = "/confirmar-firma", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ObjectNode> confirmarFirma(@RequestBody AtencionMedicaConfirmarFirmaRequest request) {
+        ObjectNode jsonRespuesta = atencionMedicaService.confirmarFirmaYObtenerJson(request);
+        return ResponseEntity.ok(jsonRespuesta);
+    }  
+    
+    
     /**
      * 1. CREAR BORRADOR (POST)
      * Permisivo: Solo valida IDs de estructura y Tenant (BorradorGroup).

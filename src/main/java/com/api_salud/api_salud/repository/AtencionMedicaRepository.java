@@ -15,4 +15,5 @@ public interface AtencionMedicaRepository {
 	Long guardarAtencionMedicaBorrador(String jsonPayload);
 	String listarAtencionesPendientesFirma(Integer idEntidad, Integer idMedico);
 	void actualizarRutasPdf(Long idAtencion, List<DocumentoAdjuntoDTO> documentos);
+	public Long confirmarFirmaJson(Object payloadObjeto) ;	
 }
