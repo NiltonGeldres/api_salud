@@ -68,14 +68,7 @@ public class AtencionMedicaController {
      * 3. GENERAR PDF BORRADOR / VALIDAR (POST)
      * Estricto: Valida tanto el BorradorGroup como las colecciones obligatorias (CompletoGroup).
      */
-   /* @PostMapping("/preparar-pdf")
-    public ResponseEntity<AtencionMedicaResponse> prepararPdfBorrador(
-            @Validated(ValidationGroups.CompletoGroup.class) @RequestBody AtencionMedicaRequest request) {
-        
-        AtencionMedicaResponse response = atencionMedicaService.prepararPdf(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    */
+
     @PostMapping("/preparar-pdf")
     public ResponseEntity<ObjectNode> prepararPdfBorrador(
             @Validated(ValidationGroups.CompletoGroup.class) @RequestBody AtencionMedicaRequest request) {
