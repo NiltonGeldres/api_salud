@@ -17,6 +17,9 @@ public class PacienteCitadoResponse {
     
     private Integer estadoCita;
     private Integer idAtencion;
+    private Integer edad;
+    private String sexo;
+    
 	public int getIdPaciente() {
 		return idPaciente;
 	}
@@ -101,10 +104,19 @@ public class PacienteCitadoResponse {
 	public void setIdAtencion(Integer idAtencion) {
 		this.idAtencion = idAtencion;
 	}
+	public Integer getEdad() {
+		return edad;
+	}
+	public void setEdad(Integer edad) {
+		this.edad = edad;
+	}
+	public String getSexo() {
+		return sexo;
+	}
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
 
-//    private String atendido;
-//    private String estadoFirma;
-//	private int idEstadoAtencion ;
     
     
     
