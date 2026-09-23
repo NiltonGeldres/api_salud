@@ -143,7 +143,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                 throw new IllegalArgumentException("Se requiere un idAtencion válido para actualizar el borrador.");
             }
 
-            request.setEstadoFirma("BORRADOR ACTUALIZADO");
+            request.setEstadoFirma("BORRADOR");
             String jsonPayload = objectMapper.writeValueAsString(request);
 
             // Actualización parcial o total del borrador en BD
