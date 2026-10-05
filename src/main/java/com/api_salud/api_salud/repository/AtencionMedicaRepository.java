@@ -5,6 +5,7 @@ import java.util.List;
 import com.api_salud.api_salud.dto.DocumentoAdjuntoDTO;
 
 public interface AtencionMedicaRepository {
+	String obtenerPanelHistoriaClinicaJson(Integer idPaciente);	
     Long guardarAtencionMedicaCompleta(String jsonPayload);
    // void actualizarRutaPdf(Long idAtencion, String rutaPdf);
     String obtenerJsonAtencionPorId(Long idAtencion); // 🆕

@@ -32,6 +32,7 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
     private final SimpleJdbcCall jdbcCallActualizarRutaPdf;
     private final SimpleJdbcCall jdbcCallListarPendientesFirma;
     private final SimpleJdbcCall jdbcCallConfirmarFirma;
+    private final SimpleJdbcCall jdbcCallObtenerPanelHistoria;
     
     // Configuración e inyección del DataSource nativo
     public AtencionMedicaRepositoryImpl(DataSource dataSource, ObjectMapper objectMapper) {
@@ -77,10 +78,23 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
                     .withSchemaName("igm_atenciones_medicas")
                     .withFunctionName("fn_confirmar_atencion_medica_firmada");
                 
+        this.jdbcCallObtenerPanelHistoria = new SimpleJdbcCall(dataSource)
+                .withSchemaName("igm_atenciones_medicas")
+                .withFunctionName("fn_obtener_panel_historia_clinica");  
         
     }
 
-
+    @Override
+    public String obtenerPanelHistoriaClinicaJson(Integer idPaciente) {
+        String sql = "SELECT igm_atenciones_medicas.fn_obtener_panel_historia_clinica(?)::text";
+        
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, idPaciente);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }    
+    
     @Override
     public Long confirmarFirmaJson(Object payloadObjeto) {
         try {
@@ -209,55 +223,6 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
                 .orElse(null);
     }
     
-/*    
- // =======================================================================
-    // 🎯 2. ACTUALIZAR RUTA FÍSICA DEL PDF Y SINCRONIZAR JSONB VÍA PL/pgSQL
-    // =======================================================================
-    @Override
-    public void actualizarRutasPdf(Long idAtencion, List<DocumentoAdjuntoDTO> documentos) {
-        try {
-            // Extraer rutas según el tipo de documento generado
-            String rutaHistoria = obtenerRutaPorTipo(documentos, "historia");
-            String rutaReceta = obtenerRutaPorTipo(documentos, "receta");
-            String rutaOrdenes = obtenerRutaPorTipo(documentos, "orden");
-            String rutaIndicaciones = obtenerRutaPorTipo(documentos, "indicaciones");
-
-            MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-            parameterSource.addValue("p_id_atencion", idAtencion, Types.BIGINT);
-            parameterSource.addValue("p_ruta_historia", rutaHistoria, Types.VARCHAR);
-            parameterSource.addValue("p_ruta_receta", rutaReceta, Types.VARCHAR);
-            parameterSource.addValue("p_ruta_ordenes", rutaOrdenes, Types.VARCHAR);
-            parameterSource.addValue("p_ruta_indicaciones", rutaIndicaciones, Types.VARCHAR);
-
-            jdbcCallActualizarRutaPdf.execute(parameterSource);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al ejecutar fn_actualizar_ruta_pdf_borrador en la BD: " + e.getMessage(), e);
-        }
-    }
-
-    private String obtenerRutaPorTipo(List<DocumentoAdjuntoDTO> documentos, String tipo) {
-        return documentos.stream()
-                .filter(d -> tipo.equalsIgnoreCase(d.getTipoDocumento()))
-                .map(DocumentoAdjuntoDTO::getRutaBorrador)
-                .findFirst()
-                .orElse(null);
-    }    
-    
-*/    
-/*    @Override
-    public void actualizarRutaPdf(Long idAtencion, String rutaPdf) {
-        try {
-            MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-            parameterSource.addValue("p_id_atencion", idAtencion, Types.BIGINT);
-            parameterSource.addValue("p_ruta_pdf", rutaPdf, Types.VARCHAR);
-
-            jdbcCallActualizarRutaPdf.execute(parameterSource);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al ejecutar fn_actualizar_ruta_pdf_borrador en la BD: " + e.getMessage(), e);
-        }
-    }    */
-    
-
     // =======================================================================
     // 🎯 3. EJECUTAR FUNCIÓN DE FIRMA COMPLETA USANDO SimpleJdbcCall
     // =======================================================================
@@ -314,3 +279,50 @@ public class AtencionMedicaRepositoryImpl implements AtencionMedicaRepository {
 }
 
 
+/*    
+// =======================================================================
+   // 🎯 2. ACTUALIZAR RUTA FÍSICA DEL PDF Y SINCRONIZAR JSONB VÍA PL/pgSQL
+   // =======================================================================
+   @Override
+   public void actualizarRutasPdf(Long idAtencion, List<DocumentoAdjuntoDTO> documentos) {
+       try {
+           // Extraer rutas según el tipo de documento generado
+           String rutaHistoria = obtenerRutaPorTipo(documentos, "historia");
+           String rutaReceta = obtenerRutaPorTipo(documentos, "receta");
+           String rutaOrdenes = obtenerRutaPorTipo(documentos, "orden");
+           String rutaIndicaciones = obtenerRutaPorTipo(documentos, "indicaciones");
+
+           MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+           parameterSource.addValue("p_id_atencion", idAtencion, Types.BIGINT);
+           parameterSource.addValue("p_ruta_historia", rutaHistoria, Types.VARCHAR);
+           parameterSource.addValue("p_ruta_receta", rutaReceta, Types.VARCHAR);
+           parameterSource.addValue("p_ruta_ordenes", rutaOrdenes, Types.VARCHAR);
+           parameterSource.addValue("p_ruta_indicaciones", rutaIndicaciones, Types.VARCHAR);
+
+           jdbcCallActualizarRutaPdf.execute(parameterSource);
+       } catch (Exception e) {
+           throw new RuntimeException("Error al ejecutar fn_actualizar_ruta_pdf_borrador en la BD: " + e.getMessage(), e);
+       }
+   }
+
+   private String obtenerRutaPorTipo(List<DocumentoAdjuntoDTO> documentos, String tipo) {
+       return documentos.stream()
+               .filter(d -> tipo.equalsIgnoreCase(d.getTipoDocumento()))
+               .map(DocumentoAdjuntoDTO::getRutaBorrador)
+               .findFirst()
+               .orElse(null);
+   }    
+   
+*/    
+/*    @Override
+   public void actualizarRutaPdf(Long idAtencion, String rutaPdf) {
+       try {
+           MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+           parameterSource.addValue("p_id_atencion", idAtencion, Types.BIGINT);
+           parameterSource.addValue("p_ruta_pdf", rutaPdf, Types.VARCHAR);
+
+           jdbcCallActualizarRutaPdf.execute(parameterSource);
+       } catch (Exception e) {
+           throw new RuntimeException("Error al ejecutar fn_actualizar_ruta_pdf_borrador en la BD: " + e.getMessage(), e);
+       }
+   }    */

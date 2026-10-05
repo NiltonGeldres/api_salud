@@ -8,6 +8,7 @@ import com.api_salud.api_salud.service.AtencionMedicaService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,12 +32,24 @@ public class AtencionMedicaController {
     }
 
 
+    @GetMapping(
+            value = "/paciente/{idPaciente}/panel-historia",
+            produces = MediaType.APPLICATION_JSON_VALUE
+        )
+        public ResponseEntity<String> obtenerPanelHistoriaClinica(@PathVariable Integer idPaciente) {
+            String jsonResponse = atencionMedicaService.obtenerPanelHistoriaClinica(idPaciente);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(jsonResponse);
+     }
+    
+    
     @PostMapping(value = "/confirmar-firma", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectNode> confirmarFirma(@RequestBody AtencionMedicaConfirmarFirmaRequest request) {
         ObjectNode jsonRespuesta = atencionMedicaService.confirmarFirmaYObtenerJson(request);
         return ResponseEntity.ok(jsonRespuesta);
     }  
-    
     
     /**
      * 1. CREAR BORRADOR (POST)

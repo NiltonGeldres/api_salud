@@ -38,5 +38,7 @@ public interface AtencionMedicaService {
 	
 	String listarAtencionesPendientesFirma( Integer idMedico);
 	
-	public ObjectNode confirmarFirmaYObtenerJson(AtencionMedicaConfirmarFirmaRequest dto) ;	
+	public ObjectNode confirmarFirmaYObtenerJson(AtencionMedicaConfirmarFirmaRequest dto) ;
+
+	String obtenerPanelHistoriaClinica(Integer idPaciente);	
 }

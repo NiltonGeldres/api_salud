@@ -62,9 +62,28 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 		this.storageService = storageService;        
 		this.storageConfig = storageConfig;          
 		this.securityUtils = securityUtils;     
-		this.citaService = citaService;		
-	}    
+		this.citaService = citaService;
+	}  
+    
+    
+    @Override
+    @Transactional(readOnly = true)
+    public String obtenerPanelHistoriaClinica(Integer idPaciente) {
+        if (idPaciente == null || idPaciente <= 0) {
+            throw new IllegalArgumentException("El ID de paciente es requerido y debe ser mayor a 0.");
+        }
 
+        String jsonResult = atencionMedicaRepository.obtenerPanelHistoriaClinicaJson(idPaciente);
+
+        System.out.println("=== DEBUG obtenerPanelHistoriaClinica ===");
+        System.out.println("idPaciente: " + idPaciente);
+        System.out.println("jsonResult retornado por Repository: " + jsonResult);
+        System.out.println("=========================================");
+        
+        return (jsonResult != null && !jsonResult.isEmpty()) 
+                ? jsonResult 
+                : "{\"especialidades\":[],\"atenciones\":[]}";
+    }
     
     @Override
     @Transactional
