@@ -2,8 +2,10 @@ package com.api_salud.api_salud.controller;
 
 import com.api_salud.api_salud.request.AtencionMedicaConfirmarFirmaRequest;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
+import com.api_salud.api_salud.request.DocumentoPresignedUrlRequest;
 import com.api_salud.api_salud.request.validation.ValidationGroups;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
+import com.api_salud.api_salud.response.DocumentoPresignedUrlResponse;
 import com.api_salud.api_salud.service.AtencionMedicaService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -32,7 +34,16 @@ public class AtencionMedicaController {
     }
 
 
-    @GetMapping(
+    @PostMapping(value = "/documento-presigned-url", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DocumentoPresignedUrlResponse> obtenerUrlPresignedDocumento(
+            @Valid @RequestBody DocumentoPresignedUrlRequest request) {
+
+        DocumentoPresignedUrlResponse response = atencionMedicaService.obtenerUrlPresignedDocumento(request);
+        return ResponseEntity.ok(response);
+    }
+    
+    
+   @GetMapping(
             value = "/paciente/{idPaciente}/panel-historia",
             produces = MediaType.APPLICATION_JSON_VALUE
         )

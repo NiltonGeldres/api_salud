@@ -12,6 +12,8 @@ public class DocumentoPresignedUrlRequest {
     @NotEmpty(message = "El tipoDocumento es obligatorio")
     private String tipoDocumento; // Ej: RECETA, SOLICITUD_EXAMEN, INFORME_MEDICO, CERTIFICADO
 
+    private String nroHistoriaClinica;
+
     public DocumentoPresignedUrlRequest() {}
 
     public Long getIdAtencion() {
@@ -29,4 +31,14 @@ public class DocumentoPresignedUrlRequest {
     public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
+
+	public String getNroHistoriaClinica() {
+		return nroHistoriaClinica;
+	}
+
+	public void setNroHistoriaClinica(String nroHistoriaClinica) {
+		this.nroHistoriaClinica = nroHistoriaClinica;
+	}
+    
+    
 }

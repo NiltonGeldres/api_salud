@@ -2,6 +2,7 @@ package com.api_salud.api_salud.service;
 
 import com.api_salud.api_salud.request.AtencionMedicaConfirmarFirmaRequest;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
+import com.api_salud.api_salud.request.DocumentoPresignedUrlRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
 import com.api_salud.api_salud.response.DocumentoPresignedUrlResponse;
 import com.api_salud.api_salud.service.storage.StorageService;
@@ -12,24 +13,15 @@ import com.api_salud.api_salud.dto.AtencionMedicaPdfDTO;
 import com.api_salud.api_salud.dto.DocumentoAdjuntoDTO;
 import com.api_salud.api_salud.repository.AtencionMedicaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-
-import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,30 +60,37 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 	}  
     
 
+    
+    
     @Override
-    public DocumentoPresignedUrlResponse obtenerUrlPresignedDocumento(Long idAtencion, String tipoDocumento) {
-        // 1. Obtener la atención médica desde la BD para conocer el idEntidad y hcPaciente
-        String atencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion).orElseThrow(() -> new RuntimeException("No se encontró la atención médica con ID: " + idAtencion));
+    public DocumentoPresignedUrlResponse obtenerUrlPresignedDocumento(DocumentoPresignedUrlRequest request) {
 
-        // 2. Construir la ruta en el bucket usando el método de StorageService
-        // Nota: esFirmado = true ya que el frontend consulta los documentos finales firmados por el médico
+        // 1. Obtener el idEntidad desde el contexto del Tenant (TenantContext / Seguridad)
+        Integer idEntidad = TenantContext.getEntidadId(); 
+
+        // 2. Construir la ruta relativa exacta en R2 usando la plantilla app.storage.path.firmado
+        // esFirmado = true asegura usar la plantilla de documento firmado
         String rutaRelativa = storageService.construirRutaRelativa(
-                atencion.getIdEntidad(),
-                atencion.getHcPaciente(),
-                idAtencion,
-                tipoDocumento,
+                idEntidad,
+                request.getNroHistoriaClinica(),
+                request.getIdAtencion(),
+                request.getTipoDocumento(),
                 true 
         );
 
-        // 3. Generar la Presigned URL de lectura mediante StorageService
+        // 3. Generar la Presigned URL de lectura (GET) mediante S3Presigner
         String presignedUrl = storageService.generarPresignedGetUrl(rutaRelativa);
 
+        // 4. Validar que la firma de la URL no sea nula o vacía
         if (presignedUrl == null || presignedUrl.trim().isEmpty()) {
-            throw new RuntimeException("No se pudo generar la URL para el documento: " + tipoDocumento);
+            throw new RuntimeException("No se pudo generar la Presigned URL para el documento " 
+                    + request.getTipoDocumento() + " de la atención " + request.getIdAtencion());
         }
 
-        return new DocumentoPresignedUrlResponse(tipoDocumento, presignedUrl);
+        // 5. Retornar el DTO con el tipo de documento y su URL firmada
+        return new DocumentoPresignedUrlResponse(request.getTipoDocumento(), presignedUrl);
     }
+    
 
     private String obtenerRutaDesdeBD(Long idAtencion, String tipoDocumento) {
         // Lógica de mapeo o consulta SQL / SP
@@ -667,7 +666,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
      * Construye las Presigned URLs de lectura y subida para cada documento y
      * oculta las rutas relativas (`null`) en el DTO de salida.
      */
-    private DocumentoAdjuntoDTO procesarDocumentoIndividual(
+/*    private DocumentoAdjuntoDTO procesarDocumentoIndividual(
             String tipoDoc, 
             String rutaRelativaBD, 
             boolean esFirmado, 
@@ -704,7 +703,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 
         return dto;
     }
-    
+*/    
  // =======================================================================
  // 🎯 LISTAR ATENCIONES PENDIENTES DE FIRMA
  // =======================================================================
@@ -760,120 +759,3 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 }
 
 
-/*    private void enriquecerJsonConPresignedUrls(ObjectNode rootNode) {
-String estadoFirma = rootNode.has("estadoFirma") ? rootNode.get("estadoFirma").asText() : "PENDIENTE_FIRMA";
-boolean esFirmado = "FIRMADO".equalsIgnoreCase(estadoFirma) ;
-
-// Mapeo de claves planas nativas a sus tipos de documento correspondientes
-Map<String, String> mapaClavesYTipos = new HashMap<>();
-mapaClavesYTipos.put("pdfRutaHistoria", "historia");
-mapaClavesYTipos.put("pdfRutaReceta", "receta");
-mapaClavesYTipos.put("pdfRutaOrdenes", "orden");
-mapaClavesYTipos.put("pdfRutaIndicaciones", "indicaciones");
-
-List<DocumentoAdjuntoDTO> listaDocumentos = new ArrayList<>();
-
-// Recorrer las claves nativas del JSON
-mapaClavesYTipos.forEach((clavePlana, tipoDoc) -> {
-    if (rootNode.has(clavePlana) && !rootNode.get(clavePlana).isNull()) {
-        String rutaRelativaBD = rootNode.get(clavePlana).asText();
-
-        if (!rutaRelativaBD.trim().isEmpty()) {
-            DocumentoAdjuntoDTO docDto = procesarDocumentoIndividual(
-                    tipoDoc, 
-                    rutaRelativaBD, 
-                    esFirmado, 
-                    rootNode, 
-                    clavePlana
-            );
-            listaDocumentos.add(docDto);
-        }
-    }
-});
-
-// Inyectar el arreglo "documentos" unificado en el JSON de salida
-rootNode.set("documentos", objectMapper.valueToTree(listaDocumentos));
-}
-*/   
-/*
-private void enriquecerJsonConPresignedUrlsFirmadas(ObjectNode rootNode) {
-// 1. Mapeo de claves de rutas firmadas a sus tipos de documento
-Map<String, String> mapaClavesYTipos = new HashMap<>();
-mapaClavesYTipos.put("pdfRutaHistoriaFirmado", "historia");
-mapaClavesYTipos.put("pdfRutaRecetaFirmado", "receta");
-mapaClavesYTipos.put("pdfRutaOrdenesFirmado", "orden");
-mapaClavesYTipos.put("pdfRutaIndicacionesFirmado", "indicaciones");
-
-// 2. Verificar si el arreglo "documentos" ya existe en el JSON
-if (rootNode.has("documentos") && rootNode.get("documentos").isArray()) {
-    ArrayNode documentosArray = (ArrayNode) rootNode.get("documentos");
-
-    mapaClavesYTipos.forEach((claveRutaFirmado, tipoDoc) -> {
-        if (rootNode.hasNonNull(claveRutaFirmado)) {
-            String rutaRelativaFirmado = rootNode.get(claveRutaFirmado).asText().trim();
-
-            if (!rutaRelativaFirmado.isEmpty()) {
-                // Limpiar barra inicial para R2/S3 si es necesario
-                String rutaLimpia = rutaRelativaFirmado.startsWith("/") 
-                        ? rutaRelativaFirmado.substring(1) 
-                        : rutaRelativaFirmado;
-
-                // Generar Presigned URL del archivo firmado
-                String urlLecturaFirmado = storageService.generarPresignedGetUrl(rutaLimpia);
-
-                // 3. Buscar el documento existente dentro del ArrayNode y actualizarlo
-                boolean encontrado = false;
-                for (JsonNode docNode : documentosArray) {
-                    if (docNode.isObject() && tipoDoc.equalsIgnoreCase(docNode.get("tipoDocumento").asText())) {
-                        ObjectNode docObject = (ObjectNode) docNode;
-                        docObject.put("rutaFirmado", rutaLimpia);
-                        docObject.put("urlLecturaFirmado", urlLecturaFirmado);
-                        docObject.put("urlLectura", urlLecturaFirmado); // Actualizar urlLectura principal
-                        encontrado = true;
-                        break;
-                    }
-                }
-
-                // 4. Si por alguna razón no existía previamente en el arreglo, se agrega
-                if (!encontrado) {
-                    ObjectNode nuevoDoc = objectMapper.createObjectNode();
-                    nuevoDoc.put("tipoDocumento", tipoDoc);
-                    nuevoDoc.put("rutaFirmado", rutaLimpia);
-                    nuevoDoc.put("urlLecturaFirmado", urlLecturaFirmado);
-                    nuevoDoc.put("urlLectura", urlLecturaFirmado);
-                    documentosArray.add(nuevoDoc);
-                }
-            }
-        }
-    });
-} else {
-    // Si no existía el arreglo "documentos", invocar al método principal para construirlo primero
-    enriquecerJsonConPresignedUrls(rootNode);
-    enriquecerJsonConPresignedUrlsFirmadas(rootNode);
-}
-}
-*/
-
-
-/*
-@Override
-@Transactional(readOnly = true)
-public String obtenerJsonAtencion(Long idAtencion) {
-    String jsonAtencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion);
-    
-    if (jsonAtencion == null || jsonAtencion.trim().isEmpty() || "{}".equals(jsonAtencion)) {
-        throw new RuntimeException("No se encontraron datos registrados para la atención con ID: " + idAtencion);
-    }
-
-    System.out.println("=== JSON PAYLOAD BD (ID: " + idAtencion + ") ===");
-    System.out.println("=== JSON PAYLOAD BD (ID: " + idAtencion + ") ===");
-    try {
-        System.out.println(objectMapper.readTree(jsonAtencion).toPrettyString());
-    } catch (Exception e) {
-        // Si el formateo falla por algún carácter especial, imprime la cadena directa sin romper la petición
-        System.out.println(jsonAtencion);
-    }        
-    return jsonAtencion;
-}    
-
-*/
