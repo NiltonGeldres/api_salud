@@ -3,6 +3,7 @@ package com.api_salud.api_salud.service;
 import com.api_salud.api_salud.request.AtencionMedicaConfirmarFirmaRequest;
 import com.api_salud.api_salud.request.AtencionMedicaRequest;
 import com.api_salud.api_salud.response.AtencionMedicaResponse;
+import com.api_salud.api_salud.response.DocumentoPresignedUrlResponse;
 import com.api_salud.api_salud.service.storage.StorageService;
 import com.api_salud.api_salud.utils.SecurityUtils;
 import com.api_salud.api_salud.config.StorageConfig;
@@ -63,7 +64,45 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
 		this.storageConfig = storageConfig;          
 		this.securityUtils = securityUtils;     
 		this.citaService = citaService;
+		
 	}  
+    
+
+    @Override
+    public DocumentoPresignedUrlResponse obtenerUrlPresignedDocumento(Long idAtencion, String tipoDocumento) {
+        // 1. Obtener la atención médica desde la BD para conocer el idEntidad y hcPaciente
+        String atencion = atencionMedicaRepository.obtenerJsonAtencionPorId(idAtencion).orElseThrow(() -> new RuntimeException("No se encontró la atención médica con ID: " + idAtencion));
+
+        // 2. Construir la ruta en el bucket usando el método de StorageService
+        // Nota: esFirmado = true ya que el frontend consulta los documentos finales firmados por el médico
+        String rutaRelativa = storageService.construirRutaRelativa(
+                atencion.getIdEntidad(),
+                atencion.getHcPaciente(),
+                idAtencion,
+                tipoDocumento,
+                true 
+        );
+
+        // 3. Generar la Presigned URL de lectura mediante StorageService
+        String presignedUrl = storageService.generarPresignedGetUrl(rutaRelativa);
+
+        if (presignedUrl == null || presignedUrl.trim().isEmpty()) {
+            throw new RuntimeException("No se pudo generar la URL para el documento: " + tipoDocumento);
+        }
+
+        return new DocumentoPresignedUrlResponse(tipoDocumento, presignedUrl);
+    }
+
+    private String obtenerRutaDesdeBD(Long idAtencion, String tipoDocumento) {
+        // Lógica de mapeo o consulta SQL / SP
+        // Ejemplo simple:
+        // switch (tipoDocumento.toUpperCase()) {
+        //     case "RECETA": return "atenciones/" + idAtencion + "/receta.pdf";
+        //     case "EXAMEN": return "atenciones/" + idAtencion + "/examen.pdf";
+        //     ...
+        // }
+        return "atenciones/" + idAtencion + "/" + tipoDocumento.toLowerCase() + ".pdf"; 
+    }
     
     
     @Override
