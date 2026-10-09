@@ -19,6 +19,7 @@ public class CitaSeparadaPagadaEntity {
 	String  destino; 
     String  entidaddestino;
 	int idusuario;
+	String nombreespecialidad ;
 	
 	public int getIdcitaseparada() {
 		return idcitaseparada;
@@ -122,6 +123,13 @@ public class CitaSeparadaPagadaEntity {
 	public void setIdusuario(int idusuario) {
 		this.idusuario = idusuario;
 	}
+	public String getNombreespecialidad() {
+		return nombreespecialidad;
+	}
+	public void setNombreespecialidad(String nombreespecialidad) {
+		this.nombreespecialidad = nombreespecialidad;
+	}
+
 
 	
 	
