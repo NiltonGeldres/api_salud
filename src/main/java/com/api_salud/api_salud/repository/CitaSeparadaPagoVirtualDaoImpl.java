@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.api_salud.api_salud.entity.CitaSeparadaPagadaEntity;
 import com.api_salud.api_salud.entity.CitaSeparadaPagoVirtualEntity;
 import com.api_salud.api_salud.response.CitaSeparadaPagoVirtualResponse;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//@JsonIgnoreProperties(ignoreUnknown = true)
 @Repository
 @Transactional
 public class CitaSeparadaPagoVirtualDaoImpl implements  CitaSeparadaPagoVirtualDao {
