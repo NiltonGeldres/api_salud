@@ -25,6 +25,7 @@ public interface CitaSeparadaDao {
 		    String tipoUsuario,
 		    String fechaSeparacion,
 		    double precioUnitario,
+		    Integer idUsuarioPaciente,
 		    int idusuario
 		    
 			) ;	

@@ -18,10 +18,8 @@ public class CitaSeparadaRequest {
     String fechaSeparacion;
     double precioUnitario;	
     String usuario;	
+    Integer idUsuarioPaciente;	
     int idEntidad;
-    
-    
-    
     
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
@@ -125,6 +123,13 @@ public class CitaSeparadaRequest {
 	public void setIdEntidad(int idEntidad) {
 		this.idEntidad = idEntidad;
 	}
+	public Integer getIdUsuarioPaciente() {
+		return idUsuarioPaciente;
+	}
+	public void setIdUsuarioPaciente(Integer idUsuarioPaciente) {
+		this.idUsuarioPaciente = idUsuarioPaciente;
+	}
+
 
 
     

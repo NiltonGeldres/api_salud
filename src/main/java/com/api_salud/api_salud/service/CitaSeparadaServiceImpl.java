@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.entity.CajaComprobantePagoEntity;
 import com.api_salud.api_salud.entity.CitaEntity;
 import com.api_salud.api_salud.entity.CitaSeparadaEntity;
@@ -108,9 +109,9 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	@Override
 	public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
 
-        
         // Obtener datos del usuario/paciente
-        int idUsuario = usuarioService.xusername_leer(request.getUsuario());
+    //    int idUsuario = usuarioService.xusername_leer(request.getUsuario());
+		int idUsuario = TenantContext.getUsuarioId();
         if (idUsuario == 0) throw new RuntimeException("Usuario no encontrado o de baja");
         
        // int idPaciente = pacienteService.leerIdPacientexIdUsuario(idUsuario);
@@ -118,7 +119,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 
         // Ejecutar SimpleJdbcCall (a través del DAO)
         int idCitaSeparada = ejecutarPersistencia(request, idUsuario);
-
+        System.out.println("idCitaSeparada  "+idCitaSeparada);
         if (idCitaSeparada == 0) throw new RuntimeException("Error al insertar en Base de Datos");
 
         // Procesar respuesta y Email
@@ -131,6 +132,27 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         String fechaSeparada = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String horaSeparada = new SimpleDateFormat("HH:mm").format(new Date());
 
+    	System.out.println(
+    		    request.getIdCitaSeparada()
+    		    + "---" + request.getFecha() 
+    		    + "---" + request.getHoraInicio() 
+    		    + "---" + request.getHoraFin() 
+    		    + "---" + request.getIdPaciente() 
+    		    + "---" + request.getIdMedico() 
+    		    + "---" + request.getIdEspecialidad() 
+    		    + "---" + request.getIdServicio() 
+    		    + "---" + request.getIdProgramacion() 
+    		    + "---" + request.getIdProducto() 
+    		    + "---" + request.getFechaSolicitud()
+    		    + "---" + request.getHoraSolicitud()
+    		    + "---" + request.getTipoUsuario()
+    		    + "---" + request.getFechaSeparacion()
+    		    + "---" + request.getPrecioUnitario()    
+    		    + "---" + request.getUsuario()    
+    		    + "getIdUsuarioPaciente-" + request.getIdUsuarioPaciente()    
+    		    + "---" + request.getIdEntidad()
+    		);
+        
         return citaSeparadaDao.crearCitaSeparada(
                 request.getIdEntidad(),
                 request.getIdCitaSeparada(),
@@ -148,6 +170,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
                 request.getTipoUsuario(),
                 fechaSeparada,
                 request.getPrecioUnitario(),
+                request.getIdUsuarioPaciente(),
                 idUsuario
         );
     }

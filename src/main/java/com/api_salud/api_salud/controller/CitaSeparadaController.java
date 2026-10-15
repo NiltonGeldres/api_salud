@@ -41,10 +41,8 @@ public class CitaSeparadaController {
 
     @PostMapping("/citaSeparadaCrear")
     public ResponseEntity<?> crearCitaSeparada(   @RequestBody CitaSeparadaRequest request  ){
-
-    	
         // Asignación de datos desde el contexto
-    	 Integer idEntidadContexto = TenantContext.getEntidadId();
+        Integer idEntidadContexto = TenantContext.getEntidadId();
         String usuarioContexto = TenantContext.getCurrentUser();
         
         if (idEntidadContexto != null) request.setIdEntidad(idEntidadContexto.intValue());

@@ -48,6 +48,7 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 		    String tipoUsuario,
 		    String fechaSeparacion,
 		    double precioUnitario,
+		    Integer idUsuarioPaciente,		    
 		    int idUsuario		    
 			) {
 		
@@ -74,6 +75,7 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 				            		,new SqlParameter("p_fechaseparacion", 	Types.VARCHAR)	
 				            		,new SqlParameter("p_preciounitario", 	Types.NUMERIC)	
 				            		,new SqlParameter("p_idusuario", 		Types.INTEGER)	
+				            		,new SqlParameter("p_idusuariopaciente",Types.INTEGER)	
 				            		,new SqlOutParameter("o_idcitaseparada", Types.INTEGER )
 	            					);
 		int o_idcitaseparada=0;
@@ -93,7 +95,8 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 				.addValue("p_tipousuario"		,tipoUsuario)
 				.addValue("p_fechaseparacion"	,fechaSeparacion)
 				.addValue("p_preciounitario"	,precioUnitario)
-				.addValue("p_idusuario"	,idUsuario);
+				.addValue("p_idusuario"	,idUsuario)
+				.addValue("p_idusuariopaciente"	,idUsuarioPaciente);
 	    		
 	    		
    		Map<String, Object> out = simpleJdbcCallCitaSeparada.execute(param);
