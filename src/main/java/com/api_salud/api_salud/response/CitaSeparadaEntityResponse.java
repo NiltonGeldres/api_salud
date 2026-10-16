@@ -1,12 +1,11 @@
 package com.api_salud.api_salud.response;
 
-
 public class CitaSeparadaEntityResponse {
 	int idCitaSeparada;
     String fecha ;
     String horaInicio ;
     String horaFin ;
-    int idPaciente ;
+    Integer idPaciente ;
     int idMedico ;
     int idEspecialidad ;
     int idServicio ;
@@ -19,13 +18,16 @@ public class CitaSeparadaEntityResponse {
     String nombreMedico;
     String nombreEspecialidad;
     String nombreServicio;
-    int numeroCuenta;
+    String numeroCuenta;
     double precioUnitario;
     int idUsuario;
-    String email; 
+ //   String email; 
     int idEntidad;
     int idMedicoEspecialidad;
-    
+    String emailUsuario;
+    String primer_nombre;
+    String apellido_paterno;
+    Integer idUsuarioPaciente;
     
 	public int getIdCitaSeparada() {
 		return idCitaSeparada;
@@ -51,10 +53,10 @@ public class CitaSeparadaEntityResponse {
 	public void setHoraFin(String horaFin) {
 		this.horaFin = horaFin;
 	}
-	public int getIdPaciente() {
+	public Integer getIdPaciente() {
 		return idPaciente;
 	}
-	public void setIdPaciente(int idPaciente) {
+	public void setIdPaciente(Integer idPaciente) {
 		this.idPaciente = idPaciente;
 	}
 	public int getIdMedico() {
@@ -129,10 +131,11 @@ public class CitaSeparadaEntityResponse {
 	public void setNombreServicio(String nombreServicio) {
 		this.nombreServicio = nombreServicio;
 	}
-	public int getNumeroCuenta() {
+
+	public String getNumeroCuenta() {
 		return numeroCuenta;
 	}
-	public void setNumeroCuenta(int numeroCuenta) {
+	public void setNumeroCuenta(String numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
 	public double getPrecioUnitario() {
@@ -147,12 +150,7 @@ public class CitaSeparadaEntityResponse {
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 	public int getIdEntidad() {
 		return idEntidad;
 	}
@@ -164,6 +162,30 @@ public class CitaSeparadaEntityResponse {
 	}
 	public void setIdMedicoEspecialidad(int idMedicoEspecialidad) {
 		this.idMedicoEspecialidad = idMedicoEspecialidad;
+	}
+	public String getEmailUsuario() {
+		return emailUsuario;
+	}
+	public void setEmailUsuario(String emailUsuario) {
+		this.emailUsuario = emailUsuario;
+	}
+	public String getPrimer_nombre() {
+		return primer_nombre;
+	}
+	public void setPrimer_nombre(String primer_nombre) {
+		this.primer_nombre = primer_nombre;
+	}
+	public String getApellido_paterno() {
+		return apellido_paterno;
+	}
+	public void setApellido_paterno(String apellido_paterno) {
+		this.apellido_paterno = apellido_paterno;
+	}
+	public Integer getIdUsuarioPaciente() {
+		return idUsuarioPaciente;
+	}
+	public void setIdUsuarioPaciente(Integer idUsuarioPaciente) {
+		this.idUsuarioPaciente = idUsuarioPaciente;
 	}
     
     

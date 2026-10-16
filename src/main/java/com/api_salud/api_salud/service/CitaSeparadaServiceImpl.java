@@ -105,7 +105,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         return citaService.leerCita(idCita);
     }
 
-
+/*
 	@Override
 	public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
 
@@ -127,7 +127,30 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         
 
 	}	
+*/
+	
+	@Override
+	public CitaSeparadaEntityResponse crearCitaSeparada(CitaSeparadaRequest request) {
+		int idUsuario = TenantContext.getUsuarioId();
+		if (idUsuario == 0) throw new RuntimeException("Usuario no encontrado o de baja");
 
+		// ¡Única llamada a la base de datos! Inserta y retorna el objeto completo con su email
+//		CitaSeparadaEntityResponse entityRes = citaSeparadaDao.crearYLeerCitaSeparada(request, idUsuario);
+		
+		CitaSeparadaEntityResponse entityRes = citaSeparadaDao.crearCitaSeparada(request, idUsuario);
+		
+		if (entityRes == null || entityRes.getIdCitaSeparada() == 0) {
+			throw new RuntimeException("Error al insertar o procesar la cita en Base de Datos");
+		}
+
+		// Enviar correo de forma silenciosa usando el email que ya vino en la misma consulta
+		if (entityRes.getEmailUsuario() != null) {
+			//enviarEmailSilencioso(entityRes);
+		}
+
+		return entityRes;
+	}
+/*	
     private int ejecutarPersistencia(CitaSeparadaRequest request, int idUsuario) {
         String fechaSeparada = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String horaSeparada = new SimpleDateFormat("HH:mm").format(new Date());
@@ -186,16 +209,16 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         
 //        return new CitaSeparadaResponse(idCita, "Cita procesada con éxito");
     }
-
-    private void enviarEmailSilencioso(Usuario u, CitaSeparadaEntityResponse res) {
+*/
+    private void enviarEmailSilencioso( CitaSeparadaEntityResponse res) {
         try {
             emailService.sendEmail(
-                u.getEmail(), 
+                res.getEmailUsuario(), 
                 "Solicitud de cita", 
                 res.getNombreMedico(),
                 res.getNumeroCuenta(), 
                 res.getPrecioUnitario(),
-                u.getPrimer_nombre() + " " + u.getApellido_paterno()
+                res.getPrimer_nombre() + " " + res.getApellido_paterno()
             );
         } catch (Exception e) {
             System.err.println("No se pudo enviar el correo: " + e.getMessage());

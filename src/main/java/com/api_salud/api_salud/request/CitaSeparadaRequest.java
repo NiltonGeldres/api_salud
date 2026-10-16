@@ -6,7 +6,7 @@ public class CitaSeparadaRequest {
     String fecha ;
     String horaInicio ;
     String horaFin ;
-    int idPaciente ;
+    Integer idPaciente ;
     int idMedico ;
     int idEspecialidad ;
     int idServicio ;
@@ -45,10 +45,10 @@ public class CitaSeparadaRequest {
 	public void setHoraFin(String horaFin) {
 		this.horaFin = horaFin;
 	}
-	public int getIdPaciente() {
+	public Integer  getIdPaciente() {
 		return idPaciente;
 	}
-	public void setIdPaciente(int idPaciente) {
+	public void setIdPaciente(Integer idPaciente) {
 		this.idPaciente = idPaciente;
 	}
 	public int getIdMedico() {

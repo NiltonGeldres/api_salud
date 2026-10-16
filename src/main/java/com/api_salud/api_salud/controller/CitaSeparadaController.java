@@ -151,65 +151,6 @@ public class CitaSeparadaController {
         }
     }
 
-    
-/*
-    @PostMapping("/confimarCitaSeparada")
-    public ResponseEntity<?> confirmarCitaSeparada1( @RequestBody CitaSeparadaFacturarRequest   request ){
-	    CitaResponse response = null;
-		CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
-	    CitaSeparadaEntityResponse cs = new CitaSeparadaEntityResponse();
-	     cs = citaSeparadaService.leerCitaSeparadaXIdCitaSeparada(request.getIdCitaSeparada());
-	     facturaCita.setIdCitaSeparada(request.getIdCitaSeparada());
-	     facturaCita.setUsuario(request.getUsuario());
-	     facturaCita.setIdMedico(cs.getIdMedico());
-	     facturaCita.setFecha(cs.getFecha());
-	     facturaCita.setIdPaciente(cs.getIdPaciente());
-	     facturaCita.setIdEspecialidad(cs.getIdEspecialidad());
-	     facturaCita.setIdCita(cs.getIdCitaSeparada());
-	     facturaCita.setHoraInicio(cs.getHoraInicio());
-	     facturaCita.setHoraFin(cs.getHoraFin());
-	     facturaCita.setIdServicio(cs.getIdServicio());
-	     facturaCita.setIdProgramacion(cs.getIdProgramacion());
-	     facturaCita.setFechaSolicitud(cs.getFechaSolicitud());
-	     facturaCita.setHoraSolicitud(cs.getFechaSolicitud());
-	     facturaCita.setIdProducto(cs.getIdProducto()) ;
-	     facturaCita.setPrecioUnitario(cs.getPrecioUnitario());
-	     facturaCita.setIdPuntoCarga(0);
-	     facturaCita.setIdTipoFinanciamiento(1);
-	     facturaCita.setIdFuenteFinanciamiento(1);
-	     facturaCita.setIdUsuario(cs.getIdUsuario()) ;
-		 
-    	 int idCita = citaSeparadaService.confirmarCitaSeparada(facturaCita);
-    	 response = citaService.leerCita(idCita);
-    	if(idCita != 0) 
-            return new ResponseEntity<CitaResponse>(response, HttpStatus.OK);
-        else    
-            return new ResponseEntity<CitaResponse>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    	
-   	 }
-        
-*/
-       
-   //Entity
- /*  static class citaSeparadaFacturarRequest {
-	int idCitaSeparada ;
-	String usuario ;
-	
-	public int getIdCitaSeparada() {
-		return idCitaSeparada;
-	}
-	public void setIdCitaSeparada(int idCitaSeparada) {
-		this.idCitaSeparada = idCitaSeparada;
-	}
-	public String getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-   	   
- }*/
-       
    
 	
 	// Método de validación separado
@@ -259,3 +200,64 @@ public class CitaSeparadaController {
    
     
 }
+
+
+
+/*
+@PostMapping("/confimarCitaSeparada")
+public ResponseEntity<?> confirmarCitaSeparada1( @RequestBody CitaSeparadaFacturarRequest   request ){
+    CitaResponse response = null;
+	CitaFacturacionRequest facturaCita = new CitaFacturacionRequest();
+    CitaSeparadaEntityResponse cs = new CitaSeparadaEntityResponse();
+     cs = citaSeparadaService.leerCitaSeparadaXIdCitaSeparada(request.getIdCitaSeparada());
+     facturaCita.setIdCitaSeparada(request.getIdCitaSeparada());
+     facturaCita.setUsuario(request.getUsuario());
+     facturaCita.setIdMedico(cs.getIdMedico());
+     facturaCita.setFecha(cs.getFecha());
+     facturaCita.setIdPaciente(cs.getIdPaciente());
+     facturaCita.setIdEspecialidad(cs.getIdEspecialidad());
+     facturaCita.setIdCita(cs.getIdCitaSeparada());
+     facturaCita.setHoraInicio(cs.getHoraInicio());
+     facturaCita.setHoraFin(cs.getHoraFin());
+     facturaCita.setIdServicio(cs.getIdServicio());
+     facturaCita.setIdProgramacion(cs.getIdProgramacion());
+     facturaCita.setFechaSolicitud(cs.getFechaSolicitud());
+     facturaCita.setHoraSolicitud(cs.getFechaSolicitud());
+     facturaCita.setIdProducto(cs.getIdProducto()) ;
+     facturaCita.setPrecioUnitario(cs.getPrecioUnitario());
+     facturaCita.setIdPuntoCarga(0);
+     facturaCita.setIdTipoFinanciamiento(1);
+     facturaCita.setIdFuenteFinanciamiento(1);
+     facturaCita.setIdUsuario(cs.getIdUsuario()) ;
+	 
+	 int idCita = citaSeparadaService.confirmarCitaSeparada(facturaCita);
+	 response = citaService.leerCita(idCita);
+	if(idCita != 0) 
+        return new ResponseEntity<CitaResponse>(response, HttpStatus.OK);
+    else    
+        return new ResponseEntity<CitaResponse>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	
+	 }
+    
+*/
+   
+//Entity
+/*  static class citaSeparadaFacturarRequest {
+int idCitaSeparada ;
+String usuario ;
+
+public int getIdCitaSeparada() {
+	return idCitaSeparada;
+}
+public void setIdCitaSeparada(int idCitaSeparada) {
+	this.idCitaSeparada = idCitaSeparada;
+}
+public String getUsuario() {
+	return usuario;
+}
+public void setUsuario(String usuario) {
+	this.usuario = usuario;
+}
+	   
+}*/
+   

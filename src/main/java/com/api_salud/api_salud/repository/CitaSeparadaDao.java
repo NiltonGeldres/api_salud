@@ -1,12 +1,13 @@
 
 package com.api_salud.api_salud.repository;
 
+import com.api_salud.api_salud.request.CitaSeparadaRequest;
 import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 import com.api_salud.api_salud.response.CitaSeparadaResponse;
 
 public interface CitaSeparadaDao {
 
-
+/*
 	public int  crearCitaSeparada(
 //			public CitaSeparadaResponse crearCitaSeparada(
 			int idEntidad,
@@ -29,6 +30,8 @@ public interface CitaSeparadaDao {
 		    int idusuario
 		    
 			) ;	
+	*/
+	public CitaSeparadaEntityResponse crearCitaSeparada(CitaSeparadaRequest request, int idUsuario) ;	
 	
 	public CitaSeparadaResponse leerCitaSeparadaXIdpaciente(int idUsuario);	
 	

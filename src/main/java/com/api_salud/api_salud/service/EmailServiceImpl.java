@@ -18,7 +18,7 @@ public class EmailServiceImpl  implements EmailService {
 							String to, 
 							String subject, 
 							String nombreMedico,
-							int numeroCuenta,
+							String numeroCuenta,
 							double precio,
 							String nombrePaciente
 							) throws MessagingException {

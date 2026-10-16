@@ -36,7 +36,7 @@ public class TestMailEnviar {
 	 	try {
 	 		
 	 		System.out.println("ENVIANDO EMAIL ");
-	 		emailService.sendEmail("niltongeldres@hotmail.com", "Correo de prueba", "MEDICO", 10, 70, "NILTON GELDRES");
+	 		emailService.sendEmail("niltongeldres@hotmail.com", "Correo de prueba", "MEDICO", "10", 70, "NILTON GELDRES");
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

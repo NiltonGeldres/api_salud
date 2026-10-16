@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -16,6 +20,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.api_salud.api_salud.entity.CitaSeparadaEntity;
+import com.api_salud.api_salud.request.CitaSeparadaRequest;
 import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 import com.api_salud.api_salud.response.CitaSeparadaResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,8 +33,89 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;  	
 	private SimpleJdbcCall  simpleJdbcCallCitaSeparada;
-	
-	
+	private SimpleJdbcCall callCrearYLeerJson;
+
+    @Override
+    public CitaSeparadaEntityResponse crearCitaSeparada(CitaSeparadaRequest request, int idUsuario) {
+    	System.out.println("REQUEST "+
+				request.getIdEntidad() 
+				+"-- "+request.getFecha()
+				+"-- "+request.getHoraInicio()
+				+"-- "+request.getHoraFin()
+				+"-- "+request.getIdPaciente()
+				+"-- "+request.getIdMedico()
+				+"-- "+request.getIdEspecialidad()
+				+"-- "+request.getIdServicio()
+				+"-- "+request.getIdProgramacion()
+				+"-- "+request.getIdProducto()
+				+"-- "+request.getFechaSolicitud()
+				+"-- "+request.getHoraSolicitud()
+				+"-- "+request.getTipoUsuario()
+				+"-- "+request.getFechaSeparacion()
+				+"-- "+request.getPrecioUnitario()
+				+"-- "+idUsuario
+				+"-- "+request.getIdUsuarioPaciente()
+		);
+
+    	// Se agregan casts explícitos a cada parámetro y ::text al final para el jsonb
+    	
+        String sql = "SELECT igm_citas.f_citas_separadas_crear_y_leer_json(" +
+                     "?::integer, " +  // p_id_entidad
+                     "?::varchar, " +  // p_fecha
+                     "?::varchar, " +  // p_horainicio
+                     "?::varchar, " +  // p_horafin
+                     "?::integer, " +  // p_idpaciente
+                     "?::integer, " +  // p_idmedico
+                     "?::integer, " +  // p_idespecialidad
+                     "?::integer, " +  // p_idservicio
+                     "?::integer, " +  // p_idprogramacion
+                     "?::integer, " +  // p_idproducto
+                     "?::varchar, " +  // p_fechasolicitud
+                     "?::varchar, " +  // p_horasolicitud
+                     "?::varchar, " +  // p_tipousuario
+                     "?::varchar, " +  // p_fechaseparacion
+                     "?::numeric, " +  // p_preciounitario
+                     "?::integer, " +  // p_idusuario
+                     "?::integer" +   // p_idusuariopaciente
+                     ")::text";
+        
+        try {
+            String jsonResultado = jdbcTemplate.queryForObject(sql, String.class,
+                  request.getIdEntidad()
+                , request.getFecha()
+                , request.getHoraInicio()
+                , request.getHoraFin()
+                , (request.getIdPaciente() != null && request.getIdPaciente() > 0) ? request.getIdPaciente() : null
+                , request.getIdMedico()
+                , request.getIdEspecialidad()
+                , request.getIdServicio()
+                , request.getIdProgramacion()
+                , request.getIdProducto()
+                , request.getFechaSolicitud()
+                , request.getHoraSolicitud()
+                , request.getTipoUsuario()
+                , request.getFechaSeparacion()
+                , request.getPrecioUnitario()
+                , idUsuario
+                , request.getIdUsuarioPaciente()
+            );
+            System.out.println("REQUEST "+jsonResultado);
+            if (jsonResultado != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                return objectMapper.readValue(jsonResultado, CitaSeparadaEntityResponse.class);
+            }
+
+            return null;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al insertar o procesar la cita en Base de Datos: " + e.getMessage(), e);
+        }
+    }    
+    
+
+/*	
 	@Override
 	public int  crearCitaSeparada(
 			int idEntidad,
@@ -106,7 +192,7 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
         }
 		return response;
 	}
-	
+*/	
 	
 	@Override
 	public CitaSeparadaResponse leerCitaSeparadaXIdpaciente(
@@ -273,3 +359,38 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 }
 
 
+/*        this.callCrearYLeerJson = new SimpleJdbcCall(jdbcTemplate)
+.withSchemaName("igm_citas")
+.withFunctionName("f_citas_separadas_crear_y_leer_json")
+.withoutProcedureColumnMetaDataAccess()
+.declareParameters(
+     new SqlParameter("p_id_entidad", Types.INTEGER)
+    ,new SqlParameter("p_fecha", Types.VARCHAR)
+    ,new SqlParameter("p_horainicio", Types.VARCHAR)
+    ,new SqlParameter("p_horafin", Types.VARCHAR)
+    ,new SqlParameter("p_idpaciente", Types.INTEGER)
+    ,new SqlParameter("p_idmedico", Types.INTEGER) 
+    ,new SqlParameter("p_idespecialidad", Types.INTEGER)
+    ,new SqlParameter("p_idservicio", Types.INTEGER)
+    ,new SqlParameter("p_idprogramacion", Types.INTEGER)
+    ,new SqlParameter("p_idproducto", Types.INTEGER)
+    ,new SqlParameter("p_fechasolicitud", Types.VARCHAR)
+    ,new SqlParameter("p_horasolicitud", Types.VARCHAR)
+    ,new SqlParameter("p_tipousuario", Types.VARCHAR)
+    ,new SqlParameter("p_fechaseparacion", Types.VARCHAR) 
+    ,new SqlParameter("p_preciounitario", Types.NUMERIC) 
+    ,new SqlParameter("p_idusuario", Types.INTEGER) 
+    ,new SqlParameter("p_idusuariopaciente", Types.INTEGER) 
+);*/
+
+/*    @PostConstruct
+public void init() {
+    jdbcTemplate.setResultsMapCaseInsensitive(true);
+
+    this.callCrearYLeerJson = new SimpleJdbcCall(jdbcTemplate)
+            .withSchemaName("igm_citas")
+            .withFunctionName("f_citas_separadas_crear_y_leer_json")
+            .withoutProcedureColumnMetaDataAccess();
+    
+
+}*/
