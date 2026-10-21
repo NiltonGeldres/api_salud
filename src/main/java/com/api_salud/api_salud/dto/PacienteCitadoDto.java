@@ -17,6 +17,7 @@ public class PacienteCitadoDto {
 	    private String fecha;
 	    private Integer edad;
 	    private String sexo;
+	    private Integer idUsuario;
 	    
 	    
 	    
@@ -109,6 +110,12 @@ public class PacienteCitadoDto {
 		}
 		public void setSexo(String sexo) {
 			this.sexo = sexo;
+		}
+		public Integer getIdUsuario() {
+			return idUsuario;
+		}
+		public void setIdUsuario(Integer idUsuario) {
+			this.idUsuario = idUsuario;
 		}
 
 

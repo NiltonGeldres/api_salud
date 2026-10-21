@@ -129,6 +129,7 @@ public class CitaServiceImpl  implements  CitaService{
             res.setIdAtencion(dto.getIdAtencion());
             res.setSexo(dto.getSexo());
             res.setEdad(dto.getEdad());
+            res.setIdUsuario(dto.getIdUsuario());;
             
             // Lógica de negocio para la etiqueta
 //          String etiqueta = (dto.getEstadoCita( )== 1) ? "false" : "true";
