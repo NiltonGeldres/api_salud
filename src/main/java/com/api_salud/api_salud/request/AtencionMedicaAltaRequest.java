@@ -11,6 +11,7 @@ public class AtencionMedicaAltaRequest {
     @NotBlank(message = "La descripción del alta es obligatoria.")
     @Size(max = 2000, message = "El texto del alta supera los 2000 caracteres.")
     private String nombreAlta;
+    private String descripcionAlta;
 
 	public int getIdAlta() {
 		return idAlta;
@@ -26,6 +27,14 @@ public class AtencionMedicaAltaRequest {
 
 	public void setNombreAlta(String nombreAlta) {
 		this.nombreAlta = nombreAlta;
+	}
+
+	public String getDescripcionAlta() {
+		return descripcionAlta;
+	}
+
+	public void setDescripcionAlta(String descripcionAlta) {
+		this.descripcionAlta = descripcionAlta;
 	}
 
 

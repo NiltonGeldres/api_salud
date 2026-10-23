@@ -211,7 +211,7 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
                 "Borrador actualizado correctamente.", 
                 request.getIdAtencion(), 
                 request.getIdEstadoAtencion(), 
-                "BORRADOR ACTUALIZADO"
+                "BORRADOR"
             );
 
         } catch (Exception e) {
