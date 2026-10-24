@@ -7,6 +7,7 @@ public class CatalogoInitResponse {
     private List<TriajeDTO> catalogoTriajes;
     private List<TipoDiagnosticoDTO> catalogoTipoDiagnostico;
     private List<ViaAdministracionDTO> catalogoViasAdministracion;
+    private List<FrecuenciaDosisDTO> catalogoFrecuencias; // 👈 NUEVO CAMPO AGREGADO
     private List<PaqueteMedicacionDTO> catalogoPaquetesMedicacion;
     private List<PaqueteExamenDTO> catalogoPaquetesExamenes;
 
@@ -35,6 +36,14 @@ public class CatalogoInitResponse {
 
     public void setCatalogoViasAdministracion(List<ViaAdministracionDTO> catalogoViasAdministracion) {
         this.catalogoViasAdministracion = catalogoViasAdministracion;
+    }
+
+    public List<FrecuenciaDosisDTO> getCatalogoFrecuencias() {
+        return catalogoFrecuencias;
+    }
+
+    public void setCatalogoFrecuencias(List<FrecuenciaDosisDTO> catalogoFrecuencias) {
+        this.catalogoFrecuencias = catalogoFrecuencias;
     }
 
     public List<PaqueteMedicacionDTO> getCatalogoPaquetesMedicacion() {
@@ -101,6 +110,28 @@ public class CatalogoInitResponse {
         public void setNombreViaAdministracion(String nombreViaAdministracion) { this.nombreViaAdministracion = nombreViaAdministracion; }
         public String getGrupoClasificacion() { return grupoClasificacion; }
         public void setGrupoClasificacion(String grupoClasificacion) { this.grupoClasificacion = grupoClasificacion; }
+    }
+
+    public static class FrecuenciaDosisDTO {
+        private Integer idFrecuenciaDosis;
+        private String codigo;
+        private String nombreFrecuenciaDosis;
+        private String descripcionMedico;
+        private String descripcionPaciente;
+        private Integer factorDiario;
+
+        public Integer getIdFrecuenciaDosis() { return idFrecuenciaDosis; }
+        public void setIdFrecuenciaDosis(Integer idFrecuenciaDosis) { this.idFrecuenciaDosis = idFrecuenciaDosis; }
+        public String getCodigo() { return codigo; }
+        public void setCodigo(String codigo) { this.codigo = codigo; }
+        public String getNombreFrecuenciaDosis() { return nombreFrecuenciaDosis; }
+        public void setNombreFrecuenciaDosis(String nombreFrecuenciaDosis) { this.nombreFrecuenciaDosis = nombreFrecuenciaDosis; }
+        public String getDescripcionMedico() { return descripcionMedico; }
+        public void setDescripcionMedico(String descripcionMedico) { this.descripcionMedico = descripcionMedico; }
+        public String getDescripcionPaciente() { return descripcionPaciente; }
+        public void setDescripcionPaciente(String descripcionPaciente) { this.descripcionPaciente = descripcionPaciente; }
+        public Integer getFactorDiario() { return factorDiario; }
+        public void setFactorDiario(Integer factorDiario) { this.factorDiario = factorDiario; }
     }
 
     public static class PaqueteMedicacionDTO {
