@@ -24,6 +24,7 @@ public class UsuarioEntity {
 	private int idReferenciaRol ;
 	private int idPaciente ;
 	
+	
 	public int getIdUsuario() {
 		return idUsuario;
 	}
