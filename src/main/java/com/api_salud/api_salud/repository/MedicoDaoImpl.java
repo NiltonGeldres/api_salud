@@ -24,19 +24,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.api_salud.api_salud.dto.MedicoDTO;
 import com.api_salud.api_salud.request.MedicoRequest;
 import com.api_salud.api_salud.response.MedicoResponse;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Repository
 @Transactional
 public class MedicoDaoImpl implements MedicoDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
+    private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper; 
+    
     // Objetos pre-configurados en memoria
     private SimpleJdbcCall callMedicoEntidad;
     private SimpleJdbcCall callMedicoEspecialidad;
@@ -111,8 +113,6 @@ public class MedicoDaoImpl implements MedicoDao {
                         new SqlOutParameter("cur", Types.REF_CURSOR, new BeanPropertyRowMapper<>(MedicoDTO.class))
                 );
     
-// --- Nuevas Funciones CRUD (Registrar, Listar Paginado, Actualizar, Baja) ---
-        
      // Todas las funciones maestras bajo el estándar JSON
         this.callRegistrarJson = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_maestros")
@@ -142,7 +142,7 @@ public class MedicoDaoImpl implements MedicoDao {
         
     }
 
-@Override
+    @Override
     public int registrarMedico(MedicoRequest req) {
         try {
             // Serializamos el request completo a String JSON
@@ -273,7 +273,8 @@ public class MedicoDaoImpl implements MedicoDao {
         }
     }
     
-    //--------------------------------------------------
+    //--------------------------------------
+    
     @Override
     public List<MedicoDTO> medicoEntidad(int idEntidad) {
         try {

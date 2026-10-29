@@ -50,7 +50,7 @@ public class MedicoController {
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "0") int offset) {
         
-        List<MedicoDTO> medicos = medicoService.listarMedicosPaginado(idEntidad, filtro, estado, limit, offset);
+        List<MedicoDTO> medicos = medicoService.listarMedicos(idEntidad, filtro, estado, limit, offset);
         return new ResponseEntity<>(medicos, HttpStatus.OK);
     }
 

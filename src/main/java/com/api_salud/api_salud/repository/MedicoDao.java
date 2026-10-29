@@ -11,9 +11,10 @@ public interface MedicoDao {
 //	public MedicoResponse medicoEspecialidad(int idEspecialidad);
 	
     public int registrarMedico(MedicoRequest req);
-    public List<MedicoDTO> listarMedicosPaginado(int idEntidad, String filtro, String estado, int limit, int offset) ;
+//    public List<MedicoDTO> listarMedicosPaginado(int idEntidad, String filtro, String estado, int limit, int offset) ;
     public boolean actualizarMedico(int idMedico, MedicoRequest req) ;
     public boolean darBajaMedico(int idMedico, int idEntidad, String estado);
+    public List<MedicoDTO> listarMedicos(int idEntidad, String filtro, String estado, int limit, int offset);
     
 	public List<MedicoDTO> medicoEspecialidad(int idEspecialidad);	
 	public int  medicoXUsuarioLeer(String usuario) ;

@@ -64,25 +64,6 @@ public class JwtUtilService {
       return createToken(claims, userDetails.getUsername());
   }
 
-  /*
-  public String generateToken(
-		  UserDetails userDetails, 
-		  String  usuarioNombres,
-		  int idMedico, 
-		  int idEntidad,
-		  int idPaciente) {
-      Map<String, Object> claims = new HashMap<>();
-      
-      // 1. Guardamos todos los roles, no solo el primero
-      GrantedAuthority  rol = userDetails.getAuthorities().stream().collect(Collectors.toList()).get(0);
-      claims.put("rol", rol);
-      claims.put("usuarioNombres", usuarioNombres);
-      claims.put("idMedico", idMedico);
-      claims.put("idEntidad", idEntidad);
-      claims.put("idPaciente", idPaciente);
-      return createToken(claims, userDetails.getUsername());
-  }
-*/
   private String createToken(Map<String, Object> claims, String subject) {
 
     return Jwts.builder()
@@ -99,13 +80,6 @@ public class JwtUtilService {
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
  
-  /* agregado para el contexto */
-  /*public Long extractIdEntidad(String token) {
-	    Claims claims = extractAllClaims(token);
-	    Object value = claims.get("idEntidad");
-	    return value != null ? ((Number) value).longValue() : null;
-	}*/
-
   
 	public Integer extractIdUsuario(String token) {
         return extractClaim(token, claims -> (Integer) claims.get("idUsuario"));
@@ -113,10 +87,6 @@ public class JwtUtilService {
 
     public Integer extractIdEntidad(String token) {
         return extractClaim(token, claims -> (Integer) claims.get("idEntidad"));
-/*        return extractClaim(token, claims -> {
-            Object value = claims.get("idEntidad");
-            return value != null ? ((Number) value).longValue() : null;
-        });*/
     }
 
     public Integer extractIdRol(String token) {
@@ -131,3 +101,35 @@ public class JwtUtilService {
 }
 
 
+/*
+public String generateToken(
+		  UserDetails userDetails, 
+		  String  usuarioNombres,
+		  int idMedico, 
+		  int idEntidad,
+		  int idPaciente) {
+    Map<String, Object> claims = new HashMap<>();
+    
+    // 1. Guardamos todos los roles, no solo el primero
+    GrantedAuthority  rol = userDetails.getAuthorities().stream().collect(Collectors.toList()).get(0);
+    claims.put("rol", rol);
+    claims.put("usuarioNombres", usuarioNombres);
+    claims.put("idMedico", idMedico);
+    claims.put("idEntidad", idEntidad);
+    claims.put("idPaciente", idPaciente);
+    return createToken(claims, userDetails.getUsername());
+}
+*/
+
+/* agregado para el contexto */
+/*public Long extractIdEntidad(String token) {
+	    Claims claims = extractAllClaims(token);
+	    Object value = claims.get("idEntidad");
+	    return value != null ? ((Number) value).longValue() : null;
+	}*/
+
+
+/*        return extractClaim(token, claims -> {
+Object value = claims.get("idEntidad");
+return value != null ? ((Number) value).longValue() : null;
+});*/

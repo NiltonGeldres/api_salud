@@ -289,7 +289,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return null;
     }
-
     
     @Override
     public UsuarioEntity obtenerUsuarioPorId(int idUsuario) {
@@ -299,8 +298,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return (list != null && !list.isEmpty()) ? list.get(0) : null;
     }
     
-
-    
     @Override
     public Usuario usuarioLeer(int id_usuario) {
         SqlParameterSource param = new MapSqlParameterSource().addValue("p_id_usuario", id_usuario);
@@ -309,7 +306,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return (list != null && !list.isEmpty()) ? list.get(0) : null;
     }
     
-    
     //validado
     @Override
     public int UsuarioIdxusername_leer(String p_usuario) {
@@ -317,7 +313,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
         Map<String, Object> out = callUsuarioIdXUsernameLeer.execute(param);
         return (int) out.getOrDefault("p_id_usuario", 0);
     }
-
    
     //validado
     @Override
@@ -332,6 +327,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return null;
         }
     }
+    
     //validado
     @Override
     public UsuarioDatosGlobalesResponse usuarioDatosGlobales(int idUsuario) {
@@ -359,7 +355,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
             return null;
         }
     }
-
     
     @Override
     public Usuario usuarioActualizar(Usuario request) {
