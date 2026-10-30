@@ -1,11 +1,5 @@
 package com.api_salud.api_salud.entity;
 
-
-
-
-
-
-
 public class Role {
 
 	private Integer id;

@@ -119,6 +119,49 @@ public class RoleDaoImpl implements RoleDao{
 		}
 		  return idRol;          
 	};
+	
+	
+	@Override
+    public List<Role> listarRolesCatalog() {
+        SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
+                .withSchemaName("igm_security")
+                .withProcedureName("fn_obtener_roles") // o el nombre exacto de tu función/procedimiento
+                .withoutProcedureColumnMetaDataAccess()
+                .returningResultSet("o_roles", (rs, rowNum) -> {
+                    Role role = new Role();
+                    role.setId(rs.getInt("id_rol"));
+                    role.setName(rs.getString("nombre"));
+                    return role;
+                });
+
+        Map<String, Object> out = call.execute();
+        List<Role> resultados = (List<Role>) out.get("o_roles");
+        return (resultados != null) ? resultados : new ArrayList<>();
+    }
+
+    @Override
+    public Role crearRolCatalog(String nombre) {
+        Role rolCreado = null;
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection();
+             CallableStatement cstmt = conn.prepareCall("{call igm_security.fn_insertar_rol(?, ?)}")) {
+            
+            cstmt.setString(1, nombre);
+            cstmt.registerOutParameter(2, Types.INTEGER); // Suponiendo que retorna el id generado o cursor
+            cstmt.execute();
+            
+            int idGenerado = cstmt.getInt(2);
+            if (idGenerado > 0) {
+                rolCreado = new Role();
+                rolCreado.setId(idGenerado);
+                rolCreado.setName(nombre);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rolCreado;
+    }
+    
+    
 }
 
 
