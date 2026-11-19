@@ -46,7 +46,7 @@ public class AtencionMedicaController {
    @GetMapping(
             value = "/paciente/{idPaciente}/panel-historia",
             produces = MediaType.APPLICATION_JSON_VALUE
-        )
+    )
         public ResponseEntity<String> obtenerPanelHistoriaClinica(@PathVariable Integer idPaciente) {
             String jsonResponse = atencionMedicaService.obtenerPanelHistoriaClinica(idPaciente);
 
@@ -123,15 +123,7 @@ public class AtencionMedicaController {
         AtencionMedicaResponse response = atencionMedicaService.firmarAtencion(idAtencion);
         return ResponseEntity.ok(response);
     }
-/*
-    @PostMapping("/{idAtencion}/preparar-pdf")
-    public ResponseEntity<AtencionMedicaResponse> firmarYGenerarPdf(
-            @PathVariable Long idAtencion) {
-        AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencion);
-        return ResponseEntity.ok(response);
-    }
-*/
-    
+
     
     /**
      * Endpoint para consultar y llevar los datos de la atención hacia afuera (sistemas externos/frontend).
@@ -147,13 +139,6 @@ public class AtencionMedicaController {
         return ResponseEntity.ok(jsonAtencion);
     }    
     
-/*    
-    @GetMapping(value = "/detalle/{idAtencion}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> obtenerAtencionPorId(@PathVariable Long idAtencion) {
-        String jsonAtencion = atencionMedicaService.obtenerJsonAtencion(idAtencion);
-        return ResponseEntity.ok(jsonAtencion);
-    }   
- */   
     
  // =======================================================================
     // 🎯 GET: LISTAR ATENCIONES PENDIENTES DE FIRMA (PDF BORRADOR)
@@ -171,3 +156,23 @@ public class AtencionMedicaController {
     
     
 }    
+
+
+/*    
+@GetMapping(value = "/detalle/{idAtencion}", produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<String> obtenerAtencionPorId(@PathVariable Long idAtencion) {
+    String jsonAtencion = atencionMedicaService.obtenerJsonAtencion(idAtencion);
+    return ResponseEntity.ok(jsonAtencion);
+}   
+*/   
+
+
+/*
+@PostMapping("/{idAtencion}/preparar-pdf")
+public ResponseEntity<AtencionMedicaResponse> firmarYGenerarPdf(
+        @PathVariable Long idAtencion) {
+    AtencionMedicaResponse response = atencionMedicaService.prepararPdf(idAtencion);
+    return ResponseEntity.ok(response);
+}
+*/
+

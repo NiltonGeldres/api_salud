@@ -559,9 +559,6 @@ public class AtencionMedicaServiceImpl implements AtencionMedicaService {
             throw new RuntimeException("Error en proceso de firmado: " + e.getMessage(), e);
         }
     }
-    
-        
-
 
     @Override
     @Transactional(readOnly = true)

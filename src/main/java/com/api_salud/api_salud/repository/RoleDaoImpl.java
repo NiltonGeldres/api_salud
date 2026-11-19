@@ -34,11 +34,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RoleDaoImpl implements RoleDao{
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;  
+	private JdbcTemplate jdbcTemplate;
+	
 	private SimpleJdbcCall simpleJdbcCallRol;
 	
 	//private ResultSet rsRole;
-	private Connection connection;
+	//private Connection connection;
 
 	@Override  
 	public List<RolDto>  buscarPorIdUsuario(int idUsuario) {
@@ -66,17 +67,19 @@ public class RoleDaoImpl implements RoleDao{
 	public List<GrantedAuthority> findByUsername(String  username){
 		List<GrantedAuthority> roles = new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
-		simpleJdbcCallRol = new SimpleJdbcCall(jdbcTemplate)
+		//simpleJdbcCallRol  = new SimpleJdbcCall(jdbcTemplate)
+		SimpleJdbcCall call  = new SimpleJdbcCall(jdbcTemplate)
 				    		.withProcedureName("igm_security.role_leer")
 				            .withoutProcedureColumnMetaDataAccess()
 				            .declareParameters( 
 				            					new SqlParameter("p_username", Types.VARCHAR)
 				            					,new SqlOutParameter("cur", Types.OTHER )				            					
-				            					);
+				            );
 	    SqlParameterSource param = new MapSqlParameterSource()
 	    		.addValue("p_username", username);	 
 	    
-			Map<String, Object> out = simpleJdbcCallRol.execute(param);
+//			Map<String, Object> out = simpleJdbcCallRol.execute(param);
+			Map<String, Object> out = call.execute(param);
 
 		    if (out != null) { 
 		        List<Object>  list = (List<Object>) out.get("cur") ;
@@ -94,7 +97,29 @@ public class RoleDaoImpl implements RoleDao{
 		return roles;
 		
 	};
+	
+	@Override
+    public int create(int idUsuario) {
+        int idRol = 0;
+        String sql = "{call igm_security.rol_crear(?,?)}";
 
+        try (Connection conn = jdbcTemplate.getDataSource().getConnection();
+             CallableStatement cstmt = conn.prepareCall(sql)) {
+
+            cstmt.setInt(1, idUsuario);
+            cstmt.registerOutParameter(2, Types.INTEGER);
+            cstmt.execute();
+            idRol = cstmt.getInt(2);
+
+        } catch (SQLException e) {
+            throw new org.springframework.dao.DataAccessResourceFailureException(
+                    "Error al crear el rol para idUsuario=" + idUsuario, e);
+        }
+
+        return idRol;
+    }
+	
+/*
 	@Override
 	public  int create(int idUsuario){
 		
@@ -119,15 +144,15 @@ public class RoleDaoImpl implements RoleDao{
 		}
 		  return idRol;          
 	};
-	
+	*/
 	
 	@Override
     public List<Role> listarRolesCatalog() {
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_security")
-                .withProcedureName("fn_obtener_roles") // o el nombre exacto de tu función/procedimiento
+                .withFunctionName("fn_obtener_roles") // 🟢 CAMBIAR a withFunctionName en lugar de withProcedureName
                 .withoutProcedureColumnMetaDataAccess()
-                .returningResultSet("o_roles", (rs, rowNum) -> {
+                .returningResultSet("return", (rs, rowNum) -> { // O el nombre del result set que retorne tu función
                     Role role = new Role();
                     role.setId(rs.getInt("id_rol"));
                     role.setName(rs.getString("nombre"));
@@ -135,13 +160,16 @@ public class RoleDaoImpl implements RoleDao{
                 });
 
         Map<String, Object> out = call.execute();
-        List<Role> resultados = (List<Role>) out.get("o_roles");
+        
+	// Dependiendo de cómo devuelva el resultado la función de PostgreSQL, 
+	// a veces se almacena en la clave "return" o en el nombre que retorne la función.
+        List<Role> resultados = (List<Role>) out.get("return"); 
         return (resultados != null) ? resultados : new ArrayList<>();
     }
 
     @Override
     public Role crearRolCatalog(String nombre) {
-        Role rolCreado = null;
+       // Role rolCreado = null;
         try (Connection conn = jdbcTemplate.getDataSource().getConnection();
              CallableStatement cstmt = conn.prepareCall("{call igm_security.fn_insertar_rol(?, ?)}")) {
             
@@ -151,14 +179,18 @@ public class RoleDaoImpl implements RoleDao{
             
             int idGenerado = cstmt.getInt(2);
             if (idGenerado > 0) {
-                rolCreado = new Role();
+                Role rolCreado = new Role();
                 rolCreado.setId(idGenerado);
                 rolCreado.setName(nombre);
+                return rolCreado;
             }
+            return null;
+            
         } catch (SQLException e) {
-            e.printStackTrace();
+        	throw new org.springframework.dao.DataAccessResourceFailureException(
+                    "Error al insertar rol en catálogo: " + nombre, e);        	
+            //e.printStackTrace();
         }
-        return rolCreado;
     }
     
     
