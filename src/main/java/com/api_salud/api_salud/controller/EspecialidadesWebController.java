@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api_salud.api_salud.context.TenantContext;
 import com.api_salud.api_salud.controller.EntidadController.entidadRequest;
 import com.api_salud.api_salud.response.EntidadResponse;
 import com.api_salud.api_salud.response.EspecialidadResponse;
@@ -37,7 +38,8 @@ public class EspecialidadesWebController {
 			
 	    @PostMapping("/especialidadMedico")
 	   public ResponseEntity<EspecialidadResponse> especialidadMedico(@RequestBody entidadRequest request){
-	    	int idMedico = medicoService.medicoXUsuarioLeer(request.getUsuario());
+//	    	int idMedico = medicoService.medicoXUsuarioLeer(request.getUsuario());
+	    	int idMedico = TenantContext.getReferenciaId();;	    	
 	        EspecialidadResponse response = especialidadService.xIdMedico(idMedico);
 	        return new ResponseEntity<EspecialidadResponse>(response, HttpStatus.OK);
 	    }
