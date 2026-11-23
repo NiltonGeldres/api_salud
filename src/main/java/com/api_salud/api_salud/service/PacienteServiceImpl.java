@@ -18,10 +18,6 @@ import com.api_salud.api_salud.response.CitaSeparadaEntityResponse;
 
 @Service
 public class PacienteServiceImpl implements PacienteService{
-	//@Autowired
-	//PacienteDao pacienteDao;
-	
-	
 	   private static final Logger log = LoggerFactory.getLogger(PacienteServiceImpl.class);
 
 	    @Autowired
@@ -29,18 +25,7 @@ public class PacienteServiceImpl implements PacienteService{
 
 	    @Autowired
 	    private PacienteMapper pacienteMapper; // Mapper para convertir Request -> Entity
-
-/*	
-	    @Override
-	    @Transactional(propagation = Propagation.REQUIRED)
-	    public int crearDesdeRegistro(UsuarioRequest request) {
-	        PacienteEntity entidad = pacienteMapper.usuarioRequestToPacienteEntity(request);
-	        return pacienteDao.pacienteCrear(entidad);
-	    }
-	*/
-	 
-
-	    
+    
 	    @Override
 	    @Transactional(propagation = Propagation.REQUIRED)
 	    public int obtenerOCrearDesdeCita(CitaSeparadaEntityResponse cita, UsuarioRequest request) {
@@ -94,13 +79,10 @@ public class PacienteServiceImpl implements PacienteService{
 	        }
 	    }
 
-		    
-		    
 		@Override
 		public int  crear(PacienteEntity request) {
 			return pacienteDao.pacienteCrear(request);
 		}
-	
 			
 		@Override
 		public  PacienteEntity leerNroDocumento(PacienteEntity request) {
@@ -120,13 +102,16 @@ public class PacienteServiceImpl implements PacienteService{
 			return pacienteDao.actualizar(request);
 		}
 	
-	
 		@Override
 		public int crearConUsuario(Usuario usuario) {
+			System.out.println("EN crearConUsuario");
 			PacienteEntity pacienteEncontrado  =  pacienteDao.leerIdUsuario(usuario.getId_usuario()); //Buscar paciente con id usuario
+			
 			if(pacienteEncontrado == null ) {   		//Si no tiene HC, crear   
 				String nombresPacienteCrear =  usuario.getApellido_paterno() +" "+usuario.getApellido_materno()+" "+usuario.getPrimer_nombre()+" "+usuario.getSegundo_nombre();
 				PacienteEntity pacienteDuplicado = pacienteDao.leerNombres(nombresPacienteCrear);// consulta si nombre ya existe
+				
+				
 				if(pacienteDuplicado ==null) { //No esta duplicado, crear
 					int idPaciente =pacienteDao.crear(  
 									   usuario.getNumero_documento() 
@@ -146,7 +131,9 @@ public class PacienteServiceImpl implements PacienteService{
 									);
 					return idPaciente;
 				} else {return 0;} 
-			} else {return pacienteEncontrado.getIdPaciente();} 
+			} else {
+				return pacienteEncontrado.getIdPaciente();
+				} 
 		}
 
 		@Override

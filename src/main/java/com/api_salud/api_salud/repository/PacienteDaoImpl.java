@@ -35,7 +35,6 @@ public class PacienteDaoImpl implements PacienteDao {
 	
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     
     @Override
     public Integer obtenerIdPacientePorIdUsuario(int idUsuario) {
@@ -59,6 +58,8 @@ public class PacienteDaoImpl implements PacienteDao {
     
     @Override
     public int pacienteCrear(PacienteEntity paciente) {
+    	System.out.println("EN  PACIENTES CREAR :  igm_clientes   paciente_crear");    	
+    	
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_clientes")
                 .withProcedureName("paciente_crear")
@@ -122,7 +123,7 @@ public class PacienteDaoImpl implements PacienteDao {
 		     Integer idUsuario
 			) {
 
-	
+	System.out.println("EN CREAR  :  igm_clientes.paciente_crear");
     	List<CitaSeparadaEntity> res =new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
         SimpleJdbcCall simpleJdbcCallPaciente = new SimpleJdbcCall(jdbcTemplate)		
