@@ -65,8 +65,6 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 	
     @Autowired
     private UsuarioMapper usuarioMapper; // Mapper para convertir Request -> Entity	
-
-	
 	
 	@Transactional 
     public CitaResponse procesarConfirmacionCita(CitaSeparadaFacturarRequest request) {
@@ -100,34 +98,11 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         facturaCita.setIdFuenteFinanciamiento(1);
 
         // 4. Confirmar en DB (esto debería actualizar igm_citas.citas_separadas)
-        int idCita = this.confirmarCitaSeparada(facturaCita);
+       int idCita = this.confirmarCitaSeparada(facturaCita);
         
         return citaService.leerCita(idCita);
+   
     }
-
-/*
-	@Override
-	public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
-
-        // Obtener datos del usuario/paciente
-    //    int idUsuario = usuarioService.xusername_leer(request.getUsuario());
-		int idUsuario = TenantContext.getUsuarioId();
-        if (idUsuario == 0) throw new RuntimeException("Usuario no encontrado o de baja");
-        
-       // int idPaciente = pacienteService.leerIdPacientexIdUsuario(idUsuario);
-       // request.setIdPaciente(idPaciente);
-
-        // Ejecutar SimpleJdbcCall (a través del DAO)
-        int idCitaSeparada = ejecutarPersistencia(request, idUsuario);
-        System.out.println("idCitaSeparada  "+idCitaSeparada);
-        if (idCitaSeparada == 0) throw new RuntimeException("Error al insertar en Base de Datos");
-
-        // Procesar respuesta y Email
-        return procesarPostRegistro(idCitaSeparada, idUsuario);
-        
-
-	}	
-*/
 	
 	@Override
 	public CitaSeparadaEntityResponse crearCitaSeparada(CitaSeparadaRequest request) {
@@ -150,66 +125,7 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 
 		return entityRes;
 	}
-/*	
-    private int ejecutarPersistencia(CitaSeparadaRequest request, int idUsuario) {
-        String fechaSeparada = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String horaSeparada = new SimpleDateFormat("HH:mm").format(new Date());
 
-    	System.out.println(
-    		    request.getIdCitaSeparada()
-    		    + "---" + request.getFecha() 
-    		    + "---" + request.getHoraInicio() 
-    		    + "---" + request.getHoraFin() 
-    		    + "---" + request.getIdPaciente() 
-    		    + "---" + request.getIdMedico() 
-    		    + "---" + request.getIdEspecialidad() 
-    		    + "---" + request.getIdServicio() 
-    		    + "---" + request.getIdProgramacion() 
-    		    + "---" + request.getIdProducto() 
-    		    + "---" + request.getFechaSolicitud()
-    		    + "---" + request.getHoraSolicitud()
-    		    + "---" + request.getTipoUsuario()
-    		    + "---" + request.getFechaSeparacion()
-    		    + "---" + request.getPrecioUnitario()    
-    		    + "---" + request.getUsuario()    
-    		    + "getIdUsuarioPaciente-" + request.getIdUsuarioPaciente()    
-    		    + "---" + request.getIdEntidad()
-    		);
-        
-        return citaSeparadaDao.crearCitaSeparada(
-                request.getIdEntidad(),
-                request.getIdCitaSeparada(),
-                request.getFecha(),
-                request.getHoraInicio(),
-                request.getHoraInicio(), // horaFin
-                request.getIdPaciente(),
-                request.getIdMedico(),
-                request.getIdEspecialidad(),
-                request.getIdServicio(),
-                request.getIdProgramacion(),
-                0, 
-                fechaSeparada, 
-                horaSeparada,
-                request.getTipoUsuario(),
-                fechaSeparada,
-                request.getPrecioUnitario(),
-                request.getIdUsuarioPaciente(),
-                idUsuario
-        );
-    }
-
-    private CitaSeparadaEntityResponse procesarPostRegistro(int idCita, int idUser) {
-        CitaSeparadaEntityResponse entityRes = citaSeparadaDao.leerCitaSeparadaXIdCitaSeparada(idCita);
-        Usuario usuario = usuarioDao.usuarioLeer(idUser);
-
-        if (usuario.getEmail() != null) {
-           // enviarEmailSilencioso(usuario, entityRes);
-        }
-        return entityRes;
-        
-//        return new CitaSeparadaResponse(idCita, "Cita procesada con éxito");
-    }
-*/
     private void enviarEmailSilencioso( CitaSeparadaEntityResponse res) {
         try {
             emailService.sendEmail(
@@ -224,9 +140,6 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
             System.err.println("No se pudo enviar el correo: " + e.getMessage());
         }
     }
-
-
-
 	
 	public CitaSeparadaResponse leerCitaSeparadaXIdPaciente(int idUsuario ) {
 		CitaSeparadaResponse response = null; 
@@ -269,17 +182,28 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
         String horaString = horaFormat.format(date);
         
 		// * Crear Paciente * //
-		int idUsuario = 0;
+/*		int idUsuario = 0;
 		String username= request.getUsuario();
 //		Usuario usuario = usuarioService.usuarioUsernameLeer(username);
+		System.out.println("Invocando usuarioService.usuarioLeer   "+request.getIdUsuario()+" "+ request.getUsuario());
 		Usuario usuario = usuarioService.usuarioLeer(request.getIdUsuario());
+		System.out.println(
+				"Invocando pacienteService.crearConUsuario"
+				+usuario.getApellido_paterno()+" "
+				+usuario.getApellido_materno()+" "		
+				+usuario.getPrimer_nombre()
+		);		
+		
+		System.out.println("Invocando pacienteService.crearConUsuario");
 		int idPaciente =  pacienteService.crearConUsuario(usuario);
-        
-		if (idPaciente != 0 ) {
-	        request.setIdPaciente(idPaciente);
+		System.out.println("terminando pacienteService.crearConUsuario");
+  */      
+		if (request.getIdPaciente() != 0 ) {
+//		if (idPaciente != 0 ) {
+	        //request.setIdPaciente(idPaciente);
 	        request.setHoraSolicitud(horaString);
 	        request.setFechaSolicitud(fechaString);
-	        request.setIdUsuario(idUsuario);
+	      //  request.setIdUsuario(idUsuario);
 			
 			CitaEntity c = new CitaEntity();
 			c.setIdMedico(request.getIdMedico());
@@ -354,9 +278,12 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			fosp.setIdComprobantePago(0);
 			fosp.setIdEstadoFacturacion(1);
 			fosp.setIdOrden(1);			
-			fosp.setIdOrdenPago(0);			
-			fosp.setIdUsuario(idUsuario);
-			fosp.setIdUsuarioExonera(idUsuario);
+			fosp.setIdOrdenPago(0);
+						
+			fosp.setIdUsuario(request.getIdUsuario());
+//			fosp.setIdUsuario(idUsuario);
+//			fosp.setIdUsuarioExonera(idUsuario);
+			fosp.setIdUsuarioExonera(request.getIdUsuario());
 			fosp.setImporteExonerado(0);
 					
 						
@@ -391,7 +318,8 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 			ccp.setIdTipoPago(1);
 			ccp.setIdTipoOrden(1);
 			ccp.setDctos(0);
-			ccp.setIdPaciente(idPaciente);
+			ccp.setIdPaciente(request.getIdPaciente());
+//			ccp.setIdPaciente(idPaciente);
 			ccp.setIdCajero(1);
 			ccp.setIdTurno(1);
 			ccp.setIdCaja(1);
@@ -420,3 +348,89 @@ public class CitaSeparadaServiceImpl  implements CitaSeparadaService{
 }
 
 
+
+/*	
+private int ejecutarPersistencia(CitaSeparadaRequest request, int idUsuario) {
+    String fechaSeparada = new SimpleDateFormat("yyyyMMdd").format(new Date());
+    String horaSeparada = new SimpleDateFormat("HH:mm").format(new Date());
+
+	System.out.println(
+		    request.getIdCitaSeparada()
+		    + "---" + request.getFecha() 
+		    + "---" + request.getHoraInicio() 
+		    + "---" + request.getHoraFin() 
+		    + "---" + request.getIdPaciente() 
+		    + "---" + request.getIdMedico() 
+		    + "---" + request.getIdEspecialidad() 
+		    + "---" + request.getIdServicio() 
+		    + "---" + request.getIdProgramacion() 
+		    + "---" + request.getIdProducto() 
+		    + "---" + request.getFechaSolicitud()
+		    + "---" + request.getHoraSolicitud()
+		    + "---" + request.getTipoUsuario()
+		    + "---" + request.getFechaSeparacion()
+		    + "---" + request.getPrecioUnitario()    
+		    + "---" + request.getUsuario()    
+		    + "getIdUsuarioPaciente-" + request.getIdUsuarioPaciente()    
+		    + "---" + request.getIdEntidad()
+		);
+    
+    return citaSeparadaDao.crearCitaSeparada(
+            request.getIdEntidad(),
+            request.getIdCitaSeparada(),
+            request.getFecha(),
+            request.getHoraInicio(),
+            request.getHoraInicio(), // horaFin
+            request.getIdPaciente(),
+            request.getIdMedico(),
+            request.getIdEspecialidad(),
+            request.getIdServicio(),
+            request.getIdProgramacion(),
+            0, 
+            fechaSeparada, 
+            horaSeparada,
+            request.getTipoUsuario(),
+            fechaSeparada,
+            request.getPrecioUnitario(),
+            request.getIdUsuarioPaciente(),
+            idUsuario
+    );
+}
+
+private CitaSeparadaEntityResponse procesarPostRegistro(int idCita, int idUser) {
+    CitaSeparadaEntityResponse entityRes = citaSeparadaDao.leerCitaSeparadaXIdCitaSeparada(idCita);
+    Usuario usuario = usuarioDao.usuarioLeer(idUser);
+
+    if (usuario.getEmail() != null) {
+       // enviarEmailSilencioso(usuario, entityRes);
+    }
+    return entityRes;
+    
+//    return new CitaSeparadaResponse(idCita, "Cita procesada con éxito");
+}
+*/
+
+
+/*
+@Override
+public CitaSeparadaEntityResponse crearCitaSeparada( CitaSeparadaRequest request) {
+
+    // Obtener datos del usuario/paciente
+//    int idUsuario = usuarioService.xusername_leer(request.getUsuario());
+	int idUsuario = TenantContext.getUsuarioId();
+    if (idUsuario == 0) throw new RuntimeException("Usuario no encontrado o de baja");
+    
+   // int idPaciente = pacienteService.leerIdPacientexIdUsuario(idUsuario);
+   // request.setIdPaciente(idPaciente);
+
+    // Ejecutar SimpleJdbcCall (a través del DAO)
+    int idCitaSeparada = ejecutarPersistencia(request, idUsuario);
+    System.out.println("idCitaSeparada  "+idCitaSeparada);
+    if (idCitaSeparada == 0) throw new RuntimeException("Error al insertar en Base de Datos");
+
+    // Procesar respuesta y Email
+    return procesarPostRegistro(idCitaSeparada, idUsuario);
+    
+
+}	
+*/

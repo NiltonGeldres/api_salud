@@ -58,7 +58,6 @@ public class PacienteDaoImpl implements PacienteDao {
     
     @Override
     public int pacienteCrear(PacienteEntity paciente) {
-    	System.out.println("EN  PACIENTES CREAR :  igm_clientes   paciente_crear");    	
     	
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
                 .withSchemaName("igm_clientes")

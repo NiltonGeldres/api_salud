@@ -58,7 +58,11 @@
             </td>
 
             <td class="header-center">
-                <div class="info-card">
+                <div class="info-card" style="margin-bottom: 0;">
+                    <strong>N° Atencion:</strong> 
+                    <span style="float: right;" th:text="${atencion.idAtencion}"></span>
+                </div>
+                <div class="info-card" style="margin-bottom: 0;">
                     <strong>Fecha:</strong> 
                     <span style="float: right;" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
                 </div>

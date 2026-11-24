@@ -1,5 +1,4 @@
 package com.api_salud.api_salud.controller;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,7 +19,6 @@ import com.api_salud.api_salud.request.CitaRequest;
 import com.api_salud.api_salud.response.CitaResponse;
 import com.api_salud.api_salud.response.PacienteCitadoResponse;
 import com.api_salud.api_salud.service.CitaService;
-
 
 @RestController
 @RequestMapping("")
@@ -49,7 +47,6 @@ public class CitaController {
 	    }	    
 	    return response.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(response);
 	}
-    
 	
     @PostMapping("/citaDisponible")
     public ResponseEntity<CitaResponse> disponible(@RequestBody CitaRequest request){

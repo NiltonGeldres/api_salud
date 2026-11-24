@@ -77,7 +77,8 @@ public class PacienteMapperImpl implements PacienteMapper {
     	    entity.setIdTipoSexo(request.getIdSexo());
   	    
     	    // 2. Campos obligatorios para el SP que nacen con valores por defecto o NULL
-    	    entity.setNroHistoriaClinica(null); // Se genera tras el pago
+//    	    entity.setNroHistoriaClinica(null); // Se genera tras el pago
+    	    entity.setNroHistoriaClinica(request.getNumeroDocumento());
     	    entity.setFechaNacimiento(null);  
     	    // El SignUp no lo pide, se completa en el perfil
     	    entity.setObservacion("Registro inicial desde App");

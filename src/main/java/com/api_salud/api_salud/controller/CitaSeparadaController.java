@@ -136,7 +136,7 @@ public class CitaSeparadaController {
   
     @PostMapping("/confimarCitaSeparada")
 //    @PreAuthorize("hasAnyRole('USUARIOS', 'PACIENTE')") // Seguridad por Rol
-    public ResponseEntity<CitaResponse> confirmarCitaSeparada(@RequestBody CitaSeparadaFacturarRequest request) {
+    public ResponseEntity<CitaResponse> procesarConfirmarCitaSeparada(@RequestBody CitaSeparadaFacturarRequest request) {
         // Toda la lógica de "preparación" ocurre en el Service
         CitaResponse response = citaSeparadaService.procesarConfirmacionCita(request);
         
@@ -151,8 +151,6 @@ public class CitaSeparadaController {
         }
     }
 
-   
-	
 	// Método de validación separado
 	private String validarRequest(CitaSeparadaRequest r) {
 	    // 1. Validaciones de Contexto y Entidad

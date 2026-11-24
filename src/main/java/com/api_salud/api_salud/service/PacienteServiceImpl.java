@@ -104,15 +104,25 @@ public class PacienteServiceImpl implements PacienteService{
 	
 		@Override
 		public int crearConUsuario(Usuario usuario) {
-			System.out.println("EN crearConUsuario");
+			System.out.println("En crearConUsuario");
+			System.out.println(
+					"Invocando pacienteService.crearConUsuario"
+					+usuario.getApellido_paterno()+" "
+					+usuario.getApellido_materno()+" "		
+					+usuario.getPrimer_nombre()
+			);
+			
 			PacienteEntity pacienteEncontrado  =  pacienteDao.leerIdUsuario(usuario.getId_usuario()); //Buscar paciente con id usuario
+			System.out.println("pacienteDao.leerIdUsuario pacienteEncontrado  "+pacienteEncontrado);
 			
 			if(pacienteEncontrado == null ) {   		//Si no tiene HC, crear   
 				String nombresPacienteCrear =  usuario.getApellido_paterno() +" "+usuario.getApellido_materno()+" "+usuario.getPrimer_nombre()+" "+usuario.getSegundo_nombre();
 				PacienteEntity pacienteDuplicado = pacienteDao.leerNombres(nombresPacienteCrear);// consulta si nombre ya existe
+				System.out.println("pacienteDao.leerNombres  "+pacienteDuplicado);
 				
 				
 				if(pacienteDuplicado ==null) { //No esta duplicado, crear
+					System.out.println("pacienteDao.crear  "+pacienteDuplicado);
 					int idPaciente =pacienteDao.crear(  
 									   usuario.getNumero_documento() 
 									  ,usuario.getNumero_documento() 
@@ -129,6 +139,7 @@ public class PacienteServiceImpl implements PacienteService{
 									  , null , null, null, null, null, null, null, null, null , null, null
 									  , usuario.getId_usuario()
 									);
+					System.out.println("return "+idPaciente);
 					return idPaciente;
 				} else {return 0;} 
 			} else {

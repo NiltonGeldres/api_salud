@@ -187,7 +187,11 @@
 
             <!-- Columna Central: Fecha e Historia Clínica -->
             <td class="header-center">
-                <div class="info-card">
+                <div class="info-card" style="margin-bottom: 0;">
+                    <strong>N° Atencion:</strong> 
+                    <span style="float: right;" th:text="${atencion.idAtencion}"></span>
+                </div>
+                <div class="info-card" style="margin-bottom: 0;" >
                     <strong>Fecha:</strong> 
                     <span style="float: right;" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
                 </div>
@@ -354,13 +358,14 @@
             <strong>Registro Clínico Electrónico</strong><br />
             Documento generado automáticamente por sistema. ID Atención: <span th:text="${atencion.idAtencion}"></span>
         </div>
-
+ <!-- PLAN DE TRABAJO Y MEDICACIÓN 
         <div class="table-cell qr-cell">
             <div class="qr-header">VALIDAR ATENCIÓN</div>
             <img th:src="@{'https://api.qrserver.com/v1/create-qr-code/?size=120x120&amp;data=' + ${atencion.idAtencion}}" 
                  width="50" height="50" style="background: #ffffff; padding: 2px; border-radius: 4px;" alt="QR" />
             <div class="qr-footer">Escanear QR</div>
         </div>
+	-->        
     </div>
 
 </body>
