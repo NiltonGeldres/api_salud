@@ -46,8 +46,6 @@ public class CitaSeparadaPagoVirtualDaoImpl implements  CitaSeparadaPagoVirtualD
 		    
 			) {
 		
-		System.out.println("en CitaSeparadaPagoVirtualDaoImpl");
-		
 		CitaSeparadaPagoVirtualResponse response = null;
     	List<CitaSeparadaPagoVirtualEntity> res =new ArrayList<>();
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
@@ -99,8 +97,7 @@ public class CitaSeparadaPagoVirtualDaoImpl implements  CitaSeparadaPagoVirtualD
 
 	@Override
 	public List<CitaSeparadaPagadaEntity> leerCitaSeparadaPagadaXMedico(int idMedico) {
-		System.out.println("en leerCitaSeparadaPagadaXMedico");
-		
+
     	List<CitaSeparadaPagadaEntity> response = null;
 		jdbcTemplate.setResultsMapCaseInsensitive(true);
 		simpleJdbcCallCitaSeparadaPagoVirtual = new SimpleJdbcCall(jdbcTemplate)

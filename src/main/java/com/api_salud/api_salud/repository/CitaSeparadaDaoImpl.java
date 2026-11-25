@@ -37,25 +37,6 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
 
     @Override
     public CitaSeparadaEntityResponse crearCitaSeparada(CitaSeparadaRequest request, int idUsuario) {
-    	System.out.println("REQUEST "+
-				request.getIdEntidad() 
-				+"-- "+request.getFecha()
-				+"-- "+request.getHoraInicio()
-				+"-- "+request.getHoraFin()
-				+"-- "+request.getIdPaciente()
-				+"-- "+request.getIdMedico()
-				+"-- "+request.getIdEspecialidad()
-				+"-- "+request.getIdServicio()
-				+"-- "+request.getIdProgramacion()
-				+"-- "+request.getIdProducto()
-				+"-- "+request.getFechaSolicitud()
-				+"-- "+request.getHoraSolicitud()
-				+"-- "+request.getTipoUsuario()
-				+"-- "+request.getFechaSeparacion()
-				+"-- "+request.getPrecioUnitario()
-				+"-- "+idUsuario
-				+"-- "+request.getIdUsuarioPaciente()
-		);
 
     	// Se agregan casts explícitos a cada parámetro y ::text al final para el jsonb
     	
@@ -99,7 +80,6 @@ public class CitaSeparadaDaoImpl  implements CitaSeparadaDao{
                 , idUsuario
                 , request.getIdUsuarioPaciente()
             );
-            System.out.println("REQUEST "+jsonResultado);
             if (jsonResultado != null) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

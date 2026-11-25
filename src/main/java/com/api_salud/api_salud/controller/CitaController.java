@@ -43,7 +43,6 @@ public class CitaController {
 	    
 	    List<PacienteCitadoResponse> response = citaService.citaMedicoListarDiaria(request);
 	    for (PacienteCitadoResponse cita : response) {
-	        System.out.println("ID Cita: " + cita.getIdCita() + " - ID Especialidad: " + cita.getIdEspecialidad());
 	    }	    
 	    return response.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(response);
 	}

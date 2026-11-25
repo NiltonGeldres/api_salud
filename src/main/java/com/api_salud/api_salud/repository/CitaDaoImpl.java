@@ -142,12 +142,9 @@ public class CitaDaoImpl implements CitaDao{
 	    
 
 	    
-	    System.out.println("CITADOS OUT " +  out);
 	    // Retornamos la lista casteada
 	    return (List<PacienteCitadoDto>) out.get("cur");
 	}
-	
-	
 	
 	@Override
 	public int crearCita(CitaEntity citaEntity) {
@@ -200,9 +197,40 @@ public class CitaDaoImpl implements CitaDao{
         }
 		return response;
 	}
+	
+	
+	@Override
+	public CitaResponse citasDisponiblesDia(int idMedico, String fecha, int idEspecialidad) {
+	    String sql 
+	    = "SELECT  id_medico,  fecha, id_especialidad, id_programacion, id_servicio,  hora_inicio, hora_fin FROM igm_citas.fn_cupos_disponibles_dia(?, ?::date, ?, ?) ";
 
+	    List<CitaDisponibleResponse> lista = jdbcTemplate.query(
+	            sql,
+	            (rs, rowNum) -> {
+	                CitaDisponibleResponse dto = new CitaDisponibleResponse();
+	                dto.setIdMedico(rs.getInt("id_medico"));
+	                dto.setFecha(rs.getString("fecha"));
+	                dto.setIdEspecialidad(rs.getInt("id_especialidad"));
+	                dto.setIdProgramacion(rs.getInt("id_programacion"));
+	                dto.setIdServicio(rs.getInt("id_servicio"));
+	                dto.setHoraInicio(rs.getString("hora_inicio").trim());
+	                dto.setHoraFin(rs.getString("hora_fin").trim());
+	                return dto;
+	            },
+	            idMedico,
+	            fecha,
+	            idEspecialidad,
+	            null // o idEntidad si lo manejas por contexto/request
+	    );
+
+	    CitaResponse response = new CitaResponse();
+	    response.setCita(lista);
+	    response.setTotalRecord(String.valueOf(lista.size()));
+	    return response;
+	}
 	
 	
+/*	
 	@Override
 	public CitaResponse citasDisponiblesDia(int idMedico, String fecha, int idEspecialidad ) {
 		int tiempoPromedioAtencion = medicoDao.tiempoPromedioAtencion_leer(idMedico, idEspecialidad);
@@ -213,7 +241,7 @@ public class CitaDaoImpl implements CitaDao{
 		programacionMedica = programacionMedicaDao.programacionMedicoFecha(idMedico,fecha,idEspecialidad);
 		//-------------------------------------------------------- 
 		
-		/* Recorrer programaciones del dia sin tomar la hora final de programacion*/
+		// Recorrer programaciones del dia sin tomar la hora final de programacion/
 		List<CitaDisponibleResponse> cuposProgramadaDia = new ArrayList<>();
 		List<String> cuposProgramadasDiaTodas = new ArrayList<>();
 		for(ProgramacionMedicaEntity p : programacionMedica.getProgramacionMedica()) {
@@ -248,7 +276,7 @@ public class CitaDaoImpl implements CitaDao{
   	    
 		//Quitando los que ya estan registrados 
 		if (!citaRegistrada.isEmpty() ) {
-
+			System.out.println("PARAMETROS !citaRegistrada.isEmpty() :  ");
             for(CitaDisponibleResponse citaProgramada:  cuposProgramadaDia) {
             	boolean isExists = citaRegistrada.contains(citaProgramada.getHoraInicio());
             	
@@ -280,10 +308,10 @@ public class CitaDaoImpl implements CitaDao{
 		response.setCita(sinBloquear);
 		return response;
 	}
-	
+*/	
 
 /*1*/
-	
+/*	
 	@Override
 	public List<String> crearCuposProgramadasDiaTodas(String fecha, String horaInicio, String horaFin, int tiempoPromedioAtencion) {
 	    // 1. Usar DateTimeFormatter (H:mm es más flexible que concatenar ceros manualmente)
@@ -317,8 +345,9 @@ public class CitaDaoImpl implements CitaDao{
 
 	    return cupos;
 	}
-	
+*/	
 /*2*/
+/*	
 	@Override
 	public List<String> cuposNoDisponibleDia(int idMedico, String fecha, int idEspecialidad) {
 		List<String> citaAsignada = new ArrayList<>();
@@ -336,8 +365,9 @@ public class CitaDaoImpl implements CitaDao{
 		
 		return citaAsignada;
 	}
+*/	
 /*3*/
-	
+/*	
 	public CitaResponse obtenerCitasAsignadasDia(int idMedico, String fecha, int idEspecialidad) {
 		CitaResponse response = null;
 	    List<CitaDisponibleResponse> res =new ArrayList<>();
@@ -404,7 +434,7 @@ public class CitaDaoImpl implements CitaDao{
 	     	}		
 			return response;
 		}
-			
+*/			
 	
 	
 /* -----------------------------------------------------------------------------*/

@@ -43,16 +43,7 @@ public class ProgramacionMedicaController {
 		else
 		return null;	
 	}
-	
-	/*
-    @PostMapping("/programacionMedicoTodos")
-   public ResponseEntity<ProgramacionMedicaResponse> medicoTodos(@RequestBody ProgramacionMedicaRequest request){
-        ProgramacionMedicaResponse response =  programacionMedicaService.medicoTodos(request);
-        return new ResponseEntity<ProgramacionMedicaResponse>(response, HttpStatus.OK);
-        		
-    }
- */   
-    
+   
     @PostMapping("/programacionMedicoMes")
 	public ResponseEntity<?> programacionMedicoMesLeer(@RequestBody ProgramacionMedicaDTO  request) {
 

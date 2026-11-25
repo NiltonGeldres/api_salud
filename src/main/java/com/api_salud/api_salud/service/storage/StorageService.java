@@ -22,10 +22,10 @@ public class StorageService {
         this.config = config;
 
         String provider = config.getProvider();
-        System.out.println("=== ESTRATEGIA DE ALMACENAMIENTO SELECCIONADA: " + provider + " ===");
+//        System.out.println("=== ESTRATEGIA DE ALMACENAMIENTO SELECCIONADA: " + provider + " ===");
 
         if ("CLOUD".equalsIgnoreCase(provider) || "R2".equalsIgnoreCase(provider)) {
-            System.out.println("=== USANDO R2 STORAGE STRATEGY ===");
+           // System.out.println("=== USANDO R2 STORAGE STRATEGY ===");
             this.strategy = new R2StorageStrategy(config);
         } else {
             System.out.println("=== USANDO LOCAL STORAGE STRATEGY ===");

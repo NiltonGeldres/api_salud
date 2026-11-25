@@ -18,11 +18,12 @@ public class TestCitaAsignada {
 
 	@Test
 	void contextLoads() {
-		
+/*		
 			CitaResponse data =	citaDao.obtenerCitasAsignadasDia(1762,"20240112" ,9 );
 		for (CitaDisponibleResponse  element : data.getCita()) {
 			//System.out.println("Elemento:  " +element.getHoraInicio());
 		}
+*/		
 		
 /*	CitaResponse data =	citaDao.asignadas(1762,"20220704" ,9 );
 		for (CitaEntity  element : data.getCita()) {
